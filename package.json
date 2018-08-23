@@ -1,0 +1,7 @@
+{
+  "devDependencies": {
+    "mappoint": "^0.2.3",
+    "pumpify": "^1.5.1",
+    "split2": "^3.0.0"
+  }
+}
