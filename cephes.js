@@ -72,10 +72,6 @@ function makeDeadFunction(name) {
 }
 
 const wasmImports = {
-  'global': {
-    'NaN': NaN,
-    'Infinity': Infinity
-  },
   'env': {
     // dead functions
     enlargeMemory: makeDeadFunction('enlargeMemory'),
