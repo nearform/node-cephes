@@ -6,6 +6,11 @@ const internalCephesFunctions = [
   'hyp2f0', 'onef2', 'threef0'
 ];
 
+const type2llvm = {
+  'double': 'double',
+  'int': 'i32'
+}
+
 const argGenerators = {
   double: function (name) {
     let code = '';
@@ -31,6 +36,13 @@ const argGenerators = {
     let code = '';
     code += `  // argument: double* ${name}\n`;
     code += `  const carg_${name} = cephes.stackAlloc(8); // No need to zero-set it.\n`;
+    return code;
+  },
+
+  "int*": function (name) {
+    let code = '';
+    code += `  // argument: int* ${name}\n`;
+    code += `  const carg_${name} = cephes.stackAlloc(4); // No need to zero-set it.\n`;
     return code;
   },
 
@@ -102,8 +114,7 @@ process.stdin
     //
     // function arguments
     //
-    for (const {type, isPointer, isArray, name} of functionArgs) {
-      const fullType = `${type}${isPointer ? '*' : ''}${isArray ? '[]' : ''}`;
+    for (const {fullType, name} of functionArgs) {
       code += argGenerators[fullType](name);
       code += '\n';
     }
@@ -130,9 +141,9 @@ process.stdin
     if (extraReturn) {
       code += '  // There are pointers, so return the values of thoese too\n';
       code += '  const ret = [fn_ret, {\n';
-      for (const { isPointer, name } of functionArgs) {
+      for (const { isPointer, name, type } of functionArgs) {
         if (!isPointer) continue;
-        code += `    "${name}": cephes.getValue(carg_${name}, 'double'),\n`;
+        code += `    '${name}': cephes.getValue(carg_${name}, '${type2llvm[type]}'),\n`;
       }
       code += '  }];\n';
     } else {

@@ -20,7 +20,8 @@ function parser() {
           type: mainType,
           isPointer: pointer === '*',
           name: name,
-          isArray: array === '[]'
+          isArray: array === '[]',
+          fullType: `${mainType}${pointer || ''}${array || ''}`
         };
       });
 

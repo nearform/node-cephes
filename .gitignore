@@ -1,2 +1,3 @@
 *.bc
+*.wast
 node_modules/
