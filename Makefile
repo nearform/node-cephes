@@ -41,10 +41,6 @@ download: | cephes/
 	cd $(CEPHESDIR) && \
 		rm -f *.mak *.MAK *.bat msc.rsp descrip.mms README *.doc protos.h ftilib.*
 
-	@# remove math functions that are too basic
-	cd $(CEPHESDIR) && rm -f \
-		fabs.c sqrt.c
-
 	@# remove math functions that are too complicated to deal with
 	cd $(CEPHESDIR) && rm -f \
 		clog.c cmplx.c mod2pi.c drand.c dtestvec.c mtst.* polevl.asm setprbor.asm \
@@ -53,6 +49,11 @@ download: | cephes/
 	@# remove mtherr.c error handling file, this is reimplemented in JavaScript
 	@# see the c-defs.js file.
 	cd $(CEPHESDIR) && rm -f mtherr.c
+
+	@# remove math functions that are too basic, as they are implemented natively
+	@# in WebAssembly (f64.abs, and f64.sqrt).
+	cd $(CEPHESDIR) && rm -f \
+		fabs.c sqrt.c
 
 	@# Rename (effectively remove) ceil, floor as they have native
 	@# WebAssembly equivalents (f64.ceil, and f64.floor).
