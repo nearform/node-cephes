@@ -1,3 +1,4 @@
 *.bc
 *.wast
+cephes.standalone.wasm # we are not ready :(
 node_modules/

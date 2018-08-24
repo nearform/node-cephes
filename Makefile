@@ -124,5 +124,22 @@ cephes.wasm: $(OBJS)
 	mv cephes-temp.wasm cephes.wasm
 	mv cephes-temp.wast cephes.wast
 
+cephes.standalone.wasm: $(OBJS)
+	@# Work In Progress: try and use the SIDE_MODULE options for a more
+	@# documented approach to stripping out the large and problematic
+	@# emscripten cephes.js file.
+	emcc \
+		-s BINARYEN_ASYNC_COMPILATION=0 \
+		-s EXPORTED_FUNCTIONS="[$(shell \
+			cat $(CEPHESDIR)/cephes_names.h | \
+			grep cephes_ | \
+			sed -E "s/^#define ([a-z0-9]+) (cephes_[a-z0-9]+)$$/'_\2'/g" | \
+			tr '\n' ','  | \
+			sed 's/,$$//' \
+		)]" \
+		-s SIDE_MODULE=1 \
+		--js-library build/c-defs.js \
+		$(LFLAGS) $(OBJS) -o cephes.standalone.wasm
+
 index.js: cephes.wasm $(BUILDFILES)
 	cproto $(CEPHESDIR)/*.c | grep cephes_ | node build/generate-index.js > index.js
