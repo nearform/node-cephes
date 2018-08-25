@@ -50,6 +50,11 @@ function mtherr(name /* char* */, code /* int */) {
   const fnname = AsciiToString(name);
   const codemsg = mtherr_codemsg.get(code);
   const message = 'cephes reports "' + codemsg + '" in ' + fnname;
+
+  // Restore stack to the STACKTOP before throwing. This only works because
+  // all the exported cephes functions are plain functions.
+  exports.stackRestore(0);
+
   if (code == 1) {
     throw new RangeError(message);
   } else {

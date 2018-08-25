@@ -1,10 +1,7 @@
 
-const parser = require('./protos-parser.js');
 const mappoint = require('mappoint');
-
-const internalCephesFunctions = [
-  'hyp2f0', 'onef2', 'threef0'
-];
+const parser = require('./protos-parser.js');
+const { internalCephesFunctions } = require('./constants.js');
 
 const type2llvm = {
   'double': 'double',
@@ -12,51 +9,51 @@ const type2llvm = {
 }
 
 const argGenerators = {
-  double: function (name) {
+  double: function (name, needStack) {
     let code = '';
     code += `  // argument: double ${name}\n`;
     code += `  if (typeof ${name} !== 'number') {\n`;
+    if (needStack) code += '    cephes.stackRestore(stacktop);\n';
     code += `    throw new TypeError('${name} must be a number');\n`;
     code += `  }\n`;
     code += `  const carg_${name} = ${name};\n`;
     return code;
   },
 
-  int: function (name) {
+  int: function (name, needStack) {
     let code = '';
     code += `  // argument: int ${name}\n`;
     code += `  if (typeof ${name} !== 'number') {\n`;
+    if (needStack) code += '    cephes.stackRestore(stacktop);\n';
     code += `    throw new TypeError('${name} must be a number');\n`;
     code += `  }\n`;
     code += `  const carg_${name} = ${name} | 0;\n`;
     return code;
   },
 
-  "double*": function (name) {
+  "double*": function (name, needStack) {
     let code = '';
     code += `  // argument: double* ${name}\n`;
     code += `  const carg_${name} = cephes.stackAlloc(8); // No need to zero-set it.\n`;
     return code;
   },
 
-  "int*": function (name) {
+  "int*": function (name, needStack) {
     let code = '';
     code += `  // argument: int* ${name}\n`;
     code += `  const carg_${name} = cephes.stackAlloc(4); // No need to zero-set it.\n`;
     return code;
   },
 
-  "double[]": function (name) {
+  "double[]": function (name, needStack) {
     let code = '';
     code += `  // argument: double[] ${name}\n`;
-    code += `  const carg_${name} = cephes.stackAlloc(${name}.length << 3);\n`;
-    code += `  if (Array.isArray(${name})) {\n`;
-    code += `    cephes.writeArrayToMemory(new Uint8Array(new Float64Array(${name}).buffer), carg_${name});\n`;
-    code += `  } else if (${name} instanceof Float64Array) {\n`;
-    code += `    cephes.writeArrayToMemory(new Uint8Array(${name}.buffer), carg_${name});\n`;
-    code += `  } else {\n`;
-    code += `    throw new TypeError('${name} must be either an Array or Float64Array');\n`;
+    code += `  if (!(${name} instanceof Float64Array)) {\n`;
+    if (needStack) code += '    cephes.stackRestore(stacktop);\n';
+    code += `    throw new TypeError('${name} must be either a Float64Array');\n`;
     code += `  }\n`;
+    code += `  const carg_${name} = cephes.stackAlloc(${name}.length << 3);\n`;
+    code += `  cephes.writeArrayToMemory(new Uint8Array(${name}.buffer, ${name}.byteOffset, ${name}.byteLength), carg_${name});\n`;
     return code;
   }
 };
@@ -116,7 +113,7 @@ process.stdin
     // function arguments
     //
     for (const {fullType, name} of functionArgs) {
-      code += argGenerators[fullType](name);
+      code += argGenerators[fullType](name, needStack);
       code += '\n';
     }
 
@@ -148,7 +145,7 @@ process.stdin
       }
       code += '  }];\n';
     } else {
-      code += ' // No pointers, so just return fn_ret\n';
+      code += '  // No pointers, so just return fn_ret\n';
       code += '  const ret = fn_ret;\n';
     }
     code += '\n';
