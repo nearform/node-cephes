@@ -1,7 +1,6 @@
 
-const mappoint = require('mappoint');
-const parser = require('./protos-parser.js');
-const { internalCephesFunctions } = require('./constants.js');
+const stream = require('stream');
+const reader = require('./reader.js');
 
 const type2llvm = {
   'double': 'double',
@@ -63,17 +62,14 @@ const cephes = require('./cephes.js');
 
 `;
 
-process.stdout.write(header);
+class InterfaceGenerator extends stream.Transform {
+  constructor() {
+    super({ objectMode: true });
+    this.push(header);
+  }
 
-process.stdin
-  .pipe(parser())
-  .pipe(mappoint({ objectMode: true }, function (data, done) {
+  _transform(data, encoding, done) {
     const {filename, returnType, functionName, functionArgs} = data;
-
-    // Skip some internal functions
-    if (internalCephesFunctions.includes(functionName)) {
-      return done(null);
-    }
 
     // Check if the stack will be needed because of isPointer or isArray
     const needStack = functionArgs.some((arg) => arg.isArray || arg.isPointer);
@@ -162,5 +158,10 @@ process.stdin
     code += '\n';
 
     done(null, code);
-  }))
+  }
+}
+
+process.stdin
+  .pipe(reader())
+  .pipe(new InterfaceGenerator())
   .pipe(process.stdout)

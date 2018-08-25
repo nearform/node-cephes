@@ -1,14 +1,16 @@
 
 CEPHESDIR := cephes
+BUILDDIR := build
 OBJS := $(patsubst %.c,%.bc,$(wildcard $(CEPHESDIR)/*.c)) build/malloc_free.bc
-BUILDFILES := $(wildcard $(CEPHESDIR)/*.c)
+BUILDFILES := $(wildcard $(CEPHESDIR)/*.c) build/malloc_free.c
+GENERATEFILES := $(wildcard $(BUILDDIR)/*.js) $(wildcard $(BUILDDIR)/*.md)
 
 CFLAGS:=-O2 -g3
 LFLAGS:=-O3 -g3
 
 .PHONY: download build
 
-build: index.js
+build: index.js README.md
 all: download build
 
 clean:
@@ -36,6 +38,9 @@ download: | cephes/
 
 	@# Download misc extension
 	curl http://www.netlib.org/cephes/misc.tgz | tar xz -C $(CEPHESDIR)
+
+	@# Download documentation
+	curl http://www.netlib.org/cephes/cephes.doc > $(CEPHESDIR)/cephes.txt
 
 	@# Remove compile files and instructions
 	cd $(CEPHESDIR) && \
@@ -119,7 +124,7 @@ cephes.wasm: $(OBJS)
 		-s INVOKE_RUN=0 \
 		-s DISABLE_EXCEPTION_CATCHING=1 \
 		-s ASSERTIONS=0 \
-		--js-library build/c-defs.js \
+		--js-library $(BUILDDIR)/c-defs.js \
 		$(LFLAGS) $(OBJS) -o cephes-temp.js
 	rm cephes-temp.js
 	mv cephes-temp.wasm cephes.wasm
@@ -139,8 +144,14 @@ cephes.standalone.wasm: $(OBJS)
 			sed 's/,$$//' \
 		)]" \
 		-s SIDE_MODULE=1 \
-		--js-library build/c-defs.js \
+		--js-library $(BUILDDIR)/c-defs.js \
 		$(LFLAGS) $(OBJS) -o cephes.standalone.wasm
 
-index.js: cephes.wasm $(BUILDFILES)
-	 cproto $(CEPHESDIR)/*.c | grep -v ignore_ | node build/generate-index.js > index.js
+index.js: cephes.wasm $(BUILDFILES) $(GENERATEFILES)
+	cproto $(CEPHESDIR)/*.c | grep -v ignore_ | node $(BUILDDIR)/generate-interface.js > index.js
+
+README.md: $(CEPHESDIR)/cephes.txt $(BUILDFILES) $(GENERATEFILES)
+	cat $(BUILDDIR)/readme-header.md > README.md
+	cproto $(CEPHESDIR)/*.c | grep -v ignore_ | node $(BUILDDIR)/generate-readme-toc.js >> README.md
+	cproto $(CEPHESDIR)/*.c | grep -v ignore_ | node $(BUILDDIR)/generate-readme-jsdoc.js >> README.md
+	cat $(BUILDDIR)/readme-footer.md >> README.md

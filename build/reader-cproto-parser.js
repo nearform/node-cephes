@@ -3,11 +3,11 @@ const stream = require('stream');
 const split2 = require('split2');
 const pumpify = require('pumpify');
 
-var SPLIT_COMMENT = /^\/\* cephes\/([a-z0-9]+)\.c \*\/$/;
-var SPLIT_PROTO = /^(double|int) cephes_([a-z0-9]+)\(([A-Za-z0-9_ ,*\[\]]+)\);$/;
-var SPLIT_ARG = /^(double|int) (\*)?(?:cephes_)?([A-Za-z0-9]+)(\[\])?$/;
+const SPLIT_COMMENT = /^\/\* cephes\/([a-z0-9]+)\.c \*\/$/;
+const SPLIT_PROTO = /^(double|int) cephes_([a-z0-9]+)\(([A-Za-z0-9_ ,*\[\]]+)\);$/;
+const SPLIT_ARG = /^(double|int) (\*)?(?:cephes_)?([A-Za-z0-9]+)(\[\])?$/;
 
-class ProtoParser extends stream.Transform {
+class CprotoLineParser extends stream.Transform {
   constructor() {
     super({ objectMode: true });
 
@@ -54,11 +54,11 @@ class ProtoParser extends stream.Transform {
   }
 }
 
-function parser() {
+function cprotoParser() {
   return pumpify.obj(
     split2(),
-    new ProtoParser()
+    new CprotoLineParser()
   );
 }
 
-module.exports = parser;
+module.exports = cprotoParser;
