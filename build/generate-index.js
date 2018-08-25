@@ -71,7 +71,7 @@ process.stdout.write(header);
 process.stdin
   .pipe(parser())
   .pipe(mappoint({ objectMode: true }, function (data, done) {
-    const {returnType, functionName, functionArgs} = data;
+    const {filename, returnType, functionName, functionArgs} = data;
 
     // Skip some internal functions
     if (internalCephesFunctions.includes(functionName)) {
@@ -94,6 +94,7 @@ process.stdin
     //
 
     // function name
+    code += `// from cephes/${filename}.c\n`;
     code += `exports.${functionName} = function ${functionName}(`
     // function arguments
     for (const {type, isPointer, isArray, name} of functionArgs) {

@@ -143,4 +143,4 @@ cephes.standalone.wasm: $(OBJS)
 		$(LFLAGS) $(OBJS) -o cephes.standalone.wasm
 
 index.js: cephes.wasm $(BUILDFILES)
-	cproto $(CEPHESDIR)/*.c | grep cephes_ | node build/generate-index.js > index.js
+	 cproto $(CEPHESDIR)/*.c | grep -v ignore_ | node build/generate-index.js > index.js
