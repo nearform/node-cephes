@@ -21,14 +21,6 @@ const HEAP32 = new Int32Array(wasmMemory.buffer);
 const HEAPF32 = new Float32Array(wasmMemory.buffer);
 const HEAPF64 = new Float64Array(wasmMemory.buffer);
 
-// Define stack to start at 16
-const STACK_BASE = 16;
-const STACK_MAX = STACK_BASE + TOTAL_STACK;
-
-// Define the dynamic top to start at STACK_MAX
-const DYNAMICTOP_PTR = 0;
-HEAP32[DYNAMICTOP_PTR>>2] = STACK_MAX;
-
 //
 // define WASM imports
 //
@@ -41,20 +33,20 @@ function AsciiToString(ptr) {
   }
 }
 
-function _mtherr(name /* char* */, code /* int */) {
-  // from mtherr.c
-  const mtherr_codemsg = new Map([
-    [0, 'unknown error'],
-    [1, 'argument domain error'],
-    [2, 'function singularity'],
-    [3, 'overflow range error'],
-    [4, 'underflow range error'],
-    [5, 'total loss of precision'],
-    [6, 'partial loss of precision'],
-    [33, 'Unix domain error code'],
-    [34, 'Unix range error code']
-  ]);
+// from mtherr.c
+const mtherr_codemsg = new Map([
+  [0, 'unknown error'],
+  [1, 'argument domain error'],
+  [2, 'function singularity'],
+  [3, 'overflow range error'],
+  [4, 'underflow range error'],
+  [5, 'total loss of precision'],
+  [6, 'partial loss of precision'],
+  [33, 'Unix domain error code'],
+  [34, 'Unix range error code']
+]);
 
+function mtherr(name /* char* */, code /* int */) {
   const fnname = AsciiToString(name);
   const codemsg = mtherr_codemsg.get(code);
   const message = 'cephes reports "' + codemsg + '" in ' + fnname;
@@ -65,30 +57,15 @@ function _mtherr(name /* char* */, code /* int */) {
   }
 }
 
-function makeDeadFunction(name) {
-  return function () {
-    throw new Error(msg + ' should never be called, arguments: ' + JSON.stringify(arguments));
-  }
-}
-
 const wasmImports = {
   'env': {
-    // dead functions
-    enlargeMemory: makeDeadFunction('enlargeMemory'),
-    getTotalMemory: makeDeadFunction('getTotalMemory'),
-    abortOnCannotGrowMemory: makeDeadFunction('abortOnCannotGrowMemory'),
-    ___setErrNo: makeDeadFunction('___setErrNo'),
-    _abort: makeDeadFunction('_abort'),
-    ___errno_location: makeDeadFunction('___errno_location'),
-
     // cephes error handler
-    "_mtherr": _mtherr,
+    "_mtherr": mtherr,
 
     // memory
     "memory": wasmMemory,
-    "DYNAMICTOP_PTR": DYNAMICTOP_PTR,
-    "STACKTOP": STACK_BASE,
-    "STACK_MAX": STACK_MAX
+    "STACKTOP": 0,
+    "STACK_MAX": TOTAL_STACK
   }
 };
 

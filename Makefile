@@ -1,6 +1,6 @@
 
 CEPHESDIR := cephes
-OBJS := $(patsubst %.c,%.bc,$(wildcard $(CEPHESDIR)/*.c))
+OBJS := $(patsubst %.c,%.bc,$(wildcard $(CEPHESDIR)/*.c)) build/malloc_free.bc
 BUILDFILES := $(wildcard $(CEPHESDIR)/*.c)
 
 CFLAGS:=-O2 -g3
