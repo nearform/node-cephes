@@ -22,6 +22,10 @@ free to send a pull request if you need one of them._
 npm install cephes
 ```
 
+If you are looking on GitHub, you will notice some files are missing. These
+are statically build from the cephes library. See the
+[CONTRIBUTING.md](CONTRIBUTING.md) file, for how to build them.
+
 ## Usage
 
 ```js

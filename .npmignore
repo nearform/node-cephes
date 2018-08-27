@@ -1,10 +1,10 @@
 
-# Build Files
+# Temporary Build Files
 *.bc
 *.wast
 /cephes.standalone.wasm
-/cephes.wasm
-/index.js
+#/cephes.wasm
+#/index.js
 
 # Logs
 logs

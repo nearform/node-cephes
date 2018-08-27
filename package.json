@@ -1,7 +1,17 @@
 {
+  "name": "cephes",
+  "description": "Implementation of special functions and distributions mathmatical functions from the cephes library.",
+  "repository": "nearform/node-cephes",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "tap test/*.test.js"
+  },
   "devDependencies": {
+    "tap": "^12.0.1",
     "mappoint": "^0.2.3",
     "pumpify": "^1.5.1",
     "split2": "^3.0.0"
-  }
+  },
+  "license": "BSD-3-Clause"
 }
