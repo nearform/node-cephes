@@ -44,7 +44,7 @@ class JSDocCGenerator extends stream.Transform {
 
     // function name
     if (extraReturn) {
-      code += `<h4 id="ref-${functionName}"> [${returnType}, extra] = cephes.${functionName}(`;
+      code += `#### [${returnType}, extra] = cephes.${functionName}(`;
     } else {
       code += `#### ${returnType} = cephes.${functionName}(`;
     }
@@ -63,7 +63,7 @@ class JSDocCGenerator extends stream.Transform {
     // Remove training comma
     code = code.slice(0, -2);
     // finish function header
-    code += ')</h4>\n';
+    code += ')\n';
     code += '\n';
 
     //

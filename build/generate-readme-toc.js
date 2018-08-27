@@ -19,6 +19,35 @@ const footer = `
 </table>
 `
 
+function JSDocHeaderId({extraReturn, returnType, functionName, functionArgs}) {
+  code = '';
+
+  // function name
+  if (extraReturn) {
+    code += `[${returnType}, extra] = cephes.${functionName}(`;
+  } else {
+    code += `${returnType} = cephes.${functionName}(`;
+  }
+  // function arguments
+  for (const {type, isPointer, isArray, fullType, name} of functionArgs) {
+    if (isPointer) continue;
+
+    if (isArray && type === 'double') {
+      code += `${name}: Float64Array, `;
+    } else if (!isArray) {
+      code += `${name}: ${type}, `;
+    } else {
+      throw new Error(`unsupported type: ${fullType}`);
+    }
+  }
+  // Remove training comma
+  code = code.slice(0, -2);
+  // finish function header
+  code += ')';
+
+  return code.replace(/[\[ ]/g, '-').replace(/[=,.():\]]/g, '').toLowerCase();
+}
+
 class TocGenerator extends stream.Transform {
   constructor() {
     super({ objectMode: true });
@@ -81,7 +110,7 @@ class TocGenerator extends stream.Transform {
     code += '    <td>';
     code += `<a href="http://www.netlib.org/cephes/doubldoc.html#${functionName}">c-doc</a>`;
     code += '&nbsp;&nbsp;&#8226;&nbsp;&nbsp;';
-    code += `<a href="#ref-${functionName}">js-doc</a>`;
+    code += `<a href="#${JSDocHeaderId({extraReturn, returnType, functionName, functionArgs})}">js-doc</a>`;
     code += '</td>\n';
 
     code += '</tr>\n';
