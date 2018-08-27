@@ -795,7 +795,7 @@ const ret = cephes.round(x);
 const [ret, extra] = cephes.frexp(x);
 ```
 
-The `extra` object contains the following values: 
+The `extra` object contains the following values:
 
 ```js
 const {
@@ -837,7 +837,7 @@ const ret = cephes.radian(d, m, s);
 const [ret, extra] = cephes.sincos(x, flg);
 ```
 
-The `extra` object contains the following values: 
+The `extra` object contains the following values:
 
 ```js
 const {
@@ -1104,7 +1104,7 @@ const ret = cephes.expn(n, x);
 const [ret, extra] = cephes.shichi(x);
 ```
 
-The `extra` object contains the following values: 
+The `extra` object contains the following values:
 
 ```js
 const {
@@ -1121,7 +1121,7 @@ const {
 const [ret, extra] = cephes.sici(x);
 ```
 
-The `extra` object contains the following values: 
+The `extra` object contains the following values:
 
 ```js
 const {
@@ -1262,7 +1262,7 @@ const ret = cephes.dawsn(xx);
 const [ret, extra] = cephes.fresnl(xxa);
 ```
 
-The `extra` object contains the following values: 
+The `extra` object contains the following values:
 
 ```js
 const {
@@ -1281,7 +1281,7 @@ const {
 const [ret, extra] = cephes.airy(x);
 ```
 
-The `extra` object contains the following values: 
+The `extra` object contains the following values:
 
 ```js
 const {
@@ -1496,7 +1496,7 @@ const ret = cephes.ellik(phi, m);
 const [ret, extra] = cephes.ellpj(u, m);
 ```
 
-The `extra` object contains the following values: 
+The `extra` object contains the following values:
 
 ```js
 const {
@@ -1804,32 +1804,15 @@ const ret = cephes.polylog(n, x);
 
 ## LICENSE
 
-~~The cephes library, that this module wraps, can be found at
-http://www.netlib.org/cephes/. The cephes library from the NetLib website,
-doesn't have any license. However, the author Stephen Moshier, has kindly
-given permission for it to be included in a BSD-licensed package.~~
-
 **Waiting for license from Cephes Author**
 
 ```
-Copyright (c) 2018, nearForm
-All rights reserved.
-
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met:
-    * Redistributions of source code must retain the above copyright
-      notice, this list of conditions and the following disclaimer.
-    * Redistributions in binary form must reproduce the above copyright
-      notice, this list of conditions and the following disclaimer in the
-      documentation and/or other materials provided with the distribution.
-    * Neither the name of the organization nor the
-      names of its contributors may be used to endorse or promote products
-      derived from this software without specific prior written permission.
+UNLICENSED
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY
+DISCLAIMED. IN NO EVENT SHALL nearForm BE LIABLE FOR ANY
 DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
 (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
 LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
