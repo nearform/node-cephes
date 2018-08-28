@@ -31,9 +31,18 @@ class CprotoLineParser extends stream.Transform {
         isPointer: pointer === '*',
         name: name,
         isArray: array === '[]',
+        isArrayLength: false,
         fullType: `${mainType}${pointer || ''}${array || ''}`
       };
     });
+
+    let lastIsArray = false;
+    for (const functionArg of functionArgs) {
+      if (lastIsArray && functionArg.name.toLowerCase() === 'n') {
+        functionArg.isArrayLength = true;
+      }
+      lastIsArray = functionArg.isArray;
+    }
 
     this.push({
       returnType,

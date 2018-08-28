@@ -1,22 +1,26 @@
 
 CEPHESDIR := cephes
 BUILDDIR := build
-OBJS := $(patsubst %.c,%.bc,$(wildcard $(CEPHESDIR)/*.c)) build/malloc_free.bc
-BUILDFILES := $(wildcard $(CEPHESDIR)/*.c) build/malloc_free.c
+JS_OBJS := $(patsubst %.c,%.bc,$(wildcard $(CEPHESDIR)/*.c)) build/malloc_free.bc
+C_OBJS := $(patsubst %.c,%.o,$(wildcard $(CEPHESDIR)/*.c)) test/expected.o
+CPROTOFILES := $(wildcard $(CEPHESDIR)/*.c)
 GENERATEFILES := $(wildcard $(BUILDDIR)/*.js) $(wildcard $(BUILDDIR)/*.md)
 
 CFLAGS:=-O2 -g3
 LFLAGS:=-O3 -g3
 
-.PHONY: download build
+.PHONY: download build test
 
 build: index.js README.md
-all: download build
 
 clean:
-	rm -f $(OBJS)
+	rm -f $(JS_OBJS)
+	rm -f $(C_OBJS)
 	rm -f cephes.wasm cephes.wast
 	rm -f index.js
+
+test: test/expected.ndjson test/actual.test.js
+	npm test
 
 cephes/:
 	mkdir cephes
@@ -76,7 +80,7 @@ download: | cephes/
 	sed -i '' -e 's%/\* #define IBMPC 1 \*/%#define IBMPC 1%g' $(CEPHESDIR)/mconf.h
 
 	@# Create renaming defs to prevent conflict with default symbols
-	echo '#ifndef CEPHES_NAMES_H' >> $(CEPHESDIR)/cephes_names.h
+	echo '#ifndef CEPHES_NAMES_H' > $(CEPHESDIR)/cephes_names.h
 	echo '#define CEPHES_NAMES_H' >> $(CEPHESDIR)/cephes_names.h
 	echo '' >> $(CEPHESDIR)/cephes_names.h
 	cproto $(CEPHESDIR)/*.c | \
@@ -91,6 +95,14 @@ download: | cephes/
 	echo '/* rename defs to prevent conflict with default symbols */' >> $(CEPHESDIR)/mconf.h
 	echo '#include "cephes_names.h"' >> $(CEPHESDIR)/mconf.h
 
+	@# Create proto header file
+	echo '#ifndef CEPHES_H' > $(CEPHESDIR)/cephes.h
+	echo '#define CEPHES_H' >> $(CEPHESDIR)/cephes.h
+	echo '' >> $(CEPHESDIR)/cephes_names.h
+	cproto $(CEPHESDIR)/*.c | grep -v 'ignore_' >> $(CEPHESDIR)/cephes.h
+	echo '' >> $(CEPHESDIR)/cephes_names.h
+	echo '#endif' >> $(CEPHESDIR)/cephes.h
+
 %.bc: %.c $(CEPHESDIR)/cephes_names.h $(CEPHESDIR)/mconf.h
 	@# Format the file so it looks readable
 	clang-format -style=llvm -i $<
@@ -104,7 +116,32 @@ download: | cephes/
 	@# Compile
 	emcc $(CFLAGS) $< -o $@
 
-cephes.wasm: $(OBJS)
+%.o: %.c $(CEPHESDIR)/cephes_names.h $(CEPHESDIR)/mconf.h
+	@# Insert missing #include "mconf.h"
+	@if ! grep -q '#include "mconf.h"' $<; then \
+		printf '%s\n%s\n' '#include "mconf.h"' "$$(cat $<)" > $<; \
+		echo "Inserted missing mconf.h"; \
+	fi
+
+	@# Compile
+	$(CC) $(CFLAGS) -c $< -o $@
+
+test/expected.c: $(CPROTOFILES) $(GENERATEFILES)
+	cproto $(CEPHESDIR)/*.c | grep -v ignore_ | node $(BUILDDIR)/generate-c-tester.js > test/expected.c
+
+test/expected.o: test/expected.c $(CEPHESDIR)/cephes_names.h $(CEPHESDIR)/mconf.h
+	$(CC) $(CFLAGS) -I $(CEPHESDIR) -c $< -o $@
+
+test/expected: $(C_OBJS)
+	$(CC) $(LFLAGS) $^ -o $@
+
+test/expected.ndjson: test/expected
+	test/expected > test/expected.ndjson
+
+test/actual.test.js: $(CPROTOFILES) $(GENERATEFILES)
+	cproto $(CEPHESDIR)/*.c | grep -v ignore_ | node $(BUILDDIR)/generate-js-tester.js > test/actual.test.js
+
+cephes.wasm: $(JS_OBJS)
 	emcc \
 		-s BINARYEN_ASYNC_COMPILATION=0 \
 		-s EXPORTED_FUNCTIONS="[$(shell \
@@ -125,12 +162,12 @@ cephes.wasm: $(OBJS)
 		-s DISABLE_EXCEPTION_CATCHING=1 \
 		-s ASSERTIONS=0 \
 		--js-library $(BUILDDIR)/c-defs.js \
-		$(LFLAGS) $(OBJS) -o cephes-temp.js
+		$(LFLAGS) $^ -o cephes-temp.js
 	rm cephes-temp.js
 	mv cephes-temp.wasm cephes.wasm
 	mv cephes-temp.wast cephes.wast
 
-cephes.standalone.wasm: $(OBJS)
+cephes.standalone.wasm: $(JS_OBJS)
 	@# Work In Progress: try and use the SIDE_MODULE options for a more
 	@# documented approach to stripping out the large and problematic
 	@# emscripten cephes.js file.
@@ -145,12 +182,12 @@ cephes.standalone.wasm: $(OBJS)
 		)]" \
 		-s SIDE_MODULE=1 \
 		--js-library $(BUILDDIR)/c-defs.js \
-		$(LFLAGS) $(OBJS) -o cephes.standalone.wasm
+		$(LFLAGS) $^ -o $@
 
-index.js: cephes.wasm $(BUILDFILES) $(GENERATEFILES)
+index.js: cephes.wasm $(CPROTOFILES) $(GENERATEFILES)
 	cproto $(CEPHESDIR)/*.c | grep -v ignore_ | node $(BUILDDIR)/generate-interface.js > index.js
 
-README.md: $(CEPHESDIR)/cephes.txt $(BUILDFILES) $(GENERATEFILES)
+README.md: $(CEPHESDIR)/cephes.txt $(CPROTOFILES) $(GENERATEFILES)
 	cat $(BUILDDIR)/readme-header.md > README.md
 	cproto $(CEPHESDIR)/*.c | grep -v ignore_ | node $(BUILDDIR)/generate-readme-toc.js >> README.md
 	cproto $(CEPHESDIR)/*.c | grep -v ignore_ | node $(BUILDDIR)/generate-readme-jsdoc.js >> README.md

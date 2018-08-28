@@ -1,7 +1,10 @@
 
 # Temporary Build Files
 *.bc
+%.o
 *.wast
+test/expected
+test/expected.c
 /cephes.standalone.wasm
 #/cephes.wasm
 #/index.js
