@@ -25,9 +25,8 @@ var rng = new XorShift([
 ]);
 
 const type2printf = {
-  'double': '%f',
-  'int': '%d',
-  'double[]': '[%f, %f, %f, %f]'
+  'double': '%.20f',
+  'int': '%d'
 };
 
 const type2zero = {
@@ -130,13 +129,13 @@ class CTesterGenerator extends stream.Transform {
     code += `    printf("{"\n`;
     code += `           "\\"fn\\": \\"${functionName}\\", "\n`;
     code += `           "\\"ret\\": ${type2printf[returnType]}, "\n`;
-    code += `           "\\"args\\": {`;
+    code += `           "\\"args\\": [`;
     for (const { name, isPointer } of functionArgs) {
       if (isPointer) continue;
-      code += `\\"${name}\\": ${fnargs.get(name)}, `;
+      code += `${fnargs.get(name)}, `;
     }
     code = code.slice(0, -2);
-    code += `}, "\n`;
+    code += `], "\n`;
     code += `           "\\"extra\\": {`;
     if (extraReturn) {
       for (const { type, name, isPointer } of functionArgs) {

@@ -138,9 +138,6 @@ test/expected: $(C_OBJS)
 test/expected.ndjson: test/expected
 	test/expected > test/expected.ndjson
 
-test/actual.test.js: $(CPROTOFILES) $(GENERATEFILES)
-	cproto $(CEPHESDIR)/*.c | grep -v ignore_ | node $(BUILDDIR)/generate-js-tester.js > test/actual.test.js
-
 cephes.wasm: $(JS_OBJS)
 	emcc \
 		-s BINARYEN_ASYNC_COMPILATION=0 \
