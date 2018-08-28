@@ -53,3 +53,14 @@ test('isnan handling', function (t) {
   t.equal(cephes.isnan(0), 0);
   t.end();
 });
+
+test('nan returned', function (t) {
+  t.ok(Number.isNaN(cephes.gamma(-Infinity)));
+  t.end();
+})
+
+test('infinity returned', function (t) {
+  const MAXL10 = 308.2547155599167;
+  t.equal(cephes.exp10(MAXL10 + 1), Infinity);
+  t.end();
+})
