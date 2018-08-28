@@ -33,3 +33,23 @@ test('throw error', function (t) {
   t.throws(() => cephes.zeta(1.2, -1), new Error('cephes reports "function singularity" in zeta'));
   t.end();
 });
+
+test('isfinite handling', function (t) {
+  t.equal(cephes.isfinite(NaN), 0);
+  t.equal(cephes.isfinite(Infinity), 0);
+  t.equal(cephes.isfinite(-Infinity), 0);
+  t.equal(cephes.isfinite(-1), 1);
+  t.equal(cephes.isfinite(1), 1);
+  t.equal(cephes.isfinite(0), 1);
+  t.end();
+});
+
+test('isnan handling', function (t) {
+  t.equal(cephes.isnan(NaN), 1);
+  t.equal(cephes.isnan(Infinity), 0);
+  t.equal(cephes.isnan(-Infinity), 0);
+  t.equal(cephes.isnan(-1), 0);
+  t.equal(cephes.isnan(1), 0);
+  t.equal(cephes.isnan(0), 0);
+  t.end();
+});
