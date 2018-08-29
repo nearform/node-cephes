@@ -13,7 +13,7 @@ The cephes library contains C implementations of most
 and other hard-to-implement mathmatical functions.
 
 _Note that there are a few cephes functions that are not exposed here, as some
-of them ar quite hard to make consumable in JavaScript using WebAssembly. Feel
+of them are quite hard to make consumable in JavaScript using WebAssembly. Feel
 free to send a pull request if you need one of them._
 
 ## Install
