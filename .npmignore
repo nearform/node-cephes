@@ -1,7 +1,7 @@
 
 # Temporary Build Files
 *.bc
-%.o
+*.o
 *.wast
 test/expected
 test/expected.c
