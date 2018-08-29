@@ -6,7 +6,8 @@ const TOTAL_STACK = 1024 * 1024; // 1MB
 const TOTAL_MEMORY = 1024 * 1024; // 1MB
 const WASM_PAGE_SIZE = 64 * 1024; // Defined in WebAssembly specs
 
-const WASM_CODE = fs.readFileSync(path.join(__dirname, 'cephes.wasm'));
+// This must be brfs friendly -- see https://github.com/browserify/brfs
+const WASM_CODE = fs.readFileSync(__dirname + '/cephes.wasm');
 
 class CephesWrapper {
   constructor(sync) {
