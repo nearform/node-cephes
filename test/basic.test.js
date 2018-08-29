@@ -64,3 +64,10 @@ test('infinity returned', function (t) {
   t.equal(cephes.exp10(MAXL10 + 1), Infinity);
   t.end();
 })
+
+
+test("compiled is a promise", async function (t) {
+  await cephes.compiled;
+  almostEqual(t, cephes.exp(2), Math.exp(2));
+  t.end();
+});

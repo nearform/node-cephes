@@ -60,6 +60,11 @@ const argGenerators = {
 const header = `
 const cephes = require('./cephes.js');
 
+// Export compiled promise, in Node.js this is just a dummy promise as the
+// WebAssembly program will be compiled synchronously. It takes about 20ms
+// as of Node.js v10.6.1.
+exports.compiled = cephes.compiled;
+
 `;
 
 class InterfaceGenerator extends stream.Transform {

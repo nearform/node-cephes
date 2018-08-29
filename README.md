@@ -28,13 +28,30 @@ are statically build from the cephes library. See the
 
 ## Usage
 
+Cephes is a WebAssembly module but is very small and fast to compile, as it
+doesn't depend on any runtime libraries. In Node.js it is therefore compiled
+synchronously and all you need to do is require the module.
+
 ```js
-const cephes = require('cephes');
+const cephes = require('cephes'); // Node.js
 ```
+
+In the browser, it is, for good pratice, compiled asynchronously. You must
+therefore wait for the `.compiled` promise to be resolved.
+
+```js
+const cephes = require('cephes'); // Browser
+await cephes.compiled;
+```
+
+Note that the `.compiled` promise is also available in Node.js, but it is
+simply a dummy promise that resolves immediately.
+
+### The JavaScript interface
 
 There are three variations of functions to be aware of:
 
-**1. Plain numeric function:**
+#### 1. Plain numeric function
 
 These don't require anything special.
 
@@ -42,7 +59,7 @@ These don't require anything special.
 const value = cephes.zeta(2, 1);
 ```
 
-**2. Functions that return more than one value:**
+#### 2. Functions that return more than one value
 
 In C, these functions return a primary value and then return extra value
 using pointer arguments. In JavaScript this is implemented as a function
@@ -53,7 +70,7 @@ value, the second is an object of the extra returned values.
 const [value, {ai, aip, bi, bip}] = cephes.airy(-1);
 ```
 
-**3. Functions that consumes an array:**
+#### 3. Functions that consumes an array
 
 Some functions consumes an array of values, these must be `TypedArrays` of
 the appropriate type. These functions will typically also require a variation
