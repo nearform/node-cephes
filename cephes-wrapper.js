@@ -97,11 +97,11 @@ class CephesWrapper {
     );
   }
 
-  async _compileAsync() {
-    return new WebAssembly.Instance(
-      await WebAssembly.compile(WASM_CODE),
+  _compileAsync() {
+    return new WebAssembly.instantiate(
+      WASM_CODE,
       this._wasmImports()
-    );
+    ).then((results) => results.instance);
   }
 
   _exportProgram(program) {
