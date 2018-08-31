@@ -7,6 +7,9 @@
   "scripts": {
     "test": "tap test/*.test.js"
   },
+  "dependencies": {
+    "brfs": "^2.0.1"
+  },
   "devDependencies": {
     "almost-equal": "^1.1.0",
     "pumpify": "^1.5.1",
@@ -16,6 +19,11 @@
   },
   "browser": {
     "./cephes.js": "./cephes-browser.js"
+  },
+  "browserify": {
+    "transform": [
+      "brfs"
+    ]
   },
   "license": "BSD-3-Clause"
 }
