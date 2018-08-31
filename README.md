@@ -133,7 +133,7 @@ const value = ephes.polevl(1.1, arrayInput, arrayInput.length - 1);
   <tr>
     <td><code>frexp(x)</code></td>
     <td>Extract exponent</td>
-    <td><a href="http://www.netlib.org/cephes/doubldoc.html#frexp">c-doc</a>&nbsp;&nbsp;&#8226;&nbsp;&nbsp;<a href="#-double-extra--cephesfrexpx-double">js-doc</a></td>
+    <td><a href="http://www.netlib.org/cephes/doubldoc.html#frexp">c-doc</a>&nbsp;&nbsp;&#8226;&nbsp;&nbsp;<a href="#double-extra--cephesfrexpx-double">js-doc</a></td>
 </tr>
   <tr>
     <td><code>ldexp(x, pw2)</code></td>
@@ -156,7 +156,7 @@ const value = ephes.polevl(1.1, arrayInput, arrayInput.length - 1);
   <tr>
     <td><code>sincos(x, flg)</code></td>
     <td>Circular sine and cosine of argument in degrees</td>
-    <td><a href="http://www.netlib.org/cephes/doubldoc.html#sincos">c-doc</a>&nbsp;&nbsp;&#8226;&nbsp;&nbsp;<a href="#-int-extra--cephessincosx-double-flg-int">js-doc</a></td>
+    <td><a href="http://www.netlib.org/cephes/doubldoc.html#sincos">c-doc</a>&nbsp;&nbsp;&#8226;&nbsp;&nbsp;<a href="#int-extra--cephessincosx-double-flg-int">js-doc</a></td>
 </tr>
   <tr>
     <td><code>cot(x)</code></td>
@@ -319,12 +319,12 @@ const value = ephes.polevl(1.1, arrayInput, arrayInput.length - 1);
   <tr>
     <td><code>shichi(x)</code></td>
     <td>Hyperbolic cosine integral</td>
-    <td><a href="http://www.netlib.org/cephes/doubldoc.html#shichi">c-doc</a>&nbsp;&nbsp;&#8226;&nbsp;&nbsp;<a href="#-int-extra--cephesshichix-double">js-doc</a></td>
+    <td><a href="http://www.netlib.org/cephes/doubldoc.html#shichi">c-doc</a>&nbsp;&nbsp;&#8226;&nbsp;&nbsp;<a href="#int-extra--cephesshichix-double">js-doc</a></td>
 </tr>
   <tr>
     <td><code>sici(x)</code></td>
     <td>Cosine integral</td>
-    <td><a href="http://www.netlib.org/cephes/doubldoc.html#sici">c-doc</a>&nbsp;&nbsp;&#8226;&nbsp;&nbsp;<a href="#-int-extra--cephessicix-double">js-doc</a></td>
+    <td><a href="http://www.netlib.org/cephes/doubldoc.html#sici">c-doc</a>&nbsp;&nbsp;&#8226;&nbsp;&nbsp;<a href="#int-extra--cephessicix-double">js-doc</a></td>
 </tr>
   <tr>
     <td colspan="3"><strong>Gamma</strong></td>
@@ -410,7 +410,7 @@ const value = ephes.polevl(1.1, arrayInput, arrayInput.length - 1);
   <tr>
     <td><code>fresnl(xxa)</code></td>
     <td>Fresnel integral</td>
-    <td><a href="http://www.netlib.org/cephes/doubldoc.html#fresnl">c-doc</a>&nbsp;&nbsp;&#8226;&nbsp;&nbsp;<a href="#-int-extra--cephesfresnlxxa-double">js-doc</a></td>
+    <td><a href="http://www.netlib.org/cephes/doubldoc.html#fresnl">c-doc</a>&nbsp;&nbsp;&#8226;&nbsp;&nbsp;<a href="#int-extra--cephesfresnlxxa-double">js-doc</a></td>
 </tr>
   <tr>
     <td colspan="3"><strong>Bessel</strong></td>
@@ -418,7 +418,7 @@ const value = ephes.polevl(1.1, arrayInput, arrayInput.length - 1);
   <tr>
     <td><code>airy(x)</code></td>
     <td>Airy</td>
-    <td><a href="http://www.netlib.org/cephes/doubldoc.html#airy">c-doc</a>&nbsp;&nbsp;&#8226;&nbsp;&nbsp;<a href="#-int-extra--cephesairyx-double">js-doc</a></td>
+    <td><a href="http://www.netlib.org/cephes/doubldoc.html#airy">c-doc</a>&nbsp;&nbsp;&#8226;&nbsp;&nbsp;<a href="#int-extra--cephesairyx-double">js-doc</a></td>
 </tr>
   <tr>
     <td><code>j0(x)</code></td>
@@ -549,7 +549,7 @@ const value = ephes.polevl(1.1, arrayInput, arrayInput.length - 1);
   <tr>
     <td><code>ellpj(u, m)</code></td>
     <td>Jacobian elliptic function</td>
-    <td><a href="http://www.netlib.org/cephes/doubldoc.html#ellpj">c-doc</a>&nbsp;&nbsp;&#8226;&nbsp;&nbsp;<a href="#-int-extra--cephesellpju-double-m-double">js-doc</a></td>
+    <td><a href="http://www.netlib.org/cephes/doubldoc.html#ellpj">c-doc</a>&nbsp;&nbsp;&#8226;&nbsp;&nbsp;<a href="#int-extra--cephesellpju-double-m-double">js-doc</a></td>
 </tr>
   <tr>
     <td colspan="3"><strong>Probability</strong></td>

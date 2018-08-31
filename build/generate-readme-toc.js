@@ -45,7 +45,7 @@ function JSDocHeaderId({extraReturn, returnType, functionName, functionArgs}) {
   // finish function header
   code += ')';
 
-  return code.replace(/[\[ ]/g, '-').replace(/[=,.():\]]/g, '').toLowerCase();
+  return code.replace(/[ ]/g, '-').replace(/[=,.():\[\]]/g, '').toLowerCase();
 }
 
 class TocGenerator extends stream.Transform {
