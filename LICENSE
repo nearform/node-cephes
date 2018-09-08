@@ -1,12 +1,177 @@
-UNLICENSED
+Copyright (c) 2018, NearForm
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+    * Neither the name of the <organization> nor the
+      names of its contributors may be used to endorse or promote products
+      derived from this software without specific prior written permission.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-DISCLAIMED. IN NO EVENT SHALL nearForm BE LIABLE FOR ANY
+DISCLAIMED. IN NO EVENT SHALL NearForm BE LIABLE FOR ANY
 DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
 (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
 LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
 ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+------------------------- SPECIAL CEPHES LICENSE ------------------------------
+
+Copyright (c) 2018, Steven Moshier
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+    * Neither the name of the <organization> nor the
+      names of its contributors may be used to endorse or promote products
+      derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL Steven Moshier BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+---- EMAIL GIVING SPECIAL LICENSE PERMIT FROM CEPHES AUTHOR STEVEN MOSHIER ----
+
+Delivered-To: andreas.madsen@nearform.com
+Received: by 2002:a50:cddc:0:0:0:0:0 with SMTP id h28-v6csp52116edj;
+        Fri, 7 Sep 2018 16:14:02 -0700 (PDT)
+X-Google-Smtp-Source: ANB0VdaJ8YzCIo8Pd/Q7wNj7S+e6aPmvMpZNFdmB7vKIgcyJIMw+gC8rAaDjX0zIeAO8g+s/Pm/d
+X-Received: by 2002:a0c:9e5a:: with SMTP id z26-v6mr7591946qve.15.1536362042101;
+        Fri, 07 Sep 2018 16:14:02 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1536362042; cv=none;
+        d=google.com; s=arc-20160816;
+        b=gn7rymZroJyBAgkSBv7ukG7UQE2wp6D+G426Phjiw3yCmCsz2V3w0UtL+Pud+pXDXT
+         iAWJnytIaOHT/0SE333Inc3/N+amK+mThqTEtU8mFuj3QYOEXsHBouyuBZXw5G0qgao+
+         u2iH1VlEqLCklwazXhzh99gh8TLicYd/d4kU5Hn5b11G+CACyvgmMVGXghjWoiCe+ba9
+         2K1sYskBrA3DMhx0v0x7ACU/iXlbcBdtMFE//HrDC4ekw93nAVdgoFRqNhSEtVRCyPyA
+         3tHKV84V9ZeOzNTwoKA04A7YOH1jkWls98ZjFdipyIUKV1sftj1l2eWqYZK6XTfX0zFm
+         +erQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20160816;
+        h=mime-version:user-agent:references:message-id:in-reply-to:subject
+         :to:from:date;
+        bh=Wb3HEoeLyQIq4UYBEAC8NHvjq6b4Xj7Fmlpy0oiZ8pM=;
+        b=WWGk93tnvmx7qHOvWCkiYhRW2lkFGEAfKmP454CPbUrFkb2obY8PBoPdql702uNz33
+         57GjX2pp/9+jqzwBcjQckhFhsKlRwTjKl1g+ei7wtxY6yVL7haaxIEE4QCsbs3a4qZ5L
+         KUpfSSl12/0SxPIuOuVJEa17Pg9j94oBqyzwOGtrcLxdrcSdzyUkE3mCI04dxKYhDEAS
+         MhUDbTgG8fW6dZa+AqmHt4qeEcvxpEKOuG06r9TWdiW6+0gbrKhCfD9tNtfoQLL5n/9k
+         D9l1blA0haxSl8vh1IGlYNHvN8VEfEWkmAIG3QcBpwa00UeTNLIev3xR8pYBWz3w2qxD
+         z+ew==
+ARC-Authentication-Results: i=1; mx.google.com;
+       spf=neutral (google.com: 209.17.115.46 is neither permitted nor denied by domain of steve@moshier.net) smtp.mailfrom=steve@moshier.net
+Return-Path: <steve@moshier.net>
+Received: from atl4mhob08.registeredsite.com (atl4mhob08.registeredsite.com. [209.17.115.46])
+        by mx.google.com with ESMTPS id 47-v6si7209544qto.215.2018.09.07.16.14.01
+        for <andreas.madsen@nearform.com>
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 07 Sep 2018 16:14:01 -0700 (PDT)
+Received-SPF: neutral (google.com: 209.17.115.46 is neither permitted nor denied by domain of steve@moshier.net) client-ip=209.17.115.46;
+Authentication-Results: mx.google.com;
+       spf=neutral (google.com: 209.17.115.46 is neither permitted nor denied by domain of steve@moshier.net) smtp.mailfrom=steve@moshier.net
+Received: from mailpod.hostingplatform.com (atl4qobmail01pod1.registeredsite.com [10.30.71.113])
+	by atl4mhob08.registeredsite.com (8.14.4/8.14.4) with ESMTP id w87NDxbh013437
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL)
+	for <andreas.madsen@nearform.com>; Fri, 7 Sep 2018 19:13:59 -0400
+Received: (qmail 23939 invoked by uid 0); 7 Sep 2018 23:13:59 -0000
+X-TCPREMOTEIP: 24.34.140.17
+X-Authenticated-UID: steve@moshier.net
+Received: from unknown (HELO ?192.168.2.8?) (steve@moshier.net@24.34.140.17)
+  by 0 with ESMTPA; 7 Sep 2018 23:13:59 -0000
+Date: Fri, 7 Sep 2018 19:13:54 -0400 (EDT)
+From: Stephen Moshier <steve@moshier.net>
+X-X-Sender: steve@n2800
+To: Andreas Madsen <andreas.madsen@nearform.com>
+Subject: Re: License for cephes
+In-Reply-To: <CAMShtBamKYVjqsQn4_c-ibi8yXCkHaJr9=+r4J7k1p=fVWi5hQ@mail.gmail.com>
+Message-ID: <alpine.DEB.2.20.1809071905330.11567@n2800>
+References: <CAMShtBamKYVjqsQn4_c-ibi8yXCkHaJr9=+r4J7k1p=fVWi5hQ@mail.gmail.com>
+User-Agent: Alpine 2.20 (DEB 67 2015-01-07)
+MIME-Version: 1.0
+Content-Type: multipart/mixed; BOUNDARY="8323329-577795007-1536362039=:11567"
+
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+
+--8323329-577795007-1536362039=:11567
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8BIT
+
+
+Andreas,
+
+Thank you for writing.  You are welcome to distribute the Cephes material
+posted to the net under a BSD license.
+
+I don't think I know what cephes.doc is.  The distribution -- either from
+netlib.org or moshier.net --  comes with html files that have names like
+doubldoc.html for the double precision functions.  There could be some
+functions not documented, but that's unintentional.
+
+
+On Tue, 28 Aug 2018, Andreas Madsen wrote:
+
+> Dear Mr. Moshier
+> I'm a researcher in machine learning from Denmark. Now and then, I
+> implement machine learning algorithms in JavaScript, which is a huge
+> challenge because JavaScript doesn't come with built-in or third-party
+> implementations of most special functions. I found your amazing cephes
+> library in scipy, and later torch, where I can see that you have
+> granted them a BSD license. I was was wondering if you would be so
+> kind and do the same for us.
+>
+> This would be an open source package, distributed under BSD. We have
+> an early version here: https://github.com/nearform/node-cephes
+>
+> I also have a few questions/comments regarding cephes:
+>
+> 1/ I found that some functions are not included in cephes.doc, is this
+> because they shouldn't be used directly or is just an accident? The
+> functions are (lbeta, btdtr,smirnov, kolmogorov, smirnovi, kolmogi, nbdtri, stdtri, ei, expx2, ra
+> dian, sincos, cot, cotdg, log1p, expm1, cosm1, signbit, isnan, isfini
+> te, plancki, planckc, planckd, planckw, p1evl, polylog). Especially
+> the Kolmogorov–Smirnov distribution and functional inverse variations
+> would be nice to use.
+>
+> 2/ The subtitle "Polynomials and Power Series" is missing for the
+> "Double Precision Routines". I'm parsing the cephes.doc file to build
+> the documentation, so this is a bit unfortunate, but not a big
+> problem.
+>
+> Thanks again for writing this amazing library, that is truly needed
+> and underappreciated.
+>
+> Best regards
+>
+>
+> --
+> Andreas Madsen
+> Data Science Consultant at nearForm | +4522120174 |
+> andreas.madsen@nearform.com
+> LinkedIn Twitter Github
+>
+> ______________________________________________________________________
+> nearform.com Follow us on Twitter, LinkedIn, Facebook, YouTube
+>
+>
+>
+>
+--8323329-577795007-1536362039=:11567--
