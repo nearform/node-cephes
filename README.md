@@ -10,7 +10,7 @@ This is a WebAssembly packaging of the [cephes library](http://www.netlib.org/ce
 The cephes library contains C implementations of most
 [special functions](https://en.wikipedia.org/wiki/Special_functions),
 [distributions](https://en.wikipedia.org/wiki/Probability_distribution),
-and other hard-to-implement mathmatical functions.
+and other hard-to-implement mathematical functions.
 
 _Note that there are a few cephes functions that are not exposed here, as some
 of them are quite hard to make consumable in JavaScript using WebAssembly. Feel
@@ -23,7 +23,7 @@ npm install cephes
 ```
 
 If you are looking on GitHub, you will notice some files are missing. These
-are statically build from the cephes library. See the
+are statically built from the cephes library. See the
 [CONTRIBUTING.md](CONTRIBUTING.md) file, for how to build them.
 
 ## Usage
@@ -36,7 +36,7 @@ synchronously and all you need to do is require the module.
 const cephes = require('cephes'); // Node.js
 ```
 
-In the browser, it is, for good pratice, compiled asynchronously. You must
+In the browser, it is, for good practice, compiled asynchronously. You must
 therefore wait for the `.compiled` promise to be resolved.
 
 ```js
