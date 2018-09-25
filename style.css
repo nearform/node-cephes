@@ -1,0 +1,124 @@
+
+#ar-walkthrough .ar-walkthrough-step {
+  min-height: 20px;
+}
+
+#ar-walkthrough .ar-walkthrough-step {
+  display: none;
+  grid-template-columns: 48px 1fr;
+  grid-template-rows: auto auto;
+  grid-template-areas:
+    "number text"
+    ". warning";
+  grid-column-gap: 10px;
+}
+#ar-walkthrough .ar-walkthrough-step.ar-walkthrough-selected {
+  display: grid;
+}
+
+#ar-walkthrough .ar-walkthrough-step .ar-walkthrough-number {
+  grid-area: number;
+
+  width: 48px;
+  height: 48px;
+  background: #E7C9F6;
+  border-radius: 100%;
+  text-align: center;
+  line-height: 48px;
+  font-size: 1.5em;
+}
+
+#ar-walkthrough .ar-walkthrough-step .ar-walkthrough-text {
+  grid-area: text;
+  margin: 0;
+}
+
+#ar-walkthrough .ar-walkthrough-pages {
+  display: grid;
+  grid-column-gap: 10px;
+  grid-auto-flow: column;
+  justify-content: center;
+  margin: 1em 0 0.5em 0;
+}
+
+#ar-walkthrough .ar-walkthrough-pages .ar-walkthrough-page {
+  height: 25px;
+  width: 25px;
+  background: #E7C9F6;
+  border-radius: 100%;
+  text-align: center;
+  line-height: 25px;
+  font-size: 0.7em;
+  cursor: pointer;
+}
+
+/* */
+
+#ar-line-graph svg .tick text {
+  font-size: 14px;
+  fill: #505050;
+}
+
+#ar-line-graph svg .tick line {
+  stroke-width: 2;
+  stroke: #505050;
+}
+
+#ar-line-graph svg .background {
+  fill: #EBEBEB;
+}
+
+#ar-line-graph svg .axis-title text {
+  transform: rotate(90deg);
+  text-anchor: middle;
+  fill: #505050;
+}
+
+#ar-line-graph svg .grid line {
+  stroke: #fff;
+  stroke-width: 2;
+}
+
+#ar-line-graph svg .grid .minor line {
+  stroke-opacity: .5;
+}
+
+#ar-line-graph svg .grid text {
+  display: none;
+}
+
+#ar-line-graph svg .axis path,
+#ar-line-graph svg .grid path {
+  display: none;
+}
+
+#ar-line-graph svg .lines .mathline {
+  fill: none;
+  stroke-width: 1px;
+}
+
+#ar-line-graph .legend {
+  display: grid;
+  margin-bottom: 10px;
+  grid-gap: 5px;
+}
+
+#ar-line-graph .legend svg.legend-item {
+  display: block;
+}
+
+#ar-line-graph .legend svg.legend-item .legend-background {
+  fill: #EBEBEB;
+}
+
+#ar-line-graph .legend svg.legend-item .legend-color {
+  text-anchor: middle;
+  alignment-baseline: middle;
+  font: 12px sans-serif;
+}
+
+#ar-line-graph .legend svg.legend-item .legend-text {
+  text-anchor: start;
+  alignment-baseline: middle;
+  font: 12px sans-serif;
+}
