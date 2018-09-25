@@ -1,6 +1,5 @@
 
 const fs = require('fs');
-const path = require('path');
 
 const TOTAL_STACK = 1024 * 1024; // 1MB
 const TOTAL_MEMORY = 1024 * 1024; // 1MB
