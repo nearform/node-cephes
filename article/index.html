@@ -44,7 +44,7 @@
     small and undocumented input range.
   </p>
   <p>
-    In R these functions are often built in and in Python
+    In R these functions are often built in, and in Python,
     <a href="https://www.scipy.org/">SciPy</a> implementations these functions.
     Deep within the <a href="https://github.com/scipy/scipy/tree/master/scipy/special/cephes">
       SciPy source code</a>, we
@@ -60,8 +60,8 @@
   </p>
   <p>
     We have released the WebAssembly version of Cephes on npm, see
-    https://www.npmjs.com/package/cephes. So all you need is to install
-    it with <code>npm install cephes</code>.
+    <a href="https://www.npmjs.com/package/cephes">https://www.npmjs.com/package/cephes</a>.
+    So all you need is to install it with <code>npm install cephes</code>.
   </p>
   <p>
     Using our Cephes module is very simple, as we have wrapped each WebAssembly
@@ -89,7 +89,7 @@ const value = cephes.gamma(2);
       <div class="ar-walkthrough-step">
         <div class="ar-walkthrough-number">1</div>
         <p class="ar-walkthrough-text">
-          The Bessel function is the solution to the equation
+          The <a href="https://en.wikipedia.org/wiki/Bessel_function">Bessel function</a> is the solution to the equation
           <math-latex display-mode latex="x^{2}{\frac {d^{2}y}{dx^{2}}}+x{\frac {dy}{dx}}+\left(x^{2}-\alpha ^{2}\right)y=0"></math-latex>
           The Bessel function is typically used in partial differential equations,
           where <math-latex latex="\alpha"></math-latex> will often be a fixed integer.
@@ -98,7 +98,7 @@ const value = cephes.gamma(2);
       <div class="ar-walkthrough-step">
         <div class="ar-walkthrough-number">2</div>
         <p class="ar-walkthrough-text">
-          The Gamma function <math-latex latex="\Gamma(x)"></math-latex>
+          The <a href="https://en.wikipedia.org/wiki/Gamma">Gamma function</a> <math-latex latex="\Gamma(x)"></math-latex>
           is used in many probability distributions.
           <math-latex display-mode latex="\Gamma (x)=\int _{0}^{\infty }y^{x-1}e^{-y}\,dy"></math-latex>
           As its value increase
@@ -113,7 +113,7 @@ const value = cephes.gamma(2);
       <div class="ar-walkthrough-step">
         <div class="ar-walkthrough-number">3</div>
         <p class="ar-walkthrough-text">
-          The beta distribution is central in a lot of Bayesian statistics.
+          The <a href="https://en.wikipedia.org/wiki/Beta_distribution">beta distribution</a> is central in a lot of Bayesian statistics.
           <math-latex display-mode latex="f_{\mathrm{B}}(x; \alpha, \beta) = \frac{x^{\alpha-1}(1-x)^{\beta-1}}{\mathrm{B}(\alpha,\beta)}"></math-latex>
           The cumulative distribution function is notoriously hard to compute,
           but also this function is implemented by Cephes.
@@ -123,7 +123,7 @@ const value = cephes.gamma(2);
       <div class="ar-walkthrough-step">
         <div class="ar-walkthrough-number">4</div>
         <p class="ar-walkthrough-text">
-          The Airy function <math-latex latex="Ai(x)"></math-latex> is the solution to the differential equation
+          The <a href="https://en.wikipedia.org/wiki/Airy_function">Airy function</a> <math-latex latex="Ai(x)"></math-latex> is the solution to the differential equation
           <math-latex display-mode latex="\frac{d^2y}{dx^2} - xy = 0"></math-latex>
           It is often used in physics such as quantum mechanics. Cephes also
           defines it compimentary function <math-latex latex="Bi(x)"></math-latex>
@@ -152,7 +152,7 @@ const value = cephes.gamma(2);
   <h2>Cephes as an Open Source project</h2>
   <p>
     Cephes is not the best open source library one could imagine. Firstly,
-    it lacks a license. However, its author Stephen L. Moshier have
+    it lacks a license. However, its author Stephen L. Moshier have kindly
     <a href="https://github.com/nearform/node-cephes/blob/master/LICENSE">
       granted us permission to license it </a> as
     <a href="https://tldrlegal.com/license/bsd-3-clause-license-(revised)">
@@ -164,7 +164,7 @@ const value = cephes.gamma(2);
     <a href="https://qz.com/1270139/r-and-python-are-joining-forces-in-the-most-ambitious-crossover-event-of-the-year-for-programmers/">
       are working together on making a better open source library of these
     special functions</a>. But it will take a while before that library is
-    ready until then Cephes is by far the best choice.
+    ready, until then Cephes is by far the best choice.
   </p>
 </dt-article>
 
