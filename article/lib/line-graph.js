@@ -151,7 +151,7 @@ class LineGraph {
       .style('grid-template-columns', function () {
         const maxWidth = Math.max(
           ...Array.from(this.querySelectorAll('svg.legend-item'))
-            .map((elem) => elem.clientWidth)
+            .map((elem) => Math.ceil(parseInt(elem.getAttribute('width'))))
         );
         return `repeat(auto-fit, minmax(${Math.ceil(maxWidth)}px, 1fr)`;
       });

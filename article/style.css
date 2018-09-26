@@ -114,11 +114,13 @@
 #ar-line-graph .legend svg.legend-item .legend-color {
   text-anchor: middle;
   alignment-baseline: middle;
+  dominant-baseline: middle;
   font: 12px sans-serif;
 }
 
 #ar-line-graph .legend svg.legend-item .legend-text {
   text-anchor: start;
   alignment-baseline: middle;
+  dominant-baseline: middle;
   font: 12px sans-serif;
 }

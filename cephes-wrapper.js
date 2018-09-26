@@ -97,7 +97,7 @@ class CephesWrapper {
   }
 
   _compileAsync() {
-    return new WebAssembly.instantiate(
+    return WebAssembly.instantiate(
       WASM_CODE,
       this._wasmImports()
     ).then((results) => results.instance);
