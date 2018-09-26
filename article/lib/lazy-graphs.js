@@ -3,8 +3,8 @@ const d3 = require('../d3.js');
 const cephes = require('../../');
 
 function linspace(start, stop, nsteps){
-  delta = (stop-start)/(nsteps-1)
-  return d3.range(start, stop+delta, delta).slice(0, nsteps)
+  const delta = (stop-start)/(nsteps-1);
+  return d3.range(start, stop+delta, delta).slice(0, nsteps);
 }
 
 class LazyGraphs {
