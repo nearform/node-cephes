@@ -11,7 +11,7 @@ LFLAGS:=-O3 -g3
 
 .PHONY: download build test
 
-build: index.js README.md
+build: index.js cephes-browser-bundled.js README.md
 
 clean:
 	rm -f $(JS_OBJS)
@@ -183,6 +183,9 @@ cephes.standalone.wasm: $(JS_OBJS)
 
 index.js: cephes.wasm $(CPROTOFILES) $(GENERATEFILES)
 	cproto $(CEPHESDIR)/*.c | grep -v ignore_ | node $(BUILDDIR)/generate-interface.js > index.js
+
+cephes-browser-bundled.js: index.js cephes-browser.js
+	rollup --config rollup.config.js --sourcemap --format umd --name cephes -o $@ $<
 
 README.md: $(CEPHESDIR)/cephes.txt $(CPROTOFILES) $(GENERATEFILES)
 	cat $(BUILDDIR)/readme-header.md > README.md
