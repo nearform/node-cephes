@@ -9,6 +9,7 @@ test/expected.c
 /cephes.wasm
 /index.js
 article/bundle.js
+/cephes-browser-bundled.js
 
 # Logs
 logs
