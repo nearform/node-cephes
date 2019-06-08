@@ -10,6 +10,7 @@ test/expected.c
 /index.js
 article/bundle.js
 /cephes-browser-bundled.js
+/cephes-browser-bundled.js.map
 
 # Logs
 logs

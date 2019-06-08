@@ -185,7 +185,7 @@ index.js: cephes.wasm $(CPROTOFILES) $(GENERATEFILES)
 	cproto $(CEPHESDIR)/*.c | grep -v ignore_ | node $(BUILDDIR)/generate-interface.js > index.js
 
 cephes-browser-bundled.js: index.js cephes-browser.js
-	./node_modules/.bin/browserify --standalone cephes --transform brfs -o $@ -e index.js
+	./node_modules/.bin/browserify --debug --standalone cephes --transform brfs -e index.js | exorcist cephes-browser-bundled.js.map > $@
 
 README.md: $(CEPHESDIR)/cephes.txt $(CPROTOFILES) $(GENERATEFILES)
 	cat $(BUILDDIR)/readme-header.md > README.md
