@@ -11,7 +11,7 @@ LFLAGS:=-O3 -g3
 
 .PHONY: download build test
 
-build: index.js README.md
+build: index.js cephes.wasm.base64.json README.md
 
 clean:
 	rm -f $(JS_OBJS)
