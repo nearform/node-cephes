@@ -7,9 +7,7 @@
   "scripts": {
     "test": "tap test/*.test.js"
   },
-  "dependencies": {
-    "brfs": "^2.0.1"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@babel/core": "^7.1.0",
     "@babel/plugin-transform-runtime": "^7.1.0",
@@ -30,11 +28,6 @@
   },
   "browser": {
     "./cephes.js": "./cephes-browser.js"
-  },
-  "browserify": {
-    "transform": [
-      "brfs"
-    ]
   },
   "license": "BSD-3-Clause"
 }

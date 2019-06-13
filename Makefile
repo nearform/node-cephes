@@ -181,6 +181,9 @@ cephes.standalone.wasm: $(JS_OBJS)
 		--js-library $(BUILDDIR)/c-defs.js \
 		$(LFLAGS) $^ -o $@
 
+cephes.wasm.base64.json: cephes.wasm
+	node -p "JSON.stringify(fs.readFileSync('$^', 'base64'))" > $@
+
 index.js: cephes.wasm $(CPROTOFILES) $(GENERATEFILES)
 	cproto $(CEPHESDIR)/*.c | grep -v ignore_ | node $(BUILDDIR)/generate-interface.js > index.js
 
