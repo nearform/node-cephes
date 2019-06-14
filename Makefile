@@ -11,7 +11,7 @@ LFLAGS:=-O3 -g3
 
 .PHONY: download build test
 
-build: index.js README.md
+build: index.js cephes.wasm.base64.json README.md
 
 clean:
 	rm -f $(JS_OBJS)
@@ -180,6 +180,9 @@ cephes.standalone.wasm: $(JS_OBJS)
 		-s SIDE_MODULE=1 \
 		--js-library $(BUILDDIR)/c-defs.js \
 		$(LFLAGS) $^ -o $@
+
+cephes.wasm.base64.json: cephes.wasm
+	node -p "JSON.stringify(fs.readFileSync('$^', 'base64'))" > $@
 
 index.js: cephes.wasm $(CPROTOFILES) $(GENERATEFILES)
 	cproto $(CEPHESDIR)/*.c | grep -v ignore_ | node $(BUILDDIR)/generate-interface.js > index.js
