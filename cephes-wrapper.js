@@ -1,6 +1,4 @@
 
-const fs = require('fs');
-
 const TOTAL_STACK = 1024 * 1024; // 1MB
 const TOTAL_MEMORY = 2 * 1024 * 1024; // 1MB
 const WASM_PAGE_SIZE = 64 * 1024; // Defined in WebAssembly specs
