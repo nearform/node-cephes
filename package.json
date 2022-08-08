@@ -46,7 +46,7 @@
     "./cephes.js": "./cephes-browser.js"
   },
   "lint-staged": {
-    "*.{js}": "eslint --cache --fix"
+    "*.js": "eslint --cache --fix"
   },
   "license": "BSD-3-Clause"
 }
