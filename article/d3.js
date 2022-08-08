@@ -1,4 +1,3 @@
-
 Object.assign(
   module.exports,
   require('d3-array'),
@@ -7,4 +6,4 @@ Object.assign(
   require('d3-axis'),
   require('d3-scale'),
   require('d3-scale-chromatic')
-);
+)

@@ -1,5 +1,4 @@
-
-const CephesWrapper = require('./cephes-wrapper.js');
+const CephesWrapper = require('./cephes-wrapper.js')
 
 // Compile sync by default
-module.exports = new CephesWrapper(true);
+module.exports = new CephesWrapper(true)

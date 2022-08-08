@@ -1,61 +1,60 @@
-
-const stream = require('stream');
-const reader = require('./reader.js');
+const stream = require('stream')
+const reader = require('./reader.js')
 
 const type2llvm = {
-  'double': 'double',
-  'int': 'i32'
+  double: 'double',
+  int: 'i32'
 }
 
 const argGenerators = {
   double: function (name, needStack) {
-    let code = '';
-    code += `  // argument: double ${name}\n`;
-    code += `  if (typeof ${name} !== 'number') {\n`;
-    if (needStack) code += '    cephes.stackRestore(stacktop);\n';
-    code += `    throw new TypeError('${name} must be a number');\n`;
-    code += `  }\n`;
-    code += `  const carg_${name} = ${name};\n`;
-    return code;
+    let code = ''
+    code += `  // argument: double ${name}\n`
+    code += `  if (typeof ${name} !== 'number') {\n`
+    if (needStack) code += '    cephes.stackRestore(stacktop);\n'
+    code += `    throw new TypeError('${name} must be a number');\n`
+    code += `  }\n`
+    code += `  const carg_${name} = ${name};\n`
+    return code
   },
 
   int: function (name, needStack) {
-    let code = '';
-    code += `  // argument: int ${name}\n`;
-    code += `  if (typeof ${name} !== 'number') {\n`;
-    if (needStack) code += '    cephes.stackRestore(stacktop);\n';
-    code += `    throw new TypeError('${name} must be a number');\n`;
-    code += `  }\n`;
-    code += `  const carg_${name} = ${name} | 0;\n`;
-    return code;
+    let code = ''
+    code += `  // argument: int ${name}\n`
+    code += `  if (typeof ${name} !== 'number') {\n`
+    if (needStack) code += '    cephes.stackRestore(stacktop);\n'
+    code += `    throw new TypeError('${name} must be a number');\n`
+    code += `  }\n`
+    code += `  const carg_${name} = ${name} | 0;\n`
+    return code
   },
 
-  "double*": function (name, needStack) {
-    let code = '';
-    code += `  // argument: double* ${name}\n`;
-    code += `  const carg_${name} = cephes.stackAlloc(8); // No need to zero-set it.\n`;
-    return code;
+  'double*': function (name) {
+    let code = ''
+    code += `  // argument: double* ${name}\n`
+    code += `  const carg_${name} = cephes.stackAlloc(8); // No need to zero-set it.\n`
+    return code
   },
 
-  "int*": function (name, needStack) {
-    let code = '';
-    code += `  // argument: int* ${name}\n`;
-    code += `  const carg_${name} = cephes.stackAlloc(4); // No need to zero-set it.\n`;
-    return code;
+  'int*': function (name) {
+    let code = ''
+    code += `  // argument: int* ${name}\n`
+    code += `  const carg_${name} = cephes.stackAlloc(4); // No need to zero-set it.\n`
+    return code
   },
 
-  "double[]": function (name, needStack) {
-    let code = '';
-    code += `  // argument: double[] ${name}\n`;
-    code += `  if (!(${name} instanceof Float64Array)) {\n`;
-    if (needStack) code += '    cephes.stackRestore(stacktop);\n';
-    code += `    throw new TypeError('${name} must be either a Float64Array');\n`;
-    code += `  }\n`;
-    code += `  const carg_${name} = cephes.stackAlloc(${name}.length << 3);\n`;
-    code += `  cephes.writeArrayToMemory(new Uint8Array(${name}.buffer, ${name}.byteOffset, ${name}.byteLength), carg_${name});\n`;
-    return code;
+  'double[]': function (name, needStack) {
+    let code = ''
+    code += `  // argument: double[] ${name}\n`
+    code += `  if (!(${name} instanceof Float64Array)) {\n`
+    if (needStack) code += '    cephes.stackRestore(stacktop);\n'
+    code += `    throw new TypeError('${name} must be either a Float64Array');\n`
+    code += `  }\n`
+    code += `  const carg_${name} = cephes.stackAlloc(${name}.length << 3);\n`
+    code += `  cephes.writeArrayToMemory(new Uint8Array(${name}.buffer, ${name}.byteOffset, ${name}.byteLength), carg_${name});\n`
+    return code
   }
-};
+}
 
 const header = `
 const cephes = require('./cephes.js');
@@ -65,108 +64,106 @@ const cephes = require('./cephes.js');
 // as of Node.js v10.6.1.
 exports.compiled = cephes.compiled;
 
-`;
+`
 
 class InterfaceGenerator extends stream.Transform {
   constructor() {
-    super({ objectMode: true });
-    this.push(header);
+    super({ objectMode: true })
+    this.push(header)
   }
 
   _transform(data, encoding, done) {
-    const {filename, returnType, functionName, functionArgs} = data;
+    const { filename, returnType, functionName, functionArgs } = data
 
     // Check if the stack will be needed because of isPointer or isArray
-    const needStack = functionArgs.some((arg) => arg.isArray || arg.isPointer);
+    const needStack = functionArgs.some(arg => arg.isArray || arg.isPointer)
 
     // Check if there is extra data returned
-    const extraReturn = functionArgs.some((arg) => arg.isPointer);
+    const extraReturn = functionArgs.some(arg => arg.isPointer)
 
     //
     // Start code generation
     //
-    let code = '';
+    let code = ''
 
     //
     // function header
     //
 
     // function name
-    code += `// from cephes/${filename}.c\n`;
+    code += `// from cephes/${filename}.c\n`
     code += `exports.${functionName} = function ${functionName}(`
     // function arguments
-    for (const {type, isPointer, isArray, name} of functionArgs) {
-      if (isPointer) continue;
-      code += `/* ${type}${isArray ? '[]' : ''} */ ${name}, `;
+    for (const { type, isPointer, isArray, name } of functionArgs) {
+      if (isPointer) continue
+      code += `/* ${type}${isArray ? '[]' : ''} */ ${name}, `
     }
     // Remove training comma
-    code = code.slice(0, -2);
+    code = code.slice(0, -2)
     // finish function header
-    code += `) {\n`;
+    code += `) {\n`
 
     if (needStack) {
-      code += '  //Save the STACKTOP because the following code will do some stack allocs\n';
-      code += `  const stacktop = cephes.stackSave();\n`;
-      code += '\n';
+      code +=
+        '  //Save the STACKTOP because the following code will do some stack allocs\n'
+      code += `  const stacktop = cephes.stackSave();\n`
+      code += '\n'
     }
 
     //
     // function arguments
     //
-    for (const {fullType, name} of functionArgs) {
-      code += argGenerators[fullType](name, needStack);
-      code += '\n';
+    for (const { fullType, name } of functionArgs) {
+      code += argGenerators[fullType](name, needStack)
+      code += '\n'
     }
 
     //
     // function call
     //
-    code += `  // return: ${returnType}\n`;
+    code += `  // return: ${returnType}\n`
     // function call
-    code += `  const fn_ret = cephes._cephes_${functionName}(`;
+    code += `  const fn_ret = cephes._cephes_${functionName}(`
     // function arguments
     for (const { name } of functionArgs) {
-      code += `carg_${name}, `;
+      code += `carg_${name}, `
     }
     // Remove training comma
-    code = code.slice(0, -2);
+    code = code.slice(0, -2)
     // finish function header
-    code += `)${returnType === 'int' ? ' | 0' : ''};\n`;
-    code += '\n';
+    code += `)${returnType === 'int' ? ' | 0' : ''};\n`
+    code += '\n'
 
     //
     // function return
     //
     if (extraReturn) {
-      code += '  // There are pointers, so return the values of thoese too\n';
-      code += '  const ret = [fn_ret, {\n';
+      code += '  // There are pointers, so return the values of thoese too\n'
+      code += '  const ret = [fn_ret, {\n'
       for (const { isPointer, name, type } of functionArgs) {
-        if (!isPointer) continue;
-        code += `    '${name}': cephes.getValue(carg_${name}, '${type2llvm[type]}'),\n`;
+        if (!isPointer) continue
+        code += `    '${name}': cephes.getValue(carg_${name}, '${type2llvm[type]}'),\n`
       }
-      code += '  }];\n';
+      code += '  }];\n'
     } else {
-      code += '  // No pointers, so just return fn_ret\n';
-      code += '  const ret = fn_ret;\n';
+      code += '  // No pointers, so just return fn_ret\n'
+      code += '  const ret = fn_ret;\n'
     }
-    code += '\n';
+    code += '\n'
 
     //
     // function footer
     //
     if (needStack) {
-      code += '  // Restore internal stacktop before returning\n';
-      code += '  cephes.stackRestore(stacktop);\n';
+      code += '  // Restore internal stacktop before returning\n'
+      code += '  cephes.stackRestore(stacktop);\n'
     }
-    code += '  return ret;\n';
-    code += '};\n';
-    code += '\n';
+    code += '  return ret;\n'
+    code += '};\n'
+    code += '\n'
 
-    done(null, code);
+    done(null, code)
   }
 }
 
-process.stdin
-  .pipe(reader())
-  .pipe(new InterfaceGenerator())
-  .pipe(process.stdout)
+process.stdin.pipe(reader()).pipe(new InterfaceGenerator()).pipe(process.stdout)
