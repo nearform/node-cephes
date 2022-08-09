@@ -67,7 +67,7 @@ download: | cephes/
 	@# Rename (effectively remove) ceil, floor as they have native
 	@# WebAssembly equivalents (f64.ceil, and f64.floor).
 	@# It will continue to contain defintions for frexp, and ldexp
-	clang-rename \
+	@# clang-rename \
 		-qualified-name=ceil -new-name=ignore_ceil \
 		-qualified-name=floor -new-name=ignore_floor \
 		-i $(CEPHESDIR)/floor.c
@@ -105,7 +105,7 @@ download: | cephes/
 
 %.bc: %.c $(CEPHESDIR)/cephes_names.h $(CEPHESDIR)/mconf.h
 	@# Format the file so it looks readable
-	clang-format -style=llvm -i $<
+	@# clang-format -style=llvm -i $<
 
 	@# Insert missing #include "mconf.h"
 	@if ! grep -q '#include "mconf.h"' $<; then \
@@ -114,7 +114,7 @@ download: | cephes/
 	fi
 
 	@# Compile
-	emcc $(CFLAGS) $< -o $@
+	emcc $(CFLAGS) $< -o $@ -c
 
 %.o: %.c $(CEPHESDIR)/cephes_names.h $(CEPHESDIR)/mconf.h
 	@# Insert missing #include "mconf.h"
@@ -148,7 +148,7 @@ cephes.wasm: $(JS_OBJS)
 			tr '\n' ','  | \
 			sed 's/,$$//' \
 		)]" \
-		-s EXTRA_EXPORTED_RUNTIME_METHODS="['writeArrayToMemory', 'stackAlloc', 'stackSave', 'stackRestore', 'getValue']" \
+		-s EXPORTED_RUNTIME_METHODS="['writeArrayToMemory', 'stackAlloc', 'stackSave', 'stackRestore', 'getValue']" \
 		-s DEFAULT_LIBRARY_FUNCS_TO_INCLUDE="[]" \
 		-s TOTAL_MEMORY=2MB \
 		-s TOTAL_STACK=1MB \
@@ -162,7 +162,7 @@ cephes.wasm: $(JS_OBJS)
 		$(LFLAGS) $^ -o cephes-temp.js
 	rm cephes-temp.js
 	mv cephes-temp.wasm cephes.wasm
-	mv cephes-temp.wast cephes.wast
+	@# mv cephes-temp.wast cephes.wast
 
 cephes.standalone.wasm: $(JS_OBJS)
 	@# Work In Progress: try and use the SIDE_MODULE options for a more
