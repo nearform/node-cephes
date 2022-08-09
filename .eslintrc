@@ -15,5 +15,13 @@
     "window": true,
     "document": true,
     "WebAssembly": true
-  }
+  },
+  "overrides": [{
+    "files":["**/*.js"],
+    "rules": {
+      "no-useless-escape":["off"],
+      "no-unused-vars":["off"],
+      "no-undef":["off"]
+    }
+  }]
 }

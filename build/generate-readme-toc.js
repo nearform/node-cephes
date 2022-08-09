@@ -1,4 +1,3 @@
-/* eslint-disable no-useless-escape */
 const stream = require('stream')
 const reader = require('./reader.js')
 
