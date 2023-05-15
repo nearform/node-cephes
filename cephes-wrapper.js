@@ -3,6 +3,7 @@ const TOTAL_STACK = 1024 * 1024; // 1MB
 const TOTAL_MEMORY = 2 * 1024 * 1024; // 1MB
 const WASM_PAGE_SIZE = 64 * 1024; // Defined in WebAssembly specs
 
+if (self && !self.Buffer) self.Buffer = require('buffer').Buffer;
 const WASM_CODE = Buffer.from(require('./cephes.wasm.base64.json'), 'base64');
 
 class CephesWrapper {
