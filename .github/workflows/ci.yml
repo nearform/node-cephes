@@ -31,7 +31,8 @@ jobs:
           sudo apt-get install python3          
           
           wget https://apt.llvm.org/llvm.sh
-
+          chmod +x llvm.sh
+          
           git clone https://github.com/emscripten-core/emsdk.git
           cd emsdk
           git pull
