@@ -29,22 +29,22 @@ download: | cephes/
 	rm -f $(CEPHESDIR)/*
 
 	@# Download main library
-	curl http://www.netlib.org/cephes/cmath.tgz | tar xz -C $(CEPHESDIR)
+	curl -0L http://www.netlib.org/cephes/cmath.tgz | tar xz -C $(CEPHESDIR)
 
 	@# Download cprob extension
-	curl http://www.netlib.org/cephes/cprob.tgz | tar xz -C $(CEPHESDIR)
+	curl -0L http://www.netlib.org/cephes/cprob.tgz | tar xz -C $(CEPHESDIR)
 
 	@# Download ellf extension
-	curl http://www.netlib.org/cephes/ellf.tgz | tar xz -C $(CEPHESDIR)
+	curl -0L http://www.netlib.org/cephes/ellf.tgz | tar xz -C $(CEPHESDIR)
 
 	@# Download bessel extension
-	curl http://www.netlib.org/cephes/bessel.tgz | tar xz -C $(CEPHESDIR)
+	curl -0L http://www.netlib.org/cephes/bessel.tgz | tar xz -C $(CEPHESDIR)
 
 	@# Download misc extension
-	curl http://www.netlib.org/cephes/misc.tgz | tar xz -C $(CEPHESDIR)
+	curl -0L http://www.netlib.org/cephes/misc.tgz | tar xz -C $(CEPHESDIR)
 
 	@# Download documentation
-	curl http://www.netlib.org/cephes/cephes.doc > $(CEPHESDIR)/cephes.txt
+	curl -0L http://www.netlib.org/cephes/cephes.doc > $(CEPHESDIR)/cephes.txt
 
 	@# Remove compile files and instructions
 	cd $(CEPHESDIR) && \
@@ -140,6 +140,7 @@ test/expected.ndjson: test/expected
 
 cephes.wasm: $(JS_OBJS)
 	emcc \
+		-s BINARYEN_TRAP_MODE='clamp' \
 		-s BINARYEN_ASYNC_COMPILATION=0 \
 		-s EXPORTED_FUNCTIONS="[$(shell \
 			cat $(CEPHESDIR)/cephes_names.h | \

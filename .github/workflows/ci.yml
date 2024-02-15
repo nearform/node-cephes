@@ -15,19 +15,41 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
+      - name: install cephes
+        run: npm install cephes    
       - name: install clang
-        run: npm install -g clang-format
+        run: | 
+          npm install -g clang-format
+          npm install --save-dev husky
       - name: install cproto
         run: |
-          echo "download and install cproto" 
+          wget -c https://sourceforge.net/projects/cproto/files/cproto/4.6/cproto-4.6.tar.gz -O - | tar -xz
+          echo "downloaded and installed cproto" 
       - name: install emscripten
         run: |
-          echo "download and install emscripten"
+
+          # Install Python
+          sudo apt-get install python3
+
+          git clone https://github.com/emscripten-core/emsdk.git
+          cd emsdk
+          git pull
+          
+          # Download and install the latest SDK tools.
+          ./emsdk install latest
+
+          # Make the "latest" SDK "active" for the current user. (writes .emscripten file)
+          ./emsdk activate latest
+
+          # Activate PATH and other environment variables in the current terminal
+          source ./emsdk_env.sh
+
+          echo "downloaded and installed emscripten"
       - name: install dependencies and build
         run: |
-          # npm install
-          # make download
-          # make build
+          npm install
+          make download
+          make build
       - name: test
         run: | 
-          # npm test
+          npm test
