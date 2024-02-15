@@ -28,7 +28,8 @@ jobs:
 
           # Install Python
           sudo apt-get install python3
-          sudo apt-get install clang-tools-5.0
+          sudo apt-get update -y
+          sudo apt-get install -y clang-tools-5.0
 
           git clone https://github.com/emscripten-core/emsdk.git
           cd emsdk
