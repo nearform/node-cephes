@@ -15,8 +15,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - name: install cephes
-        run: npm install cephes    
       - name: install clang
         run: | 
           npm install -g clang-format
