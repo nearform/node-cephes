@@ -27,9 +27,9 @@ jobs:
         run: |
 
           # Install Python
-          sudo apt-get install python3
           sudo apt-get update -y
-          sudo apt-get install -y clang-tools-5.0
+          sudo apt-get install python3          
+          sudo apt-get -y install llvm
 
           git clone https://github.com/emscripten-core/emsdk.git
           cd emsdk
