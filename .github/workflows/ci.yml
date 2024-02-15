@@ -29,7 +29,8 @@ jobs:
           # Install Python
           sudo apt-get update -y
           sudo apt-get install python3          
-          sudo apt-get -y install clang
+          
+          wget https://apt.llvm.org/llvm.sh
 
           git clone https://github.com/emscripten-core/emsdk.git
           cd emsdk
