@@ -1,0 +1,33 @@
+name: Continuous Integration
+
+on: 
+  push:
+   branches:
+    - master
+  pull_request:
+
+jobs:
+  main:
+    name: Build and test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: install clang
+        run: npm install -g clang-format
+      - name: install cproto
+        run: |
+          echo "download and install cproto" 
+      - name: install emscripten
+        run: |
+          echo "download and install emscripten"
+      - name: install dependencies and build
+        run: |
+          # npm install
+          # make download
+          # make build
+      - name: test
+        run: | 
+          # npm test
