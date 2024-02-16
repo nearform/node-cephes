@@ -8,9 +8,6 @@
     "precommit": "check-clang-format",
     "test": "tap test/*.test.js"
   },
-  "dependencies": {
-    "cephes": "^1.2.0"
-  },
   "devDependencies": {
     "@babel/core": "^7.1.0",
     "@babel/plugin-transform-runtime": "^7.1.0",
