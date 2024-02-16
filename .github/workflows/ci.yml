@@ -67,7 +67,9 @@ jobs:
           wget https://apt.llvm.org/llvm.sh
           chmod +x llvm.sh
           sudo ./llvm.sh all
-            
+           
+          VERSION=$(emcc --version)
+          echo $VERSION
           echo "downloaded and installed emscripten"
       - name: install dependencies and build
         run: |
