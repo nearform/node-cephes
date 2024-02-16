@@ -74,7 +74,7 @@ jobs:
           echo $VERSION
 
           # trying with llvm-project         
-          wget -c https://github.com/llvm/llvm-project/releases/download/llvmorg-17.0.1/clang+llvm-17.0.1-aarch64-linux-gnu.tar.xz -O - | tar -xz  
+          tar -xf https://github.com/llvm/llvm-project/releases/download/llvmorg-17.0.1/clang+llvm-17.0.1-aarch64-linux-gnu.tar.xz
           echo "downloaded and installed emscripten"
       - name: install dependencies and build
         run: |
