@@ -66,11 +66,7 @@ download: | cephes/
 
 	@# Rename (effectively remove) ceil, floor as they have native
 	@# WebAssembly equivalents (f64.ceil, and f64.floor).
-	@# It will continue to contain defintions for frexp, and ldexp
-	@# clang-rename \
-	@# 	-qualified-name=ceil -new-name=ignore_ceil \
-	@# 	-qualified-name=floor -new-name=ignore_floor \
-	@# 	-i $(CEPHESDIR)/floor.c	
+	@# It will continue to contain defintions for frexp, and ldexp	
 
 	@# Configure cephes
 	sed -i -e "s/define HAVE_LONG_DOUBLE 1/define HAVE_LONG_DOUBLE 0/g" $(CEPHESDIR)/mconf.h
