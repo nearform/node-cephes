@@ -40,17 +40,22 @@ jobs:
           #To install all apt.llvm.org packages at once:
           sudo apt-get update
 
-          #wget https://apt.llvm.org/llvm.sh
-          #chmod +x llvm.sh
-          #sudo ./llvm.sh all
+          wget https://apt.llvm.org/llvm.sh
+          chmod +x llvm.sh
+          sudo ./llvm.sh all
 
-          wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
+          wget -O - http://apt.llvm.org/llvm-snapshot.gpg.key|sudo apt-key add -
+
+          apt-get install clang-3.9 lldb-3.9
+
+
+          # wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
           
-          sudo apt-get install libllvm-17-ocaml-dev libllvm17 llvm-17 llvm-17-dev llvm-17-doc llvm-17-examples llvm-17-runtime
-          sudo apt-get install clang-17 clang-tools-17 clang-17-doc libclang-common-17-dev libclang-17-dev libclang1-17 clang-format-17 python3-clang-17 clangd-17 clang-tidy-17
-          sudo apt-get install lldb-17
-          sudo apt-get install libc++-17-dev libc++abi-17-dev
-          sudo apt-get install libclang-rt-17-dev-wasm32 libclang-rt-17-dev-wasm64 libc++-17-dev-wasm32 libc++abi-17-dev-wasm32 libclang-rt-17-dev-wasm32 libclang-rt-17-dev-wasm64
+          # sudo apt-get install libllvm-17-ocaml-dev libllvm17 llvm-17 llvm-17-dev llvm-17-doc llvm-17-examples llvm-17-runtime
+          # sudo apt-get install clang-17 clang-tools-17 clang-17-doc libclang-common-17-dev libclang-17-dev libclang1-17 clang-format-17 python3-clang-17 clangd-17 clang-tidy-17
+          # sudo apt-get install lldb-17
+          # sudo apt-get install libc++-17-dev libc++abi-17-dev
+          # sudo apt-get install libclang-rt-17-dev-wasm32 libclang-rt-17-dev-wasm64 libc++-17-dev-wasm32 libc++abi-17-dev-wasm32 libclang-rt-17-dev-wasm32 libclang-rt-17-dev-wasm64
 
 
           # wget https://apt.llvm.org/llvm.sh
