@@ -29,7 +29,8 @@ jobs:
 
           # Install Python
           sudo apt-get update -y
-          sudo apt-get install python3          
+          sudo apt-get install python3  
+          sudo apt-get install cmake        
           #sudo apt-get install clangd-12
           #sudo update-alternatives --install /usr/bin/clangd clangd /usr/bin/clangd-12 100
 
@@ -49,18 +50,27 @@ jobs:
           # wget https://apt.llvm.org/llvm.sh
           # chmod +x llvm.sh
 
-          git clone https://github.com/emscripten-core/emsdk.git
-          cd emsdk
-          git pull
+          # git clone https://github.com/emscripten-core/emsdk.git ~/.emsdk
+          # cd ~/.emsdk
+          # git pull
           
-          # Download and install the latest SDK tools.
-          ./emsdk install latest
+          if [[ -d "~/.emsdk" ]]
+          then # Update
+            echo "Updating emscripten SDK..."
+            cd ~/.emsdk && git pull
+          else # Install
+            echo "Installing emscripten SDK..."
+            git clone https://github.com/emscripten-core/emsdk.git ~/.emsdk
+          fi
 
-          # Make the "latest" SDK "active" for the current user. (writes .emscripten file)
-          ./emsdk activate latest
-
-          # Activate PATH and other environment variables in the current terminal
-          source ./emsdk_env.sh
+          # Install & activate latest SDK
+          # See https://emscripten.org/docs/getting_started/downloads.html for more details
+          cd ~/.emsdk
+          ./emsdk install latest 
+          ./emsdk activate latest    
+          # Add to .bashrc and .zshrc
+          if [[ -f "~/.bashrc" ]]; then echo -e "\nsource ~/.emsdk/emsdk_env.sh" >> ~/.bashrc; fi
+          if [[ -f "~/.zshrc" ]]; then echo -e "\nsource ~/.emsdk/emsdk_env.sh" >> ~/.zshrc; fi
 
           #To install all apt.llvm.org packages at once:
           sudo apt-get update
