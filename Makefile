@@ -70,11 +70,11 @@ download: | cephes/
 	
 
 	@# Configure cephes
-	sed -i '' -e 's/define HAVE_LONG_DOUBLE 1/define HAVE_LONG_DOUBLE 0/g' $(CEPHESDIR)/mconf.h
-	sed -i '' -e 's/define STDC_HEADERS 1/define STDC_HEADERS 0/g' $(CEPHESDIR)/mconf.h
-	sed -i '' -e 's/define HAVE_STRING_H 1/define HAVE_STRING_H 0/g' $(CEPHESDIR)/mconf.h
-	sed -i '' -e 's%#define UNK 1%/* #define UNK 1 */%g' $(CEPHESDIR)/mconf.h
-	sed -i '' -e 's%/\* #define IBMPC 1 \*/%#define IBMPC 1%g' $(CEPHESDIR)/mconf.h
+	sed -i '' -e "s/define HAVE_LONG_DOUBLE 1/define HAVE_LONG_DOUBLE 0/g" $(CEPHESDIR)/mconf.h
+	sed -i '' -e "s/define STDC_HEADERS 1/define STDC_HEADERS 0/g" $(CEPHESDIR)/mconf.h
+	sed -i '' -e "s/define HAVE_STRING_H 1/define HAVE_STRING_H 0/g" $(CEPHESDIR)/mconf.h
+	sed -i '' -e "s%#define UNK 1%/* #define UNK 1 */%g" $(CEPHESDIR)/mconf.h
+	sed -i '' -e "s%/\* #define IBMPC 1 \*/%#define IBMPC 1%g" $(CEPHESDIR)/mconf.h
 
 	@# Create renaming defs to prevent conflict with default symbols
 	echo '#ifndef CEPHES_NAMES_H' > $(CEPHESDIR)/cephes_names.h
