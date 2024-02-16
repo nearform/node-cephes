@@ -50,28 +50,19 @@ jobs:
           # wget https://apt.llvm.org/llvm.sh
           # chmod +x llvm.sh
 
-          # git clone https://github.com/emscripten-core/emsdk.git ~/.emsdk
-          # cd ~/.emsdk
-          # git pull
+          git clone https://github.com/emscripten-core/emsdk.git
+          cd emsdk
+          git pull
           
-          if [[ -d "~/.emsdk" ]]
-          then # Update
-            echo "Updating emscripten SDK..."
-            cd ~/.emsdk && git pull
-          else # Install
-            echo "Installing emscripten SDK..."
-            git clone https://github.com/emscripten-core/emsdk.git ~/.emsdk
-          fi
-
           # Install & activate latest SDK
           # See https://emscripten.org/docs/getting_started/downloads.html for more details
-          cd ~/.emsdk
+          
           ./emsdk install latest 
           ./emsdk activate latest    
           # Add to .bashrc and .zshrc
-          if [[ -f "~/.bashrc" ]]; then echo -e "\nsource ~/.emsdk/emsdk_env.sh" >> ~/.bashrc; fi
-          if [[ -f "~/.zshrc" ]]; then echo -e "\nsource ~/.emsdk/emsdk_env.sh" >> ~/.zshrc; fi
-
+          if [[ -f "~/.bashrc" ]]; then echo -e "\n source ~/.emsdk/emsdk_env.sh" >> ~/.bashrc; fi
+          if [[ -f "~/.zshrc" ]]; then echo -e "\n source ~/.emsdk/emsdk_env.sh" >> ~/.zshrc; fi
+          cd ..
           #To install all apt.llvm.org packages at once:
           sudo apt-get update
 
