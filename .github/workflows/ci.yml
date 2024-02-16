@@ -57,11 +57,9 @@ jobs:
           # Install & activate latest SDK
           # See https://emscripten.org/docs/getting_started/downloads.html for more details
           
-          ./emsdk install latest 
-          ./emsdk activate latest    
-          # Add to .bashrc and .zshrc
-          if [[ -f "~/.bashrc" ]]; then echo -e "\n source ~/.emsdk/emsdk_env.sh" >> ~/.bashrc; fi
-          if [[ -f "~/.zshrc" ]]; then echo -e "\n source ~/.emsdk/emsdk_env.sh" >> ~/.zshrc; fi
+          ./emsdk install latest
+          ./emsdk activate latest
+          source ./emsdk_env.sh
           cd ..
           #To install all apt.llvm.org packages at once:
           sudo apt-get update

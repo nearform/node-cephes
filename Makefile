@@ -111,6 +111,8 @@ download: | cephes/
 	fi
 
 	@# Compile
+	./emcc
+	
 	emcc $(CFLAGS) $< -o $@
 
 %.o: %.c $(CEPHESDIR)/cephes_names.h $(CEPHESDIR)/mconf.h
