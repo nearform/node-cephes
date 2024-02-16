@@ -22,6 +22,7 @@ jobs:
       - name: install cproto
         run: |
           wget -c https://sourceforge.net/projects/cproto/files/cproto/4.6/cproto-4.6.tar.gz -O - | tar -xz
+          sudo apt-get install cproto
           echo "downloaded and installed cproto" 
       - name: install emscripten
         run: |
