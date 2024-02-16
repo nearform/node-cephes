@@ -51,8 +51,8 @@ jobs:
 
           # wget https://apt.llvm.org/llvm.sh
           # chmod +x llvm.sh
-
-          git clone https://github.com/emscripten-core/emsdk.git
+          
+          git clone https://github.com/emscripten-core/emsdk.git          
           cd emsdk
           git pull
           
@@ -69,9 +69,18 @@ jobs:
           wget https://apt.llvm.org/llvm.sh
           chmod +x llvm.sh
           sudo ./llvm.sh all
-           
+                    
           VERSION=$(emcc --version)
           echo $VERSION
+
+          # trying with llvm-project
+          git clone https://github.com/llvm/llvm-project.git
+          cd llvm-project
+          mkdir build
+          cd build
+          cmake -DLLVM_ENABLE_PROJECTS=clang -DCMAKE_BUILD_TYPE=Release -G "Unix Makefiles" ../llvm
+          make
+
           echo "downloaded and installed emscripten"
       - name: install dependencies and build
         run: |
