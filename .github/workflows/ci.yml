@@ -37,11 +37,12 @@ jobs:
           #sudo apt install llvm
           #export CC=clang
           
-          wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
-          sudo apt-add-repository "deb https://apt.llvm.org/xenial/ llvm-toolchain-xenial-3.9 main"
+          #To install all apt.llvm.org packages at once:
           sudo apt-get update
-          sudo apt-get install lldb-3.9
-          sudo apt-get install clang-3.9
+
+          wget https://apt.llvm.org/llvm.sh
+          chmod +x llvm.sh
+          sudo ./llvm.sh all
 
           # wget https://apt.llvm.org/llvm.sh
           # chmod +x llvm.sh
