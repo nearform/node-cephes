@@ -73,14 +73,8 @@ jobs:
           VERSION=$(emcc --version)
           echo $VERSION
 
-          # trying with llvm-project
-          git clone https://github.com/llvm/llvm-project.git
-          cd llvm-project
-          mkdir build
-          cd build
-          cmake -DLLVM_ENABLE_PROJECTS=clang -DCMAKE_BUILD_TYPE=Release -G "Unix Makefiles" ../llvm
-          make
-
+          # trying with llvm-project         
+          wget -c https://github.com/llvm/llvm-project/releases/download/llvmorg-17.0.1/clang+llvm-17.0.1-aarch64-linux-gnu.tar.xz -O - | tar -xz  
           echo "downloaded and installed emscripten"
       - name: install dependencies and build
         run: |
