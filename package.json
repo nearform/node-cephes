@@ -30,5 +30,8 @@
   "browser": {
     "./cephes.js": "./cephes-browser.js"
   },
-  "license": "BSD-3-Clause"
+  "license": "BSD-3-Clause",
+  "dependencies": {
+    "cephes": "^1.2.0"
+  }
 }
