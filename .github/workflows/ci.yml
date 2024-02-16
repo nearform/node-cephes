@@ -44,7 +44,7 @@ jobs:
           chmod +x llvm.sh
           sudo ./llvm.sh all
 
-          wget -O - http://apt.llvm.org/llvm-snapshot.gpg.key|sudo apt-key add -
+          wget -O - http://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
 
           apt-get install clang-3.9 lldb-3.9
 
