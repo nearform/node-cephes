@@ -30,9 +30,10 @@ jobs:
           # Install Python
           sudo apt-get update -y
           sudo apt-get install python3  
-          sudo apt-get install cmake        
-          sudo apt-get install clang
-          sudo apt-get install libstdc++6
+          #sudo apt-get install cmake        
+          #sudo apt-get install clang
+          #sudo apt-get install libstdc++6
+          sudo apt-get install xz-utils
           #sudo apt-get install clangd-12
           #sudo update-alternatives --install /usr/bin/clangd clangd /usr/bin/clangd-12 100
 
@@ -51,6 +52,7 @@ jobs:
 
           # wget https://apt.llvm.org/llvm.sh
           # chmod +x llvm.sh
+          tar -xf https://github.com/llvm/llvm-project/releases/download/llvmorg-17.0.6/clang+llvm-17.0.6-x86_64-linux-gnu-ubuntu-22.04.tar.xz
           
           git clone https://github.com/emscripten-core/emsdk.git          
           cd emsdk
@@ -74,10 +76,9 @@ jobs:
           echo $VERSION
 
           # trying with llvm-project         
-          # tar -xf https://github.com/llvm/llvm-project/releases/download/llvmorg-17.0.1/clang+llvm-17.0.1-aarch64-linux-gnu.tar.xz
-          sudo apt-get install xz-utils
+          # tar -xf https://github.com/llvm/llvm-project/releases/download/llvmorg-17.0.1/clang+llvm-17.0.1-aarch64-linux-gnu.tar.xz          
           #tar -xvf https://github.com/llvm/llvm-project/releases/download/llvmorg-17.0.1/clang+llvm-17.0.1-aarch64-linux-gnu.tar.xz
-          tar -xf https://github.com/llvm/llvm-project/releases/download/llvmorg-17.0.6/clang+llvm-17.0.6-x86_64-linux-gnu-ubuntu-22.04.tar.xz
+          
           echo "downloaded and installed emscripten"
       - name: install dependencies and build
         run: |
