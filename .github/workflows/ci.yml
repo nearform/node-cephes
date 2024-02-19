@@ -76,7 +76,8 @@ jobs:
           # trying with llvm-project         
           # tar -xf https://github.com/llvm/llvm-project/releases/download/llvmorg-17.0.1/clang+llvm-17.0.1-aarch64-linux-gnu.tar.xz
           sudo apt-get install xz-utils
-          tar -xvf https://github.com/llvm/llvm-project/releases/download/llvmorg-17.0.1/clang+llvm-17.0.1-aarch64-linux-gnu.tar.xz
+          #tar -xvf https://github.com/llvm/llvm-project/releases/download/llvmorg-17.0.1/clang+llvm-17.0.1-aarch64-linux-gnu.tar.xz
+          tar -xf https://github.com/llvm/llvm-project/releases/download/llvmorg-17.0.6/clang+llvm-17.0.6-x86_64-linux-gnu-ubuntu-22.04.tar.xz
           echo "downloaded and installed emscripten"
       - name: install dependencies and build
         run: |
