@@ -64,13 +64,13 @@ jobs:
           ./emsdk install latest
           ./emsdk activate latest
           source ./emsdk_env.sh
-          cd ..
+          
           #To install all apt.llvm.org packages at once:
           sudo apt-get update
 
-          wget https://apt.llvm.org/llvm.sh
-          chmod +x llvm.sh
-          sudo ./llvm.sh all
+          #wget https://apt.llvm.org/llvm.sh
+          #chmod +x llvm.sh
+          #sudo ./llvm.sh all
                     
           VERSION=$(emcc --version)
           echo $VERSION
