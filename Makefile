@@ -29,22 +29,22 @@ download: | cephes/
 	rm -f $(CEPHESDIR)/*
 
 	@# Download main library
-	curl http://www.netlib.org/cephes/cmath.tgz | tar xz -C $(CEPHESDIR)
+	curl -0L http://www.netlib.org/cephes/cmath.tgz | tar xz -C $(CEPHESDIR)
 
 	@# Download cprob extension
-	curl http://www.netlib.org/cephes/cprob.tgz | tar xz -C $(CEPHESDIR)
+	curl -0L http://www.netlib.org/cephes/cprob.tgz | tar xz -C $(CEPHESDIR)
 
 	@# Download ellf extension
-	curl http://www.netlib.org/cephes/ellf.tgz | tar xz -C $(CEPHESDIR)
+	curl -0L http://www.netlib.org/cephes/ellf.tgz | tar xz -C $(CEPHESDIR)
 
 	@# Download bessel extension
-	curl http://www.netlib.org/cephes/bessel.tgz | tar xz -C $(CEPHESDIR)
+	curl -0L http://www.netlib.org/cephes/bessel.tgz | tar xz -C $(CEPHESDIR)
 
 	@# Download misc extension
-	curl http://www.netlib.org/cephes/misc.tgz | tar xz -C $(CEPHESDIR)
+	curl -0L http://www.netlib.org/cephes/misc.tgz | tar xz -C $(CEPHESDIR)
 
 	@# Download documentation
-	curl http://www.netlib.org/cephes/cephes.doc > $(CEPHESDIR)/cephes.txt
+	curl -0L http://www.netlib.org/cephes/cephes.doc > $(CEPHESDIR)/cephes.txt
 
 	@# Remove compile files and instructions
 	cd $(CEPHESDIR) && \
@@ -66,18 +66,15 @@ download: | cephes/
 
 	@# Rename (effectively remove) ceil, floor as they have native
 	@# WebAssembly equivalents (f64.ceil, and f64.floor).
-	@# It will continue to contain defintions for frexp, and ldexp
-	clang-rename \
-		-qualified-name=ceil -new-name=ignore_ceil \
-		-qualified-name=floor -new-name=ignore_floor \
-		-i $(CEPHESDIR)/floor.c
+	@# It will continue to contain defintions for frexp, and ldexp	
+	
 
 	@# Configure cephes
-	sed -i '' -e 's/define HAVE_LONG_DOUBLE 1/define HAVE_LONG_DOUBLE 0/g' $(CEPHESDIR)/mconf.h
-	sed -i '' -e 's/define STDC_HEADERS 1/define STDC_HEADERS 0/g' $(CEPHESDIR)/mconf.h
-	sed -i '' -e 's/define HAVE_STRING_H 1/define HAVE_STRING_H 0/g' $(CEPHESDIR)/mconf.h
-	sed -i '' -e 's%#define UNK 1%/* #define UNK 1 */%g' $(CEPHESDIR)/mconf.h
-	sed -i '' -e 's%/\* #define IBMPC 1 \*/%#define IBMPC 1%g' $(CEPHESDIR)/mconf.h
+	sed -i -e "s/define HAVE_LONG_DOUBLE 1/define HAVE_LONG_DOUBLE 0/g" $(CEPHESDIR)/mconf.h
+	sed -i -e "s/define STDC_HEADERS 1/define STDC_HEADERS 0/g" $(CEPHESDIR)/mconf.h
+	sed -i -e "s/define HAVE_STRING_H 1/define HAVE_STRING_H 0/g" $(CEPHESDIR)/mconf.h
+	sed -i -e "s%#define UNK 1%/* #define UNK 1 */%g" $(CEPHESDIR)/mconf.h
+	sed -i -e "s%/\* #define IBMPC 1 \*/%#define IBMPC 1%g" $(CEPHESDIR)/mconf.h
 
 	@# Create renaming defs to prevent conflict with default symbols
 	echo '#ifndef CEPHES_NAMES_H' > $(CEPHESDIR)/cephes_names.h
@@ -140,6 +137,7 @@ test/expected.ndjson: test/expected
 
 cephes.wasm: $(JS_OBJS)
 	emcc \
+		-s BINARYEN_TRAP_MODE='clamp' \
 		-s BINARYEN_ASYNC_COMPILATION=0 \
 		-s EXPORTED_FUNCTIONS="[$(shell \
 			cat $(CEPHESDIR)/cephes_names.h | \
