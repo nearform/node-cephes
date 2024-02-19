@@ -52,7 +52,7 @@ jobs:
 
           # wget https://apt.llvm.org/llvm.sh
           # chmod +x llvm.sh
-          tar -xvf https://github.com/llvm/llvm-project/releases/download/llvmorg-17.0.6/clang+llvm-17.0.6-x86_64-linux-gnu-ubuntu-22.04.tar.xz
+          #tar -xvf https://github.com/llvm/llvm-project/releases/download/llvmorg-17.0.6/clang+llvm-17.0.6-x86_64-linux-gnu-ubuntu-22.04.tar.xz
 
           git clone https://github.com/emscripten-core/emsdk.git          
           cd emsdk
