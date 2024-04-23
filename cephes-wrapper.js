@@ -76,6 +76,7 @@ class CephesWrapper {
     return {
       'env': {
         // cephes error handler
+        "mtherr": this._mtherr.bind(this),
         "_mtherr": this._mtherr.bind(this),
 
         // memory

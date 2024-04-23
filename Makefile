@@ -29,22 +29,22 @@ download: | cephes/
 	rm -f $(CEPHESDIR)/*
 
 	@# Download main library
-	curl http://www.netlib.org/cephes/cmath.tgz | tar xz -C $(CEPHESDIR)
+	curl -L http://www.netlib.org/cephes/cmath.tgz | tar xz -C $(CEPHESDIR)
 
 	@# Download cprob extension
-	curl http://www.netlib.org/cephes/cprob.tgz | tar xz -C $(CEPHESDIR)
+	curl -L http://www.netlib.org/cephes/cprob.tgz | tar xz -C $(CEPHESDIR)
 
 	@# Download ellf extension
-	curl http://www.netlib.org/cephes/ellf.tgz | tar xz -C $(CEPHESDIR)
+	curl -L http://www.netlib.org/cephes/ellf.tgz | tar xz -C $(CEPHESDIR)
 
 	@# Download bessel extension
-	curl http://www.netlib.org/cephes/bessel.tgz | tar xz -C $(CEPHESDIR)
+	curl -L http://www.netlib.org/cephes/bessel.tgz | tar xz -C $(CEPHESDIR)
 
 	@# Download misc extension
-	curl http://www.netlib.org/cephes/misc.tgz | tar xz -C $(CEPHESDIR)
+	curl -L http://www.netlib.org/cephes/misc.tgz | tar xz -C $(CEPHESDIR)
 
 	@# Download documentation
-	curl http://www.netlib.org/cephes/cephes.doc > $(CEPHESDIR)/cephes.txt
+	curl -L http://www.netlib.org/cephes/cephes.doc > $(CEPHESDIR)/cephes.txt
 
 	@# Remove compile files and instructions
 	cd $(CEPHESDIR) && \
@@ -114,7 +114,7 @@ download: | cephes/
 	fi
 
 	@# Compile
-	emcc $(CFLAGS) $< -o $@
+	emcc -c -emit-llvm $(CFLAGS) $< -o $@
 
 %.o: %.c $(CEPHESDIR)/cephes_names.h $(CEPHESDIR)/mconf.h
 	@# Insert missing #include "mconf.h"
@@ -162,7 +162,7 @@ cephes.wasm: $(JS_OBJS)
 		$(LFLAGS) $^ -o cephes-temp.js
 	rm cephes-temp.js
 	mv cephes-temp.wasm cephes.wasm
-	mv cephes-temp.wast cephes.wast
+# 	mv cephes-temp.wast cephes.wast
 
 cephes.standalone.wasm: $(JS_OBJS)
 	@# Work In Progress: try and use the SIDE_MODULE options for a more
