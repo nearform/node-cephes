@@ -29,8 +29,7 @@ class CephesWrapper {
       this.compiled = Promise.resolve();
     } else {
       // create a singleton compile promise
-      this.compiled = this._compileAsync()
-        .then((program) => this._exportProgram(program));
+      this.compiled = this._compileAsync().then((program) => this._exportProgram(program));
     }
   }
 
@@ -65,7 +64,7 @@ class CephesWrapper {
     // all the exported cephes functions are plain functions.
     this.stackRestore(0);
 
-    if (code == 1) {
+    if (code === 1) {
       throw new RangeError(message);
     } else {
       throw new Error(message);
@@ -77,7 +76,6 @@ class CephesWrapper {
       'env': {
         // cephes error handler
         "mtherr": this._mtherr.bind(this),
-        "_mtherr": this._mtherr.bind(this),
 
         // memory
         "memory": this._wasmMemory,
@@ -103,15 +101,16 @@ class CephesWrapper {
 
   _exportProgram(program) {
     // export cephes functions
+
     for (const key of Object.keys(program.exports)) {
-      if (key.startsWith('_cephes_')) {
+      if (key.startsWith('cephes_')) {
         this[key] = program.exports[key];
       }
     }
 
     // export special stack functions
-    this.stackAlloc = program.exports.stackAlloc;
-    this.stackRestore = program.exports.stackRestore;
+    this.stackAlloc = program.exports._emscripten_stack_alloc;
+    this.stackRestore = program.exports._emscripten_stack_restore;
     this.stackSave = program.exports.stackSave;
   }
 

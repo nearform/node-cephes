@@ -148,7 +148,7 @@ cephes.wasm: $(JS_OBJS)
 			tr '\n' ','  | \
 			sed 's/,$$//' \
 		)]" \
-		-s EXTRA_EXPORTED_RUNTIME_METHODS="['writeArrayToMemory', 'stackAlloc', 'stackSave', 'stackRestore', 'getValue']" \
+		-s EXPORTED_RUNTIME_METHODS="['writeArrayToMemory', 'stackAlloc', 'stackSave', 'stackRestore', 'getValue']" \
 		-s DEFAULT_LIBRARY_FUNCS_TO_INCLUDE="[]" \
 		-s TOTAL_MEMORY=2MB \
 		-s TOTAL_STACK=1MB \
