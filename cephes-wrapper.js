@@ -1,24 +1,10 @@
 
 const TOTAL_STACK = 1024 * 1024; // 1MB
-const TOTAL_MEMORY = 2 * 1024 * 1024; // 1MB
-const WASM_PAGE_SIZE = 64 * 1024; // Defined in WebAssembly specs
 
 const WASM_CODE = Buffer.from(require('./cephes.wasm.base64.json'), 'base64');
 
 class CephesWrapper {
   constructor(sync) {
-    // Initialize the runtime's memory
-    this._wasmMemory = new WebAssembly.Memory({
-      'initial': TOTAL_MEMORY / WASM_PAGE_SIZE,
-      'maximum': TOTAL_MEMORY / WASM_PAGE_SIZE
-    });
-
-    this._HEAP8 = new Int8Array(this._wasmMemory.buffer);
-    this._HEAP16 = new Int16Array(this._wasmMemory.buffer);
-    this._HEAP32 = new Int32Array(this._wasmMemory.buffer);
-    this._HEAPF32 = new Float32Array(this._wasmMemory.buffer);
-    this._HEAPF64 = new Float64Array(this._wasmMemory.buffer);
-
     // Compile and export program
     if (sync) {
       // compile synchronously
@@ -57,6 +43,7 @@ class CephesWrapper {
       default: codemsg = 'unknown error';
     }
 
+    console.log({name, code})
     const fnname = this._AsciiToString(name);
     const message = 'cephes reports "' + codemsg + '" in ' + fnname;
 
@@ -111,7 +98,18 @@ class CephesWrapper {
     // export special stack functions
     this.stackAlloc = program.exports._emscripten_stack_alloc;
     this.stackRestore = program.exports._emscripten_stack_restore;
-    this.stackSave = program.exports.stackSave;
+    this.stackSave = program.exports.emscripten_stack_get_current;
+    console.log(program.exports)
+
+    // export memory
+    this._wasmMemory = program.exports.memory;
+
+    this._HEAP8 = new Int8Array(this._wasmMemory.buffer);
+    this._HEAP16 = new Int16Array(this._wasmMemory.buffer);
+    this._HEAP32 = new Int32Array(this._wasmMemory.buffer);
+    this._HEAPF32 = new Float32Array(this._wasmMemory.buffer);
+    this._HEAPF64 = new Float64Array(this._wasmMemory.buffer);
+
   }
 
   // export helper functions
