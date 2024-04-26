@@ -17,6 +17,7 @@ jobs:
           node-version: '20'
       - name: install build tools
         run: |
+          npm install -g clang-tools-prebuilt
           apt-get update && apt-get install -y clang-format cproto git cmake python3 curl
 
           git clone https://github.com/emscripten-core/emsdk.git
