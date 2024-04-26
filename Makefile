@@ -162,7 +162,6 @@ cephes.wasm: $(JS_OBJS)
 		$(LFLAGS) $^ -o cephes-temp.js
 	rm cephes-temp.js
 	mv cephes-temp.wasm cephes.wasm
-# 	mv cephes-temp.wast cephes.wast
 
 cephes.standalone.wasm: $(JS_OBJS)
 	@# Work In Progress: try and use the SIDE_MODULE options for a more
