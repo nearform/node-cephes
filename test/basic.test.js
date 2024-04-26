@@ -27,8 +27,8 @@ it('array function', function (t) {
 });
 
 it('throw error', function (t) {
-  assert.rejects(() => cephes.zeta(0, 1), new RangeError('cephes reports "argument domain error" in zeta'));
-  assert.rejects(() => cephes.zeta(1.2, -1), new Error('cephes reports "function singularity" in zeta'));
+  assert.throws(() => cephes.zeta(0, 1), new RangeError('cephes reports "argument domain error" in zeta'));
+  assert.throws(() => cephes.zeta(1.2, -1), new Error('cephes reports "function singularity" in zeta'));
 });
 
 it('isfinite handling', function (t) {

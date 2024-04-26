@@ -7,7 +7,6 @@ class CephesWrapper {
   constructor(sync) {
     // Compile and export program
     if (sync) {
-      // compile synchronously
       const program = this._compileSync();
       this._exportProgram(program);
 
@@ -33,10 +32,6 @@ class CephesWrapper {
     const codemsg = errorMappings[code] || 'unknown error';
     const fnname = this._AsciiToString(name);
     const message = 'cephes reports "' + codemsg + '" in ' + fnname;
-
-    // Restore stack to the STACKTOP before throwing. This only works because
-    // all the exported cephes functions are plain functions.
-    this.stackRestore(0);
 
     if (code === 1) {
       throw new RangeError(message);
