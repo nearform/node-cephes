@@ -48,7 +48,7 @@
  *   message         condition      value returned
  * chdtr domain   x < 0 or v < 1        0.0
  */
-/*							chdtrc()
+/*							chdtrc()
  *
  *	Complemented Chi-square distribution
  *
@@ -98,7 +98,7 @@
  *   message         condition      value returned
  * chdtrc domain  x < 0 or v < 1        0.0
  */
-/*							chdtri()
+/*							chdtri()
  *
  *	Inverse of complemented Chi-square distribution
  *
@@ -138,9 +138,8 @@
  *                     v < 1
  *
  */
-
-/*								chdtr() */
 
+/*								chdtr() */
 
 /*
 Cephes Math Library Release 2.8:  June, 2000
@@ -149,52 +148,45 @@ Copyright 1984, 1987, 2000 by Stephen L. Moshier
 
 #include "mconf.h"
 #ifdef ANSIPROT
-extern double igamc ( double, double );
-extern double igam ( double, double );
-extern double igami ( double, double );
+extern double igamc(double, double);
+extern double igam(double, double);
+extern double igami(double, double);
 #else
 double igamc(), igam(), igami();
 #endif
 
-double chdtrc(df,x)
+double chdtrc(df, x)
 double df, x;
 {
 
-if( (x < 0.0) || (df < 1.0) )
-	{
-	mtherr( "chdtrc", DOMAIN );
-	return(0.0);
-	}
-return( igamc( df/2.0, x/2.0 ) );
+  if ((x < 0.0) || (df < 1.0)) {
+    mtherr("chdtrc", DOMAIN);
+    return (0.0);
+  }
+  return (igamc(df / 2.0, x / 2.0));
 }
 
-
-
-double chdtr(df,x)
+double chdtr(df, x)
 double df, x;
 {
 
-if( (x < 0.0) || (df < 1.0) )
-	{
-	mtherr( "chdtr", DOMAIN );
-	return(0.0);
-	}
-return( igam( df/2.0, x/2.0 ) );
+  if ((x < 0.0) || (df < 1.0)) {
+    mtherr("chdtr", DOMAIN);
+    return (0.0);
+  }
+  return (igam(df / 2.0, x / 2.0));
 }
 
-
-
-double chdtri( df, y )
+double chdtri(df, y)
 double df, y;
 {
-double x;
+  double x;
 
-if( (y < 0.0) || (y > 1.0) || (df < 1.0) )
-	{
-	mtherr( "chdtri", DOMAIN );
-	return(0.0);
-	}
+  if ((y < 0.0) || (y > 1.0) || (df < 1.0)) {
+    mtherr("chdtri", DOMAIN);
+    return (0.0);
+  }
 
-x = igami( 0.5 * df, y );
-return( 2.0 * x );
+  x = igami(0.5 * df, y);
+  return (2.0 * x);
 }

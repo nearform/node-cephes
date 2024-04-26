@@ -38,7 +38,7 @@
  * See igamc().
  *
  */
-/*							pdtrc()
+/*							pdtrc()
  *
  *	Complemented poisson distribution
  *
@@ -78,7 +78,7 @@
  * See igam.c.
  *
  */
-/*							pdtri()
+/*							pdtri()
  *
  *	Inverse Poisson distribution
  *
@@ -119,7 +119,7 @@
  *                     k < 0
  *
  */
-
+
 /*
 Cephes Math Library Release 2.8:  June, 2000
 Copyright 1984, 1987, 1995, 2000 by Stephen L. Moshier
@@ -127,58 +127,52 @@ Copyright 1984, 1987, 1995, 2000 by Stephen L. Moshier
 
 #include "mconf.h"
 #ifdef ANSIPROT
-extern double igam ( double, double );
-extern double igamc ( double, double );
-extern double igami ( double, double );
+extern double igam(double, double);
+extern double igamc(double, double);
+extern double igami(double, double);
 #else
 double igam(), igamc(), igami();
 #endif
 
-double pdtrc( k, m )
+double pdtrc(k, m)
 int k;
 double m;
 {
-double v;
+  double v;
 
-if( (k < 0) || (m <= 0.0) )
-	{
-	mtherr( "pdtrc", DOMAIN );
-	return( 0.0 );
-	}
-v = k+1;
-return( igam( v, m ) );
+  if ((k < 0) || (m <= 0.0)) {
+    mtherr("pdtrc", DOMAIN);
+    return (0.0);
+  }
+  v = k + 1;
+  return (igam(v, m));
 }
 
-
-
-double pdtr( k, m )
+double pdtr(k, m)
 int k;
 double m;
 {
-double v;
+  double v;
 
-if( (k < 0) || (m <= 0.0) )
-	{
-	mtherr( "pdtr", DOMAIN );
-	return( 0.0 );
-	}
-v = k+1;
-return( igamc( v, m ) );
+  if ((k < 0) || (m <= 0.0)) {
+    mtherr("pdtr", DOMAIN);
+    return (0.0);
+  }
+  v = k + 1;
+  return (igamc(v, m));
 }
 
-
-double pdtri( k, y )
+double pdtri(k, y)
 int k;
 double y;
 {
-double v;
+  double v;
 
-if( (k < 0) || (y < 0.0) || (y >= 1.0) )
-	{
-	mtherr( "pdtri", DOMAIN );
-	return( 0.0 );
-	}
-v = k+1;
-v = igami( v, y );
-return( v );
+  if ((k < 0) || (y < 0.0) || (y >= 1.0)) {
+    mtherr("pdtri", DOMAIN);
+    return (0.0);
+  }
+  v = k + 1;
+  v = igami(v, y);
+  return (v);
 }

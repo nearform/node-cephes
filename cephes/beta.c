@@ -39,9 +39,8 @@
  *                  a or b <0 integer        0.0
  *
  */
-
-/*							beta.c	*/
 
+/*							beta.c	*/
 
 /*
 Cephes Math Library Release 2.0:  April, 1987
@@ -65,137 +64,117 @@ Direct inquiries to 30 Frost Street, Cambridge, MA 02140
 #endif
 
 #ifdef ANSIPROT
-extern double fabs ( double );
-extern double gamma ( double );
-extern double lgam ( double );
-extern double exp ( double );
-extern double log ( double );
-extern double floor ( double );
+extern double fabs(double);
+extern double gamma(double);
+extern double lgam(double);
+extern double exp(double);
+extern double log(double);
+extern double floor(double);
 #else
 double fabs(), gamma(), lgam(), exp(), log(), floor();
 #endif
 extern double MAXLOG, MAXNUM;
 extern int sgngam;
 
-double beta( a, b )
+double beta(a, b)
 double a, b;
 {
-double y;
-int sign;
+  double y;
+  int sign;
 
-sign = 1;
+  sign = 1;
 
-if( a <= 0.0 )
-	{
-	if( a == floor(a) )
-		goto over;
-	}
-if( b <= 0.0 )
-	{
-	if( b == floor(b) )
-		goto over;
-	}
+  if (a <= 0.0) {
+    if (a == floor(a))
+      goto over;
+  }
+  if (b <= 0.0) {
+    if (b == floor(b))
+      goto over;
+  }
 
+  y = a + b;
+  if (fabs(y) > MAXGAM) {
+    y = lgam(y);
+    sign *= sgngam; /* keep track of the sign */
+    y = lgam(b) - y;
+    sign *= sgngam;
+    y = lgam(a) + y;
+    sign *= sgngam;
+    if (y > MAXLOG) {
+    over:
+      mtherr("beta", OVERFLOW);
+      return (sign * MAXNUM);
+    }
+    return (sign * exp(y));
+  }
 
-y = a + b;
-if( fabs(y) > MAXGAM )
-	{
-	y = lgam(y);
-	sign *= sgngam; /* keep track of the sign */
-	y = lgam(b) - y;
-	sign *= sgngam;
-	y = lgam(a) + y;
-	sign *= sgngam;
-	if( y > MAXLOG )
-		{
-over:
-		mtherr( "beta", OVERFLOW );
-		return( sign * MAXNUM );
-		}
-	return( sign * exp(y) );
-	}
+  y = gamma(y);
+  if (y == 0.0)
+    goto over;
 
-y = gamma(y);
-if( y == 0.0 )
-	goto over;
+  if (a > b) {
+    y = gamma(a) / y;
+    y *= gamma(b);
+  } else {
+    y = gamma(b) / y;
+    y *= gamma(a);
+  }
 
-if( a > b )
-	{
-	y = gamma(a)/y;
-	y *= gamma(b);
-	}
-else
-	{
-	y = gamma(b)/y;
-	y *= gamma(a);
-	}
-
-return(y);
+  return (y);
 }
-
-
 
 /* Natural log of |beta|.  Return the sign of beta in sgngam.  */
 
-double lbeta( a, b )
+double lbeta(a, b)
 double a, b;
 {
-double y;
-int sign;
+  double y;
+  int sign;
 
-sign = 1;
+  sign = 1;
 
-if( a <= 0.0 )
-	{
-	if( a == floor(a) )
-		goto over;
-	}
-if( b <= 0.0 )
-	{
-	if( b == floor(b) )
-		goto over;
-	}
+  if (a <= 0.0) {
+    if (a == floor(a))
+      goto over;
+  }
+  if (b <= 0.0) {
+    if (b == floor(b))
+      goto over;
+  }
 
+  y = a + b;
+  if (fabs(y) > MAXGAM) {
+    y = lgam(y);
+    sign *= sgngam; /* keep track of the sign */
+    y = lgam(b) - y;
+    sign *= sgngam;
+    y = lgam(a) + y;
+    sign *= sgngam;
+    sgngam = sign;
+    return (y);
+  }
 
-y = a + b;
-if( fabs(y) > MAXGAM )
-	{
-	y = lgam(y);
-	sign *= sgngam; /* keep track of the sign */
-	y = lgam(b) - y;
-	sign *= sgngam;
-	y = lgam(a) + y;
-	sign *= sgngam;
-	sgngam = sign;
-	return( y );
-	}
+  y = gamma(y);
+  if (y == 0.0) {
+  over:
+    mtherr("lbeta", OVERFLOW);
+    return (sign * MAXNUM);
+  }
 
-y = gamma(y);
-if( y == 0.0 )
-	{
-over:
-	mtherr( "lbeta", OVERFLOW );
-	return( sign * MAXNUM );
-	}
+  if (a > b) {
+    y = gamma(a) / y;
+    y *= gamma(b);
+  } else {
+    y = gamma(b) / y;
+    y *= gamma(a);
+  }
 
-if( a > b )
-	{
-	y = gamma(a)/y;
-	y *= gamma(b);
-	}
-else
-	{
-	y = gamma(b)/y;
-	y *= gamma(a);
-	}
-
-if( y < 0 )
-  {
+  if (y < 0) {
     sgngam = -1;
     y = -y;
-  }
-else
-  sgngam = 1;
+  } else
+    sgngam = 1;
 
-return( log(y) );
+  return (log(y));
 }

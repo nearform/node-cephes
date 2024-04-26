@@ -48,7 +48,7 @@
  * fdtr domain     a<0, b<0, x<0         0.0
  *
  */
-/*							fdtrc()
+/*							fdtrc()
  *
  *	Complemented F distribution
  *
@@ -100,7 +100,7 @@
  * fdtrc domain    a<0, b<0, x<0         0.0
  *
  */
-/*							fdtri()
+/*							fdtri()
  *
  *	Inverse of complemented F distribution
  *
@@ -152,86 +152,75 @@
  *                     v < 1
  *
  */
-
 
 /*
 Cephes Math Library Release 2.8:  June, 2000
 Copyright 1984, 1987, 1995, 2000 by Stephen L. Moshier
 */
 
-
 #include "mconf.h"
 #ifdef ANSIPROT
-extern double incbet ( double, double, double );
-extern double incbi ( double, double, double );
+extern double incbet(double, double, double);
+extern double incbi(double, double, double);
 #else
 double incbet(), incbi();
 #endif
 
-double fdtrc( ia, ib, x )
+double fdtrc(ia, ib, x)
 int ia, ib;
 double x;
 {
-double a, b, w;
+  double a, b, w;
 
-if( (ia < 1) || (ib < 1) || (x < 0.0) )
-	{
-	mtherr( "fdtrc", DOMAIN );
-	return( 0.0 );
-	}
-a = ia;
-b = ib;
-w = b / (b + a * x);
-return( incbet( 0.5*b, 0.5*a, w ) );
+  if ((ia < 1) || (ib < 1) || (x < 0.0)) {
+    mtherr("fdtrc", DOMAIN);
+    return (0.0);
+  }
+  a = ia;
+  b = ib;
+  w = b / (b + a * x);
+  return (incbet(0.5 * b, 0.5 * a, w));
 }
 
-
-
-double fdtr( ia, ib, x )
+double fdtr(ia, ib, x)
 int ia, ib;
 double x;
 {
-double a, b, w;
+  double a, b, w;
 
-if( (ia < 1) || (ib < 1) || (x < 0.0) )
-	{
-	mtherr( "fdtr", DOMAIN );
-	return( 0.0 );
-	}
-a = ia;
-b = ib;
-w = a * x;
-w = w / (b + w);
-return( incbet(0.5*a, 0.5*b, w) );
+  if ((ia < 1) || (ib < 1) || (x < 0.0)) {
+    mtherr("fdtr", DOMAIN);
+    return (0.0);
+  }
+  a = ia;
+  b = ib;
+  w = a * x;
+  w = w / (b + w);
+  return (incbet(0.5 * a, 0.5 * b, w));
 }
 
-
-double fdtri( ia, ib, y )
+double fdtri(ia, ib, y)
 int ia, ib;
 double y;
 {
-double a, b, w, x;
+  double a, b, w, x;
 
-if( (ia < 1) || (ib < 1) || (y <= 0.0) || (y > 1.0) )
-	{
-	mtherr( "fdtri", DOMAIN );
-	return( 0.0 );
-	}
-a = ia;
-b = ib;
-/* Compute probability for x = 0.5.  */
-w = incbet( 0.5*b, 0.5*a, 0.5 );
-/* If that is greater than y, then the solution w < .5.
-   Otherwise, solve at 1-y to remove cancellation in (b - b*w).  */
-if( w > y || y < 0.001)
-	{
-	w = incbi( 0.5*b, 0.5*a, y );
-	x = (b - b*w)/(a*w);
-	}
-else
-	{
-	w = incbi( 0.5*a, 0.5*b, 1.0-y );
-	x = b*w/(a*(1.0-w));
-	}
-return(x);
+  if ((ia < 1) || (ib < 1) || (y <= 0.0) || (y > 1.0)) {
+    mtherr("fdtri", DOMAIN);
+    return (0.0);
+  }
+  a = ia;
+  b = ib;
+  /* Compute probability for x = 0.5.  */
+  w = incbet(0.5 * b, 0.5 * a, 0.5);
+  /* If that is greater than y, then the solution w < .5.
+     Otherwise, solve at 1-y to remove cancellation in (b - b*w).  */
+  if (w > y || y < 0.001) {
+    w = incbi(0.5 * b, 0.5 * a, y);
+    x = (b - b * w) / (a * w);
+  } else {
+    w = incbi(0.5 * a, 0.5 * b, 1.0 - y);
+    x = b * w / (a * (1.0 - w));
+  }
+  return (x);
 }

@@ -19,9 +19,6 @@ clean:
 	rm -f cephes.wasm cephes.wast
 	rm -f index.js
 
-test: test/expected.ndjson test/actual.test.js
-	npm test
-
 cephes/:
 	mkdir cephes
 
@@ -125,18 +122,6 @@ download: | cephes/
 
 	@# Compile
 	$(CC) $(CFLAGS) -c $< -o $@
-
-test/expected.c: $(CPROTOFILES) $(GENERATEFILES)
-	cproto $(CEPHESDIR)/*.c | grep -v ignore_ | node $(BUILDDIR)/generate-c-tester.js > test/expected.c
-
-test/expected.o: test/expected.c $(CEPHESDIR)/cephes_names.h $(CEPHESDIR)/mconf.h
-	$(CC) $(CFLAGS) -I $(CEPHESDIR) -c $< -o $@
-
-test/expected: $(C_OBJS)
-	$(CC) $(LFLAGS) $^ -o $@
-
-test/expected.ndjson: test/expected
-	test/expected > test/expected.ndjson
 
 cephes.wasm: $(JS_OBJS)
 	emcc \

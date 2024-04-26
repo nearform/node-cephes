@@ -36,7 +36,7 @@
  *
  *
  */
-
+
 /*							cosh.c */
 
 /*
@@ -46,9 +46,9 @@ Copyright 1985, 1995, 2000 by Stephen L. Moshier
 
 #include "mconf.h"
 #ifdef ANSIPROT
-extern double exp ( double );
-extern int isnan ( double );
-extern int isfinite ( double );
+extern double exp(double);
+extern int isnan(double);
+extern int isfinite(double);
 #else
 double exp();
 int isnan(), isfinite();
@@ -58,26 +58,24 @@ extern double MAXLOG, INFINITY, LOGE2;
 double cosh(x)
 double x;
 {
-double y;
+  double y;
 
 #ifdef NANS
-if( isnan(x) )
-	return(x);
+  if (isnan(x))
+    return (x);
 #endif
-if( x < 0 )
-	x = -x;
-if( x > (MAXLOG + LOGE2) )
-	{
-	mtherr( "cosh", OVERFLOW );
-	return( INFINITY );
-	}	
-if( x >= (MAXLOG - LOGE2) )
-	{
-	y = exp(0.5 * x);
-	y = (0.5 * y) * y;
-	return(y);
-	}
-y = exp(x);
-y = 0.5 * (y + 1.0 / y);
-return( y );
+  if (x < 0)
+    x = -x;
+  if (x > (MAXLOG + LOGE2)) {
+    mtherr("cosh", OVERFLOW);
+    return (INFINITY);
+  }
+  if (x >= (MAXLOG - LOGE2)) {
+    y = exp(0.5 * x);
+    y = (0.5 * y) * y;
+    return (y);
+  }
+  y = exp(x);
+  y = 0.5 * (y + 1.0 / y);
+  return (y);
 }

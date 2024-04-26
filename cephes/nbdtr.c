@@ -42,7 +42,7 @@
  * See also incbet.c.
  *
  */
-/*							nbdtr.c
+/*							nbdtr.c
  *
  *	Complemented negative binomial distribution
  *
@@ -82,7 +82,7 @@
  *    IEEE     0,100       100000      1.7e-13     8.8e-15
  * See also incbet.c.
  */
-/*							nbdtr.c
+/*							nbdtr.c
  *
  *	Functional inverse of negative binomial distribution
  *
@@ -108,7 +108,7 @@
  *    IEEE     0,100       100000      1.5e-14     8.5e-16
  * See also incbi.c.
  */
-
+
 /*
 Cephes Math Library Release 2.8:  June, 2000
 Copyright 1984, 1987, 1995, 2000 by Stephen L. Moshier
@@ -116,71 +116,64 @@ Copyright 1984, 1987, 1995, 2000 by Stephen L. Moshier
 
 #include "mconf.h"
 #ifdef ANSIPROT
-extern double incbet ( double, double, double );
-extern double incbi ( double, double, double );
+extern double incbet(double, double, double);
+extern double incbi(double, double, double);
 #else
 double incbet(), incbi();
 #endif
 
-double nbdtrc( k, n, p )
+double nbdtrc(k, n, p)
 int k, n;
 double p;
 {
-double dk, dn;
+  double dk, dn;
 
-if( (p < 0.0) || (p > 1.0) )
-	goto domerr;
-if( k < 0 )
-	{
-domerr:
-	mtherr( "nbdtr", DOMAIN );
-	return( 0.0 );
-	}
+  if ((p < 0.0) || (p > 1.0))
+    goto domerr;
+  if (k < 0) {
+  domerr:
+    mtherr("nbdtr", DOMAIN);
+    return (0.0);
+  }
 
-dk = k+1;
-dn = n;
-return( incbet( dk, dn, 1.0 - p ) );
+  dk = k + 1;
+  dn = n;
+  return (incbet(dk, dn, 1.0 - p));
 }
 
-
-
-double nbdtr( k, n, p )
+double nbdtr(k, n, p)
 int k, n;
 double p;
 {
-double dk, dn;
+  double dk, dn;
 
-if( (p < 0.0) || (p > 1.0) )
-	goto domerr;
-if( k < 0 )
-	{
-domerr:
-	mtherr( "nbdtr", DOMAIN );
-	return( 0.0 );
-	}
-dk = k+1;
-dn = n;
-return( incbet( dn, dk, p ) );
+  if ((p < 0.0) || (p > 1.0))
+    goto domerr;
+  if (k < 0) {
+  domerr:
+    mtherr("nbdtr", DOMAIN);
+    return (0.0);
+  }
+  dk = k + 1;
+  dn = n;
+  return (incbet(dn, dk, p));
 }
 
-
-
-double nbdtri( k, n, p )
+double nbdtri(k, n, p)
 int k, n;
 double p;
 {
-double dk, dn, w;
+  double dk, dn, w;
 
-if( (p < 0.0) || (p > 1.0) )
-	goto domerr;
-if( k < 0 )
-	{
-domerr:
-	mtherr( "nbdtri", DOMAIN );
-	return( 0.0 );
-	}
-dk = k+1;
-dn = n;
-w = incbi( dn, dk, p );
-return( w );
+  if ((p < 0.0) || (p > 1.0))
+    goto domerr;
+  if (k < 0) {
+  domerr:
+    mtherr("nbdtri", DOMAIN);
+    return (0.0);
+  }
+  dk = k + 1;
+  dn = n;
+  w = incbi(dn, dk, p);
+  return (w);
 }
