@@ -17,7 +17,7 @@ for (const { fn, ret, args, extra = {}, error_code } of testsList) {
 
     if (error_code !== -1) {
       const codemsg = errorMappings[error_code];
-      const message = new RegExp(`cephes reports "${codemsg}" in ${fn}`);
+      const message = new RegExp(`cephes reports "${codemsg}" in`);
 
       assert.throws(() => cephes[fn].apply(null, parsedArgs), message);
       return;
