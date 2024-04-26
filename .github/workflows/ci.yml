@@ -24,7 +24,7 @@ jobs:
           cd emsdk && ./emsdk install 3.1.57 && ./emsdk activate 3.1.57 && source ./emsdk_env.sh && cd ..
           
           yarn
-          make download && make build
+          make build
       - name: test
         run: | 
           yarn test
