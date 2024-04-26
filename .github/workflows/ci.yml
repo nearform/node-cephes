@@ -1,6 +1,6 @@
 name: Continuous Integration
 
-on: 
+on:
   push:
    branches:
     - master
@@ -15,19 +15,15 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - name: install clang
-        run: npm install -g clang-format
-      - name: install cproto
+      - name: install build tools
         run: |
-          echo "download and install cproto" 
-      - name: install emscripten
+          npm install -g clang-format clang-tools-prebuilt
+          sudo apt-get update
+          sudo apt-get install cproto emscripten
+          make build
+      - name: install dependencies
         run: |
-          echo "download and install emscripten"
-      - name: install dependencies and build
-        run: |
-          # npm install
-          # make download
-          # make build
+          yarn
       - name: test
         run: | 
-          # npm test
+          yarn test
