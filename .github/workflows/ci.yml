@@ -18,6 +18,7 @@ jobs:
       - name: install system dependencies
         run: |
           sudo apt-get update && sudo apt-get install -y clang-format cproto git cmake python3 curl libtinfo5
+          npm install -g clang-tools-prebuilt
       - name: install build tools
         run: |
           git clone https://github.com/emscripten-core/emsdk.git
@@ -25,7 +26,7 @@ jobs:
       - name: install dependencies and build
         run: |
           npm install
-          make download && make build
+          make build
       - name: test
         run: |
           npm test
