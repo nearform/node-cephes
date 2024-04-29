@@ -62,8 +62,7 @@ double y0(), y1(), log();
 #endif
 extern double MAXNUM, MAXLOG;
 
-double yn(n, x)
-int n;
+double yn(n, x) int n;
 double x;
 {
   double an, anm1, anm2, r;

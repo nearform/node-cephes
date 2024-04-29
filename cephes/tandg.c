@@ -134,16 +134,13 @@ static double tancot();
 extern double MAXNUM;
 extern double PIO4;
 
-double tandg(x)
-double x;
+double tandg(x) double x;
 { return (tancot(x, 0)); }
 
-double cotdg(x)
-double x;
+double cotdg(x) double x;
 { return (tancot(x, 1)); }
 
-static double tancot(xx, cotflg)
-double xx;
+static double tancot(xx, cotflg) double xx;
 int cotflg;
 {
   double x, y, z, zz;

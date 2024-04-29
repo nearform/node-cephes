@@ -83,8 +83,7 @@ double hyperg();
 #endif
 extern double MAXNUM, MACHEP;
 
-double hyperg(a, b, x)
-double a, b, x;
+double hyperg(a, b, x) double a, b, x;
 {
   double asum, psum, acanc, pcanc, temp;
 
@@ -117,8 +116,7 @@ done:
 
 /* Power series summation for confluent hypergeometric function		*/
 
-static double hy1f1p(a, b, x, err)
-double a, b, x;
+static double hy1f1p(a, b, x, err) double a, b, x;
 double *err;
 {
   double n, a0, sum, t, u, temp;
@@ -201,8 +199,7 @@ blowup:
  *                               |  (a)                        )
  */
 
-static double hy1f1a(a, b, x, err)
-double a, b, x;
+static double hy1f1a(a, b, x, err) double a, b, x;
 double *err;
 {
   double h1, h2, t, u, temp, acanc, asum, err1, err2;
@@ -265,8 +262,7 @@ adone:
 
 /*							hyp2f0()	*/
 
-double hyp2f0(a, b, x, type, err)
-double a, b, x;
+double hyp2f0(a, b, x, type, err) double a, b, x;
 int type; /* determines what converging factor to use */
 double *err;
 {

@@ -94,8 +94,7 @@ double log(), sqrt(), polevl(), p1evl();
 #endif
 extern double LOGE2, INFINITY;
 
-double asinh(xx)
-double xx;
+double asinh(xx) double xx;
 {
   double a, z, x;
   int sign;

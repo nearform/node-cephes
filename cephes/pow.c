@@ -262,8 +262,7 @@ extern double NAN;
 extern double NEGZERO;
 #endif
 
-double pow(x, y)
-double x, y;
+double pow(x, y) double x, y;
 {
   double w, z, W, Wa, Wb, ya, yb, u;
   /* double F, Fa, Fb, G, Ga, Gb, H, Ha, Hb */
@@ -620,8 +619,7 @@ done:
 }
 
 /* Find a multiple of 1/16 that is within 1/16 of x. */
-static double reduc(x)
-double x;
+static double reduc(x) double x;
 {
   double t;
 

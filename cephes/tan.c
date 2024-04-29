@@ -187,8 +187,7 @@ extern double PIO4;
 extern double INFINITY;
 extern double NAN;
 
-double tan(x)
-double x;
+double tan(x) double x;
 {
 #ifdef MINUSZERO
   if (x == 0.0)
@@ -205,8 +204,7 @@ double x;
   return (tancot(x, 0));
 }
 
-double cot(x)
-double x;
+double cot(x) double x;
 {
 
   if (x == 0.0) {
@@ -216,8 +214,7 @@ double x;
   return (tancot(x, 1));
 }
 
-static double tancot(xx, cotflg)
-double xx;
+static double tancot(xx, cotflg) double xx;
 int cotflg;
 {
   double x, y, z, zz;

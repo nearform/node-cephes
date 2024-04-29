@@ -89,8 +89,7 @@ double fabs(), exp(), log(), sqrt();
 #endif
 extern double MACHEP, MAXNUM, MAXLOG, PI;
 
-double kn(nn, x)
-int nn;
+double kn(nn, x) int nn;
 double x;
 {
   double k, kf, nk1f, nkf, zn, t, s, z0, z;

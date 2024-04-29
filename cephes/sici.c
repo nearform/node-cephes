@@ -416,8 +416,7 @@ double log(), sin(), cos(), polevl(), p1evl();
 #define EUL 0.57721566490153286061
 extern double MAXNUM, PIO2, MACHEP;
 
-int sici(x, si, ci)
-double x;
+int sici(x, si, ci) double x;
 double *si, *ci;
 {
   double z, c, s, f, g;

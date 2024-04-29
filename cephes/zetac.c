@@ -343,8 +343,7 @@ double polevl(), p1evl(), zetac();
 #endif
 extern double MACHEP;
 
-double zetac(x)
-double x;
+double zetac(x) double x;
 {
   int i;
   double a, b, s, w;

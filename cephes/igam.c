@@ -98,8 +98,7 @@ extern double MACHEP, MAXLOG;
 static double big = 4.503599627370496e15;
 static double biginv = 2.22044604925031308085e-16;
 
-double igamc(a, x)
-double a, x;
+double igamc(a, x) double a, x;
 {
   double ans, ax, c, yc, r, t, y, z;
   double pk, pkm1, pkm2, qk, qkm1, qkm2;
@@ -165,8 +164,7 @@ double a, x;
  *
  */
 
-double igam(a, x)
-double a, x;
+double igam(a, x) double a, x;
 {
   double ans, ax, c, r;
 

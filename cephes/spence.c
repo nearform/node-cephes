@@ -115,8 +115,7 @@ double fabs(), log(), polevl();
 #endif
 extern double PI, MACHEP;
 
-double spence(x)
-double x;
+double spence(x) double x;
 {
   double w, y, z;
   int flag;

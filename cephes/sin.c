@@ -204,8 +204,7 @@ extern double NAN;
 extern double INFINITY;
 #endif
 
-double sin(x)
-double x;
+double sin(x) double x;
 {
   double y, z, zz;
   int j, sign;
@@ -272,8 +271,7 @@ double x;
   return (y);
 }
 
-double cos(x)
-double x;
+double cos(x) double x;
 {
   double y, z, zz;
   long i;
@@ -352,6 +350,5 @@ static unsigned short P648[] = {
 static double P64800 = 4.8481368110953599358991410e-5;
 #endif
 
-double radian(d, m, s)
-double d, m, s;
+double radian(d, m, s) double d, m, s;
 { return (((d * 60.0 + m) * 60.0 + s) * P64800); }

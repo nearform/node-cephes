@@ -68,8 +68,7 @@ double ellik();
 #endif
 extern double PI, PIO2, MACHEP, MAXNUM;
 
-double ellik(phi, m)
-double phi, m;
+double ellik(phi, m) double phi, m;
 {
   double a, b, c, e, temp, t, K;
   int d, mod, sign, npio2;

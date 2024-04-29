@@ -58,8 +58,7 @@ extern double incbet(double, double, double);
 double ndtri(), exp(), fabs(), log(), sqrt(), lgam(), incbet();
 #endif
 
-double incbi(aa, bb, yy0)
-double aa, bb, yy0;
+double incbi(aa, bb, yy0) double aa, bb, yy0;
 {
   double a, b, y0, d, y, x, x0, x1, lgm, yp, di, dithresh, yl, yh, xt;
   int i, rflg, dir, nflg;

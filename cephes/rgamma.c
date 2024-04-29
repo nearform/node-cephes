@@ -110,8 +110,7 @@ double chbevl(), exp(), log(), sin(), lgam();
 #endif
 extern double PI, MAXLOG, MAXNUM;
 
-double rgamma(x)
-double x;
+double rgamma(x) double x;
 {
   double w, y, z;
   int sign;

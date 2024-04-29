@@ -175,8 +175,7 @@ double polylog();
 #endif
 extern double MACHEP;
 
-double polylog(n, x)
-int n;
+double polylog(n, x) int n;
 double x;
 {
   double h, k, p, s, t, u, xc, z;

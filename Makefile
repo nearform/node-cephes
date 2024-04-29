@@ -72,6 +72,9 @@ download: | cephes/
 		-qualified-name=floor -new-name=ignore_floor \
 		-i $(CEPHESDIR)/floor.c
 
+	@# Exit make
+	exit
+
 	@# Configure cephes
 	sed -i '' -e 's/define HAVE_LONG_DOUBLE 1/define HAVE_LONG_DOUBLE 0/g' $(CEPHESDIR)/mconf.h
 	sed -i '' -e 's/define STDC_HEADERS 1/define STDC_HEADERS 0/g' $(CEPHESDIR)/mconf.h

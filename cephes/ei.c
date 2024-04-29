@@ -782,8 +782,7 @@ static short B7[20] = {
 };
 #endif
 
-double ei(x)
-double x;
+double ei(x) double x;
 {
   double f, w;
 

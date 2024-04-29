@@ -134,8 +134,7 @@ extern double igami(double, double);
 double igam(), igamc(), igami();
 #endif
 
-double pdtrc(k, m)
-int k;
+double pdtrc(k, m) int k;
 double m;
 {
   double v;
@@ -148,8 +147,7 @@ double m;
   return (igam(v, m));
 }
 
-double pdtr(k, m)
-int k;
+double pdtr(k, m) int k;
 double m;
 {
   double v;
@@ -162,8 +160,7 @@ double m;
   return (igamc(v, m));
 }
 
-double pdtri(k, y)
-int k;
+double pdtri(k, y) int k;
 double y;
 {
   double v;

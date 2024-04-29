@@ -156,8 +156,7 @@ extern double expm1(double);
 double incbet(), incbi(), pow(), log1p(), expm1();
 #endif
 
-double bdtrc(k, n, p)
-int k, n;
+double bdtrc(k, n, p) int k, n;
 double p;
 {
   double dk, dn;
@@ -188,8 +187,7 @@ double p;
   return (dk);
 }
 
-double bdtr(k, n, p)
-int k, n;
+double bdtr(k, n, p) int k, n;
 double p;
 {
   double dk, dn;
@@ -215,8 +213,7 @@ double p;
   return (dk);
 }
 
-double bdtri(k, n, y)
-int k, n;
+double bdtri(k, n, y) int k, n;
 double y;
 {
   double dk, dn, p;

@@ -582,8 +582,7 @@ double fabs(), exp(), sqrt();
 double polevl(), p1evl(), sin(), cos();
 #endif
 
-int airy(x, ai, aip, bi, bip)
-double x, *ai, *aip, *bi, *bip;
+int airy(x, ai, aip, bi, bip) double x, *ai, *aip, *bi, *bip;
 {
   double z, zz, t, f, g, uf, ug, k, zeta, theta;
   int domflg;

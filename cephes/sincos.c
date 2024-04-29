@@ -184,8 +184,7 @@ double floor(double);
 double floor();
 #endif
 
-int sincos(x, s, c, flg)
-double x;
+int sincos(x, s, c, flg) double x;
 double *s, *c;
 int flg;
 {

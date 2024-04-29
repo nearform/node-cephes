@@ -140,8 +140,7 @@ double polevl(), p1evl(), log();
 #endif
 extern double MACHEP, MAXNUM;
 
-double ellpk(x)
-double x;
+double ellpk(x) double x;
 {
 
   if ((x < 0.0) || (x > 1.0)) {

@@ -36,8 +36,7 @@ double smirnov(), kolmogorov();
 extern double MAXLOG;
 
 /* Exact Smirnov statistic, for one-sided test.  */
-double smirnov(n, e)
-int n;
+double smirnov(n, e) int n;
 double e;
 {
   int v, nn;
@@ -76,8 +75,7 @@ double e;
    or that max deviation > y/sqrt(n).
    The approximation is useful for the tail of the distribution
    when n is large.  */
-double kolmogorov(y)
-double y;
+double kolmogorov(y) double y;
 {
   double p, t, r, sign, x;
 
@@ -98,8 +96,7 @@ double y;
 
 /* Functional inverse of Smirnov distribution
    finds e such that smirnov(n,e) = p.  */
-double smirnovi(n, p)
-int n;
+double smirnovi(n, p) int n;
 double p;
 {
   double e, t, dpde;
@@ -133,8 +130,7 @@ double p;
    Finds y such that kolmogorov(y) = p.
    If e = smirnovi (n,p), then kolmogi(2 * p) / sqrt(n) should
    be close to e.  */
-double kolmogi(p)
-double p;
+double kolmogi(p) double p;
 {
   double y, t, dpdy;
 

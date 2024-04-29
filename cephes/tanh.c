@@ -84,8 +84,7 @@ double fabs(), exp(), polevl(), p1evl();
 #endif
 extern double MAXLOG;
 
-double tanh(x)
-double x;
+double tanh(x) double x;
 {
   double s, z;
 

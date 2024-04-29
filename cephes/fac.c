@@ -139,8 +139,7 @@ double gamma();
 #endif
 extern double MAXNUM;
 
-double fac(i)
-int i;
+double fac(i) int i;
 {
   double x, f, n;
   int j;

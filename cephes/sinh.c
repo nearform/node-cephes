@@ -86,8 +86,7 @@ double fabs(), exp(), polevl(), p1evl();
 #endif
 extern double INFINITY, MINLOG, MAXLOG, LOGE2;
 
-double sinh(x)
-double x;
+double sinh(x) double x;
 {
   double a;
 

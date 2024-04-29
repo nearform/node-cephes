@@ -128,8 +128,7 @@ extern double log(double);
 double polevl(), log();
 #endif
 
-double ellpe(x)
-double x;
+double ellpe(x) double x;
 {
 
   if ((x <= 0.0) || (x > 1.0)) {

@@ -122,8 +122,7 @@ extern double incbi(double, double, double);
 double incbet(), incbi();
 #endif
 
-double nbdtrc(k, n, p)
-int k, n;
+double nbdtrc(k, n, p) int k, n;
 double p;
 {
   double dk, dn;
@@ -141,8 +140,7 @@ double p;
   return (incbet(dk, dn, 1.0 - p));
 }
 
-double nbdtr(k, n, p)
-int k, n;
+double nbdtr(k, n, p) int k, n;
 double p;
 {
   double dk, dn;
@@ -159,8 +157,7 @@ double p;
   return (incbet(dn, dk, p));
 }
 
-double nbdtri(k, n, p)
-int k, n;
+double nbdtri(k, n, p) int k, n;
 double p;
 {
   double dk, dn, w;

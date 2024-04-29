@@ -109,8 +109,7 @@ double log(), sqrt(), polevl(), p1evl();
 #endif
 extern double LOGE2, INFINITY, NAN;
 
-double acosh(x)
-double x;
+double acosh(x) double x;
 {
   double a, z;
 

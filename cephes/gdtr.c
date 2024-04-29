@@ -102,8 +102,7 @@ extern double igamc(double, double);
 double igam(), igamc();
 #endif
 
-double gdtr(a, b, x)
-double a, b, x;
+double gdtr(a, b, x) double a, b, x;
 {
 
   if (x < 0.0) {
@@ -113,8 +112,7 @@ double a, b, x;
   return (igam(b, a * x));
 }
 
-double gdtrc(a, b, x)
-double a, b, x;
+double gdtrc(a, b, x) double a, b, x;
 {
 
   if (x < 0.0) {

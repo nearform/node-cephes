@@ -63,8 +63,7 @@ extern double lgam(double);
 double igamc(), ndtri(), exp(), fabs(), log(), sqrt(), lgam();
 #endif
 
-double igami(a, y0)
-double a, y0;
+double igami(a, y0) double a, y0;
 {
   double x0, x1, x, yl, yh, y, d, lgm, dithresh;
   int i, dir;

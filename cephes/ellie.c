@@ -68,8 +68,7 @@ double sqrt(), fabs(), log(), sin(), tan(), atan(), floor();
 double ellpe(), ellpk(), ellie();
 #endif
 
-double ellie(phi, m)
-double phi, m;
+double ellie(phi, m) double phi, m;
 {
   double a, b, c, e, temp;
   double lphi, t, E;

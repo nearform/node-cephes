@@ -298,8 +298,7 @@ double erf(), erfc(), expx2(), sqrt();
 static double erfce();
 #endif
 
-double ndtr(a)
-double a;
+double ndtr(a) double a;
 {
   double x, y, z;
 
@@ -327,8 +326,7 @@ double a;
   return (y);
 }
 
-double erfc(a)
-double a;
+double erfc(a) double a;
 {
   double p, q, x, y, z;
 
@@ -379,8 +377,7 @@ double a;
    exp(x^2) erfc(x)
    valid for x > 1.
    Use with ndtr and expx2.  */
-static double erfce(x)
-double x;
+static double erfce(x) double x;
 {
   double p, q;
 
@@ -394,8 +391,7 @@ double x;
   return (p / q);
 }
 
-double erf(x)
-double x;
+double erf(x) double x;
 {
   double y, z;
 
