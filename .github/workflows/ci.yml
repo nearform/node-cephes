@@ -19,12 +19,11 @@ jobs:
         run: |
           sudo apt-get update && sudo apt-get install -y clang-format cproto git cmake python3 curl libtinfo5
           npm install -g clang-tools-prebuilt
-      - name: install build tools
+      - name: install build tools and build
         run: |
           git clone https://github.com/emscripten-core/emsdk.git
           cd emsdk && ./emsdk install latest && ./emsdk activate latest && source ./emsdk_env.sh && cd ..
-      - name: install dependencies and build
-        run: |
+          
           npm install
           make build
       - name: test
