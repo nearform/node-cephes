@@ -2,8 +2,8 @@ name: Continuous Integration
 
 on:
   push:
-   branches:
-    - master
+    branches:
+      - master
   pull_request:
 
 jobs:
@@ -15,16 +15,17 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
+      - name: install system dependencies
+        run: |
+          apt-get update && apt-get install -y clang-format cproto git cmake python3 curl
       - name: install build tools
         run: |
-          sudo apt-get update && sudo apt-get install -y clang-format cproto git cmake python3 curl libtinfo5
-          npm install -g clang-tools-prebuilt
-
           git clone https://github.com/emscripten-core/emsdk.git
           cd emsdk && ./emsdk install 3.1.57 && ./emsdk activate 3.1.57 && source ./emsdk_env.sh && cd ..
-          
-          yarn
-          make build
+      - name: install dependencies and build
+        run: |
+          npm install
+          make download && make build
       - name: test
-        run: | 
-          yarn test
+        run: |
+          npm test

@@ -19,6 +19,9 @@ clean:
 	rm -f cephes.wasm cephes.wast
 	rm -f index.js
 
+test: test/expected.json test/actual.test.js
+	npm test
+
 cephes/:
 	mkdir cephes
 
@@ -102,7 +105,7 @@ download: | cephes/
 
 %.bc: %.c $(CEPHESDIR)/cephes_names.h $(CEPHESDIR)/mconf.h
 	@# Format the file so it looks readable
-	clang-format -style=llvm -i $< --
+	clang-format -style=llvm -i $<
 
 	@# Insert missing #include "mconf.h"
 	@if ! grep -q '#include "mconf.h"' $<; then \
@@ -167,6 +170,7 @@ cephes.standalone.wasm: $(JS_OBJS)
 
 cephes.wasm.base64.json: cephes.wasm
 	node -p "JSON.stringify(fs.readFileSync('$^', 'base64'))" > $@
+	rm cephes.wasm
 
 index.js: cephes.wasm $(CPROTOFILES) $(GENERATEFILES)
 	cproto $(CEPHESDIR)/*.c | grep -v ignore_ | node $(BUILDDIR)/generate-interface.js > index.js
