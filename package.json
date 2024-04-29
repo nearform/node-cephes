@@ -1,7 +1,10 @@
 {
   "name": "cephes",
   "description": "Implementation of special functions and distributions mathematical functions from the cephes library.",
-  "repository": "nearform/node-cephes",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nearform/node-cephes.git"
+  },
   "version": "2.0.0",
   "main": "index.js",
   "scripts": {
