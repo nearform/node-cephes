@@ -14,7 +14,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version-file: '.nvmrc'
       - name: install system dependencies
         run: |
           sudo apt-get update && sudo apt-get install -y clang-format cproto git cmake python3 curl libtinfo5
