@@ -19,7 +19,7 @@ clean:
 	rm -f cephes.wasm cephes.wast
 	rm -f index.js
 
-test: test/expected.ndjson test/actual.test.js
+test: test/expected.json test/actual.test.js
 	npm test
 
 cephes/:
@@ -29,22 +29,22 @@ download: | cephes/
 	rm -f $(CEPHESDIR)/*
 
 	@# Download main library
-	curl http://www.netlib.org/cephes/cmath.tgz | tar xz -C $(CEPHESDIR)
+	curl -L http://www.netlib.org/cephes/cmath.tgz | tar xz -C $(CEPHESDIR)
 
 	@# Download cprob extension
-	curl http://www.netlib.org/cephes/cprob.tgz | tar xz -C $(CEPHESDIR)
+	curl -L http://www.netlib.org/cephes/cprob.tgz | tar xz -C $(CEPHESDIR)
 
 	@# Download ellf extension
-	curl http://www.netlib.org/cephes/ellf.tgz | tar xz -C $(CEPHESDIR)
+	curl -L http://www.netlib.org/cephes/ellf.tgz | tar xz -C $(CEPHESDIR)
 
 	@# Download bessel extension
-	curl http://www.netlib.org/cephes/bessel.tgz | tar xz -C $(CEPHESDIR)
+	curl -L http://www.netlib.org/cephes/bessel.tgz | tar xz -C $(CEPHESDIR)
 
 	@# Download misc extension
-	curl http://www.netlib.org/cephes/misc.tgz | tar xz -C $(CEPHESDIR)
+	curl -L http://www.netlib.org/cephes/misc.tgz | tar xz -C $(CEPHESDIR)
 
 	@# Download documentation
-	curl http://www.netlib.org/cephes/cephes.doc > $(CEPHESDIR)/cephes.txt
+	curl -L http://www.netlib.org/cephes/cephes.doc > $(CEPHESDIR)/cephes.txt
 
 	@# Remove compile files and instructions
 	cd $(CEPHESDIR) && \
@@ -71,6 +71,9 @@ download: | cephes/
 		-qualified-name=ceil -new-name=ignore_ceil \
 		-qualified-name=floor -new-name=ignore_floor \
 		-i $(CEPHESDIR)/floor.c
+
+	@# Exit make
+	exit
 
 	@# Configure cephes
 	sed -i '' -e 's/define HAVE_LONG_DOUBLE 1/define HAVE_LONG_DOUBLE 0/g' $(CEPHESDIR)/mconf.h
@@ -114,7 +117,7 @@ download: | cephes/
 	fi
 
 	@# Compile
-	emcc $(CFLAGS) $< -o $@
+	emcc -c -emit-llvm $(CFLAGS) $< -o $@
 
 %.o: %.c $(CEPHESDIR)/cephes_names.h $(CEPHESDIR)/mconf.h
 	@# Insert missing #include "mconf.h"
@@ -126,18 +129,6 @@ download: | cephes/
 	@# Compile
 	$(CC) $(CFLAGS) -c $< -o $@
 
-test/expected.c: $(CPROTOFILES) $(GENERATEFILES)
-	cproto $(CEPHESDIR)/*.c | grep -v ignore_ | node $(BUILDDIR)/generate-c-tester.js > test/expected.c
-
-test/expected.o: test/expected.c $(CEPHESDIR)/cephes_names.h $(CEPHESDIR)/mconf.h
-	$(CC) $(CFLAGS) -I $(CEPHESDIR) -c $< -o $@
-
-test/expected: $(C_OBJS)
-	$(CC) $(LFLAGS) $^ -o $@
-
-test/expected.ndjson: test/expected
-	test/expected > test/expected.ndjson
-
 cephes.wasm: $(JS_OBJS)
 	emcc \
 		-s BINARYEN_ASYNC_COMPILATION=0 \
@@ -148,7 +139,7 @@ cephes.wasm: $(JS_OBJS)
 			tr '\n' ','  | \
 			sed 's/,$$//' \
 		)]" \
-		-s EXTRA_EXPORTED_RUNTIME_METHODS="['writeArrayToMemory', 'stackAlloc', 'stackSave', 'stackRestore', 'getValue']" \
+		-s EXPORTED_RUNTIME_METHODS="['writeArrayToMemory', 'stackAlloc', 'stackSave', 'stackRestore', 'getValue']" \
 		-s DEFAULT_LIBRARY_FUNCS_TO_INCLUDE="[]" \
 		-s TOTAL_MEMORY=2MB \
 		-s TOTAL_STACK=1MB \
@@ -162,7 +153,6 @@ cephes.wasm: $(JS_OBJS)
 		$(LFLAGS) $^ -o cephes-temp.js
 	rm cephes-temp.js
 	mv cephes-temp.wasm cephes.wasm
-	mv cephes-temp.wast cephes.wast
 
 cephes.standalone.wasm: $(JS_OBJS)
 	@# Work In Progress: try and use the SIDE_MODULE options for a more
@@ -183,6 +173,7 @@ cephes.standalone.wasm: $(JS_OBJS)
 
 cephes.wasm.base64.json: cephes.wasm
 	node -p "JSON.stringify(fs.readFileSync('$^', 'base64'))" > $@
+	rm cephes.wasm
 
 index.js: cephes.wasm $(CPROTOFILES) $(GENERATEFILES)
 	cproto $(CEPHESDIR)/*.c | grep -v ignore_ | node $(BUILDDIR)/generate-interface.js > index.js

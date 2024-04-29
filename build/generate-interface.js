@@ -123,7 +123,7 @@ class InterfaceGenerator extends stream.Transform {
     //
     code += `  // return: ${returnType}\n`;
     // function call
-    code += `  const fn_ret = cephes._cephes_${functionName}(`;
+    code += `  const fn_ret = cephes.cephes_${functionName}(`;
     // function arguments
     for (const { name } of functionArgs) {
       code += `carg_${name}, `;
