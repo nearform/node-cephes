@@ -17,7 +17,7 @@ jobs:
           node-version-file: '.nvmrc'
       - name: install system dependencies
         run: |
-          sudo apt-get update && sudo apt-get install -y clang-format cproto git cmake python3 curl libtinfo5
+          sudo apt-get update && sudo apt-get install -y clang-format cproto git cmake python3 curl libtinfo6
           npm install -g clang-tools-prebuilt
       - name: install build tools and build
         run: |
