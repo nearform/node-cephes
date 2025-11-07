@@ -67,20 +67,24 @@ download: | cephes/
 	@# Rename (effectively remove) ceil, floor as they have native
 	@# WebAssembly equivalents (f64.ceil, and f64.floor).
 	@# It will continue to contain defintions for frexp, and ldexp
-	clang-rename \
-		-qualified-name=ceil -new-name=ignore_ceil \
-		-qualified-name=floor -new-name=ignore_floor \
-		-i $(CEPHESDIR)/floor.c
-
-	@# Exit make
-	exit
-
-	@# Configure cephes
+ifeq ($(shell uname),Darwin)
+	sed -E -i '' 's/((ceil|floor)[[:space:]]*)\(/ignore_\1\(/g' $(CEPHESDIR)/floor.c
 	sed -i '' -e 's/define HAVE_LONG_DOUBLE 1/define HAVE_LONG_DOUBLE 0/g' $(CEPHESDIR)/mconf.h
 	sed -i '' -e 's/define STDC_HEADERS 1/define STDC_HEADERS 0/g' $(CEPHESDIR)/mconf.h
 	sed -i '' -e 's/define HAVE_STRING_H 1/define HAVE_STRING_H 0/g' $(CEPHESDIR)/mconf.h
 	sed -i '' -e 's%#define UNK 1%/* #define UNK 1 */%g' $(CEPHESDIR)/mconf.h
 	sed -i '' -e 's%/\* #define IBMPC 1 \*/%#define IBMPC 1%g' $(CEPHESDIR)/mconf.h
+else
+	sed -i -E 's/((ceil|floor)[[:space:]]*)\(/ignore_\1\(/g' $(CEPHESDIR)/floor.c
+	sed -i  -e 's/define HAVE_LONG_DOUBLE 1/define HAVE_LONG_DOUBLE 0/g' $(CEPHESDIR)/mconf.h
+	sed -i  -e 's/define STDC_HEADERS 1/define STDC_HEADERS 0/g' $(CEPHESDIR)/mconf.h
+	sed -i  -e 's/define HAVE_STRING_H 1/define HAVE_STRING_H 0/g' $(CEPHESDIR)/mconf.h
+	sed -i  -e 's%#define UNK 1%/* #define UNK 1 */%g' $(CEPHESDIR)/mconf.h
+	sed -i  -e 's%/\* #define IBMPC 1 \*/%#define IBMPC 1%g' $(CEPHESDIR)/mconf.h
+endif
+
+	@# Exit make
+	exit
 
 	@# Create renaming defs to prevent conflict with default symbols
 	echo '#ifndef CEPHES_NAMES_H' > $(CEPHESDIR)/cephes_names.h

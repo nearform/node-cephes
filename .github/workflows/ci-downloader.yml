@@ -1,0 +1,29 @@
+name: Check downloader
+
+on:
+    push:
+        branches:
+            - master
+        paths:
+            - "cephes/**"
+            - Makefile
+    pull_request:
+        branches:
+            - master
+        paths:
+            - "cephes/**"
+            - Makefile
+
+jobs:
+    cephes_download:
+        name: Check downloads are successful
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v5
+            - name: install system dependencies
+              run: sudo apt-get update && sudo apt-get install -y clang-format cproto git cmake python3 curl
+            - name: Check downloader
+              run: |
+                  make download
+                  git diff --quiet && git diff --cached --quiet && [ -z "$(git ls-files --others --exclude-standard)" ] || exit 1
