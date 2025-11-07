@@ -46,7 +46,7 @@
  * Spot checked against tables for x, n between 0 and 100.
  *
  */
-
+
 /*
 Cephes Math Library Release 2.8:  June, 2000
 Copyright 1984, 1987, 2000 by Stephen L. Moshier
@@ -54,53 +54,61 @@ Copyright 1984, 1987, 2000 by Stephen L. Moshier
 
 #include "mconf.h"
 #ifdef ANSIPROT
-extern double y0(double);
-extern double y1(double);
-extern double log(double);
+extern double y0 ( double );
+extern double y1 ( double );
+extern double log ( double );
 #else
 double y0(), y1(), log();
 #endif
 extern double MAXNUM, MAXLOG;
 
-double yn(n, x) int n;
+double yn( n, x )
+int n;
 double x;
 {
-  double an, anm1, anm2, r;
-  int k, sign;
+double an, anm1, anm2, r;
+int k, sign;
 
-  if (n < 0) {
-    n = -n;
-    if ((n & 1) == 0) /* -1**n */
-      sign = 1;
-    else
-      sign = -1;
-  } else
-    sign = 1;
+if( n < 0 )
+	{
+	n = -n;
+	if( (n & 1) == 0 )	/* -1**n */
+		sign = 1;
+	else
+		sign = -1;
+	}
+else
+	sign = 1;
 
-  if (n == 0)
-    return (sign * y0(x));
-  if (n == 1)
-    return (sign * y1(x));
 
-  /* test for overflow */
-  if (x <= 0.0) {
-    mtherr("yn", SING);
-    return (-MAXNUM);
-  }
+if( n == 0 )
+	return( sign * y0(x) );
+if( n == 1 )
+	return( sign * y1(x) );
 
-  /* forward recurrence on n */
+/* test for overflow */
+if( x <= 0.0 )
+	{
+	mtherr( "yn", SING );
+	return( -MAXNUM );
+	}
 
-  anm2 = y0(x);
-  anm1 = y1(x);
-  k = 1;
-  r = 2 * k;
-  do {
-    an = r * anm1 / x - anm2;
-    anm2 = anm1;
-    anm1 = an;
-    r += 2.0;
-    ++k;
-  } while (k < n);
+/* forward recurrence on n */
 
-  return (sign * an);
+anm2 = y0(x);
+anm1 = y1(x);
+k = 1;
+r = 2 * k;
+do
+	{
+	an = r * anm1 / x  -  anm2;
+	anm2 = anm1;
+	anm1 = an;
+	r += 2.0;
+	++k;
+	}
+while( k < n );
+
+
+return( sign * an );
 }

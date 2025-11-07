@@ -42,7 +42,7 @@
  * gdtr domain         x < 0            0.0
  *
  */
-/*							gdtrc.c
+/*							gdtrc.c
  *
  *	Complemented gamma distribution function
  *
@@ -86,8 +86,9 @@
  * gdtrc domain         x < 0            0.0
  *
  */
-
+
 /*							gdtr()  */
+
 
 /*
 Cephes Math Library Release 2.8:  June, 2000
@@ -96,28 +97,34 @@ Copyright 1984, 1987, 1995, 2000 by Stephen L. Moshier
 
 #include "mconf.h"
 #ifdef ANSIPROT
-extern double igam(double, double);
-extern double igamc(double, double);
+extern double igam ( double, double );
+extern double igamc ( double, double );
 #else
 double igam(), igamc();
 #endif
 
-double gdtr(a, b, x) double a, b, x;
+double gdtr( a, b, x )
+double a, b, x;
 {
 
-  if (x < 0.0) {
-    mtherr("gdtr", DOMAIN);
-    return (0.0);
-  }
-  return (igam(b, a * x));
+if( x < 0.0 )
+	{
+	mtherr( "gdtr", DOMAIN );
+	return( 0.0 );
+	}
+return(  igam( b, a * x )  );
 }
 
-double gdtrc(a, b, x) double a, b, x;
+
+
+double gdtrc( a, b, x )
+double a, b, x;
 {
 
-  if (x < 0.0) {
-    mtherr("gdtrc", DOMAIN);
-    return (0.0);
-  }
-  return (igamc(b, a * x));
+if( x < 0.0 )
+	{
+	mtherr( "gdtrc", DOMAIN );
+	return( 0.0 );
+	}
+return(  igamc( b, a * x )  );
 }
