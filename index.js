@@ -6,7 +6,7 @@ const cephes = require('./cephes.js');
 // as of Node.js v10.6.1.
 exports.compiled = cephes.compiled;
 
-// from cephes/isnan.c
+// from cephes/cmath/isnan.c
 exports.signbit = function signbit(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
@@ -23,7 +23,7 @@ exports.signbit = function signbit(/* double */ x) {
   return ret;
 };
 
-// from cephes/isnan.c
+// from cephes/cmath/isnan.c
 exports.isnan = function isnan(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
@@ -40,7 +40,7 @@ exports.isnan = function isnan(/* double */ x) {
   return ret;
 };
 
-// from cephes/isnan.c
+// from cephes/cmath/isnan.c
 exports.isfinite = function isfinite(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
@@ -57,7 +57,24 @@ exports.isfinite = function isfinite(/* double */ x) {
   return ret;
 };
 
-// from cephes/cbrt.c
+// from cephes/cmath/sqrt.c
+exports.sqrt = function sqrt(/* double */ x) {
+  // argument: double x
+  if (typeof x !== 'number') {
+    throw new TypeError('x must be a number');
+  }
+  const carg_x = x;
+
+  // return: double
+  const fn_ret = cephes.cephes_sqrt(carg_x);
+
+  // No pointers, so just return fn_ret
+  const ret = fn_ret;
+
+  return ret;
+};
+
+// from cephes/cmath/cbrt.c
 exports.cbrt = function cbrt(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
@@ -74,29 +91,29 @@ exports.cbrt = function cbrt(/* double */ x) {
   return ret;
 };
 
-// from cephes/polevl.c
+// from cephes/misc/polevl.c
 exports.polevl = function polevl(/* double */ x, /* double[] */ coef, /* int */ N) {
   //Save the STACKTOP because the following code will do some stack allocs
-  const stacktop = cephes.stackSave();
+  const stacktop = cephes.misc.stackSave();
 
   // argument: double x
   if (typeof x !== 'number') {
-    cephes.stackRestore(stacktop);
+    cephes.misc.stackRestore(stacktop);
     throw new TypeError('x must be a number');
   }
   const carg_x = x;
 
   // argument: double[] coef
   if (!(coef instanceof Float64Array)) {
-    cephes.stackRestore(stacktop);
+    cephes.misc.stackRestore(stacktop);
     throw new TypeError('coef must be either a Float64Array');
   }
-  const carg_coef = cephes.stackAlloc(coef.length << 3);
-  cephes.writeArrayToMemory(new Uint8Array(coef.buffer, coef.byteOffset, coef.byteLength), carg_coef);
+  const carg_coef = cephes.misc.stackAlloc(coef.length << 3);
+  cephes.misc.writeArrayToMemory(new Uint8Array(coef.buffer, coef.byteOffset, coef.byteLength), carg_coef);
 
   // argument: int N
   if (typeof N !== 'number') {
-    cephes.stackRestore(stacktop);
+    cephes.misc.stackRestore(stacktop);
     throw new TypeError('N must be a number');
   }
   const carg_N = N | 0;
@@ -108,33 +125,33 @@ exports.polevl = function polevl(/* double */ x, /* double[] */ coef, /* int */ 
   const ret = fn_ret;
 
   // Restore internal stacktop before returning
-  cephes.stackRestore(stacktop);
+  cephes.misc.stackRestore(stacktop);
   return ret;
 };
 
-// from cephes/chbevl.c
+// from cephes/misc/chbevl.c
 exports.chbevl = function chbevl(/* double */ x, /* double[] */ array, /* int */ n) {
   //Save the STACKTOP because the following code will do some stack allocs
-  const stacktop = cephes.stackSave();
+  const stacktop = cephes.misc.stackSave();
 
   // argument: double x
   if (typeof x !== 'number') {
-    cephes.stackRestore(stacktop);
+    cephes.misc.stackRestore(stacktop);
     throw new TypeError('x must be a number');
   }
   const carg_x = x;
 
   // argument: double[] array
   if (!(array instanceof Float64Array)) {
-    cephes.stackRestore(stacktop);
+    cephes.misc.stackRestore(stacktop);
     throw new TypeError('array must be either a Float64Array');
   }
-  const carg_array = cephes.stackAlloc(array.length << 3);
-  cephes.writeArrayToMemory(new Uint8Array(array.buffer, array.byteOffset, array.byteLength), carg_array);
+  const carg_array = cephes.misc.stackAlloc(array.length << 3);
+  cephes.misc.writeArrayToMemory(new Uint8Array(array.buffer, array.byteOffset, array.byteLength), carg_array);
 
   // argument: int n
   if (typeof n !== 'number') {
-    cephes.stackRestore(stacktop);
+    cephes.misc.stackRestore(stacktop);
     throw new TypeError('n must be a number');
   }
   const carg_n = n | 0;
@@ -146,11 +163,11 @@ exports.chbevl = function chbevl(/* double */ x, /* double[] */ array, /* int */
   const ret = fn_ret;
 
   // Restore internal stacktop before returning
-  cephes.stackRestore(stacktop);
+  cephes.misc.stackRestore(stacktop);
   return ret;
 };
 
-// from cephes/round.c
+// from cephes/cmath/round.c
 exports.round = function round(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
@@ -167,35 +184,69 @@ exports.round = function round(/* double */ x) {
   return ret;
 };
 
-// from cephes/floor.c
+// from cephes/cmath/floor.c
+exports.ceil = function ceil(/* double */ x) {
+  // argument: double x
+  if (typeof x !== 'number') {
+    throw new TypeError('x must be a number');
+  }
+  const carg_x = x;
+
+  // return: double
+  const fn_ret = cephes.cephes_ceil(carg_x);
+
+  // No pointers, so just return fn_ret
+  const ret = fn_ret;
+
+  return ret;
+};
+
+// from cephes/cmath/floor.c
+exports.floor = function floor(/* double */ x) {
+  // argument: double x
+  if (typeof x !== 'number') {
+    throw new TypeError('x must be a number');
+  }
+  const carg_x = x;
+
+  // return: double
+  const fn_ret = cephes.cephes_floor(carg_x);
+
+  // No pointers, so just return fn_ret
+  const ret = fn_ret;
+
+  return ret;
+};
+
+// from cephes/cmath/floor.c
 exports.frexp = function frexp(/* double */ x) {
   //Save the STACKTOP because the following code will do some stack allocs
-  const stacktop = cephes.stackSave();
+  const stacktop = cephes.cmath.stackSave();
 
   // argument: double x
   if (typeof x !== 'number') {
-    cephes.stackRestore(stacktop);
+    cephes.cmath.stackRestore(stacktop);
     throw new TypeError('x must be a number');
   }
   const carg_x = x;
 
   // argument: int* pw2
-  const carg_pw2 = cephes.stackAlloc(4); // No need to zero-set it.
+  const carg_pw2 = cephes.cmath.stackAlloc(4); // No need to zero-set it.
 
   // return: double
   const fn_ret = cephes.cephes_frexp(carg_x, carg_pw2);
 
   // There are pointers, so return the values of thoese too
   const ret = [fn_ret, {
-    'pw2': cephes.getValue(carg_pw2, 'i32'),
+    'pw2': cephes.cmath.getValue(carg_pw2, 'i32'),
   }];
 
   // Restore internal stacktop before returning
-  cephes.stackRestore(stacktop);
+  cephes.cmath.stackRestore(stacktop);
   return ret;
 };
 
-// from cephes/floor.c
+// from cephes/cmath/floor.c
 exports.ldexp = function ldexp(/* double */ x, /* int */ pw2) {
   // argument: double x
   if (typeof x !== 'number') {
@@ -218,7 +269,24 @@ exports.ldexp = function ldexp(/* double */ x, /* int */ pw2) {
   return ret;
 };
 
-// from cephes/expx2.c
+// from cephes/cmath/fabs.c
+exports.fabs = function fabs(/* double */ x) {
+  // argument: double x
+  if (typeof x !== 'number') {
+    throw new TypeError('x must be a number');
+  }
+  const carg_x = x;
+
+  // return: double
+  const fn_ret = cephes.cephes_fabs(carg_x);
+
+  // No pointers, so just return fn_ret
+  const ret = fn_ret;
+
+  return ret;
+};
+
+// from cephes/cprob/expx2.c
 exports.expx2 = function expx2(/* double */ x, /* int */ sign) {
   // argument: double x
   if (typeof x !== 'number') {
@@ -241,7 +309,7 @@ exports.expx2 = function expx2(/* double */ x, /* int */ sign) {
   return ret;
 };
 
-// from cephes/sin.c
+// from cephes/cmath/sin.c
 exports.radian = function radian(/* double */ d, /* double */ m, /* double */ s) {
   // argument: double d
   if (typeof d !== 'number') {
@@ -270,27 +338,27 @@ exports.radian = function radian(/* double */ d, /* double */ m, /* double */ s)
   return ret;
 };
 
-// from cephes/sincos.c
+// from cephes/cmath/sincos.c
 exports.sincos = function sincos(/* double */ x, /* int */ flg) {
   //Save the STACKTOP because the following code will do some stack allocs
-  const stacktop = cephes.stackSave();
+  const stacktop = cephes.cmath.stackSave();
 
   // argument: double x
   if (typeof x !== 'number') {
-    cephes.stackRestore(stacktop);
+    cephes.cmath.stackRestore(stacktop);
     throw new TypeError('x must be a number');
   }
   const carg_x = x;
 
   // argument: double* s
-  const carg_s = cephes.stackAlloc(8); // No need to zero-set it.
+  const carg_s = cephes.cmath.stackAlloc(8); // No need to zero-set it.
 
   // argument: double* c
-  const carg_c = cephes.stackAlloc(8); // No need to zero-set it.
+  const carg_c = cephes.cmath.stackAlloc(8); // No need to zero-set it.
 
   // argument: int flg
   if (typeof flg !== 'number') {
-    cephes.stackRestore(stacktop);
+    cephes.cmath.stackRestore(stacktop);
     throw new TypeError('flg must be a number');
   }
   const carg_flg = flg | 0;
@@ -300,16 +368,16 @@ exports.sincos = function sincos(/* double */ x, /* int */ flg) {
 
   // There are pointers, so return the values of thoese too
   const ret = [fn_ret, {
-    's': cephes.getValue(carg_s, 'double'),
-    'c': cephes.getValue(carg_c, 'double'),
+    's': cephes.cmath.getValue(carg_s, 'double'),
+    'c': cephes.cmath.getValue(carg_c, 'double'),
   }];
 
   // Restore internal stacktop before returning
-  cephes.stackRestore(stacktop);
+  cephes.cmath.stackRestore(stacktop);
   return ret;
 };
 
-// from cephes/tan.c
+// from cephes/cmath/tan.c
 exports.cot = function cot(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
@@ -326,7 +394,7 @@ exports.cot = function cot(/* double */ x) {
   return ret;
 };
 
-// from cephes/tandg.c
+// from cephes/cmath/tandg.c
 exports.cotdg = function cotdg(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
@@ -343,7 +411,7 @@ exports.cotdg = function cotdg(/* double */ x) {
   return ret;
 };
 
-// from cephes/unity.c
+// from cephes/cprob/unity.c
 exports.log1p = function log1p(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
@@ -360,7 +428,7 @@ exports.log1p = function log1p(/* double */ x) {
   return ret;
 };
 
-// from cephes/unity.c
+// from cephes/cprob/unity.c
 exports.expm1 = function expm1(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
@@ -377,7 +445,7 @@ exports.expm1 = function expm1(/* double */ x) {
   return ret;
 };
 
-// from cephes/unity.c
+// from cephes/cprob/unity.c
 exports.cosm1 = function cosm1(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
@@ -394,7 +462,7 @@ exports.cosm1 = function cosm1(/* double */ x) {
   return ret;
 };
 
-// from cephes/asin.c
+// from cephes/cmath/asin.c
 exports.acos = function acos(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
@@ -411,7 +479,7 @@ exports.acos = function acos(/* double */ x) {
   return ret;
 };
 
-// from cephes/acosh.c
+// from cephes/cmath/acosh.c
 exports.acosh = function acosh(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
@@ -428,7 +496,7 @@ exports.acosh = function acosh(/* double */ x) {
   return ret;
 };
 
-// from cephes/asinh.c
+// from cephes/cmath/asinh.c
 exports.asinh = function asinh(/* double */ xx) {
   // argument: double xx
   if (typeof xx !== 'number') {
@@ -445,7 +513,7 @@ exports.asinh = function asinh(/* double */ xx) {
   return ret;
 };
 
-// from cephes/atanh.c
+// from cephes/cmath/atanh.c
 exports.atanh = function atanh(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
@@ -462,7 +530,7 @@ exports.atanh = function atanh(/* double */ x) {
   return ret;
 };
 
-// from cephes/asin.c
+// from cephes/cmath/asin.c
 exports.asin = function asin(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
@@ -479,7 +547,7 @@ exports.asin = function asin(/* double */ x) {
   return ret;
 };
 
-// from cephes/atan.c
+// from cephes/cmath/atan.c
 exports.atan = function atan(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
@@ -496,7 +564,7 @@ exports.atan = function atan(/* double */ x) {
   return ret;
 };
 
-// from cephes/atan.c
+// from cephes/cmath/atan.c
 exports.atan2 = function atan2(/* double */ y, /* double */ x) {
   // argument: double y
   if (typeof y !== 'number') {
@@ -519,7 +587,7 @@ exports.atan2 = function atan2(/* double */ y, /* double */ x) {
   return ret;
 };
 
-// from cephes/sin.c
+// from cephes/cmath/sin.c
 exports.cos = function cos(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
@@ -536,7 +604,7 @@ exports.cos = function cos(/* double */ x) {
   return ret;
 };
 
-// from cephes/sindg.c
+// from cephes/cmath/sindg.c
 exports.cosdg = function cosdg(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
@@ -553,7 +621,7 @@ exports.cosdg = function cosdg(/* double */ x) {
   return ret;
 };
 
-// from cephes/exp.c
+// from cephes/cmath/exp.c
 exports.exp = function exp(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
@@ -570,7 +638,7 @@ exports.exp = function exp(/* double */ x) {
   return ret;
 };
 
-// from cephes/exp2.c
+// from cephes/cmath/exp2.c
 exports.exp2 = function exp2(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
@@ -587,7 +655,7 @@ exports.exp2 = function exp2(/* double */ x) {
   return ret;
 };
 
-// from cephes/exp10.c
+// from cephes/cmath/exp10.c
 exports.exp10 = function exp10(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
@@ -604,7 +672,7 @@ exports.exp10 = function exp10(/* double */ x) {
   return ret;
 };
 
-// from cephes/cosh.c
+// from cephes/cmath/cosh.c
 exports.cosh = function cosh(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
@@ -621,7 +689,7 @@ exports.cosh = function cosh(/* double */ x) {
   return ret;
 };
 
-// from cephes/sinh.c
+// from cephes/cmath/sinh.c
 exports.sinh = function sinh(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
@@ -638,7 +706,7 @@ exports.sinh = function sinh(/* double */ x) {
   return ret;
 };
 
-// from cephes/tanh.c
+// from cephes/cmath/tanh.c
 exports.tanh = function tanh(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
@@ -655,7 +723,7 @@ exports.tanh = function tanh(/* double */ x) {
   return ret;
 };
 
-// from cephes/log.c
+// from cephes/cmath/log.c
 exports.log = function log(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
@@ -672,7 +740,7 @@ exports.log = function log(/* double */ x) {
   return ret;
 };
 
-// from cephes/log2.c
+// from cephes/cmath/log2.c
 exports.log2 = function log2(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
@@ -689,7 +757,7 @@ exports.log2 = function log2(/* double */ x) {
   return ret;
 };
 
-// from cephes/log10.c
+// from cephes/cmath/log10.c
 exports.log10 = function log10(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
@@ -706,7 +774,7 @@ exports.log10 = function log10(/* double */ x) {
   return ret;
 };
 
-// from cephes/pow.c
+// from cephes/cmath/pow.c
 exports.pow = function pow(/* double */ x, /* double */ y) {
   // argument: double x
   if (typeof x !== 'number') {
@@ -729,7 +797,7 @@ exports.pow = function pow(/* double */ x, /* double */ y) {
   return ret;
 };
 
-// from cephes/powi.c
+// from cephes/cmath/powi.c
 exports.powi = function powi(/* double */ x, /* int */ nn) {
   // argument: double x
   if (typeof x !== 'number') {
@@ -752,7 +820,7 @@ exports.powi = function powi(/* double */ x, /* int */ nn) {
   return ret;
 };
 
-// from cephes/sin.c
+// from cephes/cmath/sin.c
 exports.sin = function sin(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
@@ -769,7 +837,7 @@ exports.sin = function sin(/* double */ x) {
   return ret;
 };
 
-// from cephes/sindg.c
+// from cephes/cmath/sindg.c
 exports.sindg = function sindg(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
@@ -786,7 +854,7 @@ exports.sindg = function sindg(/* double */ x) {
   return ret;
 };
 
-// from cephes/tan.c
+// from cephes/cmath/tan.c
 exports.tan = function tan(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
@@ -803,7 +871,7 @@ exports.tan = function tan(/* double */ x) {
   return ret;
 };
 
-// from cephes/tandg.c
+// from cephes/cmath/tandg.c
 exports.tandg = function tandg(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
@@ -820,7 +888,7 @@ exports.tandg = function tandg(/* double */ x) {
   return ret;
 };
 
-// from cephes/ei.c
+// from cephes/misc/ei.c
 exports.ei = function ei(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
@@ -837,7 +905,7 @@ exports.ei = function ei(/* double */ x) {
   return ret;
 };
 
-// from cephes/expn.c
+// from cephes/misc/expn.c
 exports.expn = function expn(/* int */ n, /* double */ x) {
   // argument: int n
   if (typeof n !== 'number') {
@@ -860,71 +928,71 @@ exports.expn = function expn(/* int */ n, /* double */ x) {
   return ret;
 };
 
-// from cephes/shichi.c
+// from cephes/misc/shichi.c
 exports.shichi = function shichi(/* double */ x) {
   //Save the STACKTOP because the following code will do some stack allocs
-  const stacktop = cephes.stackSave();
+  const stacktop = cephes.misc.stackSave();
 
   // argument: double x
   if (typeof x !== 'number') {
-    cephes.stackRestore(stacktop);
+    cephes.misc.stackRestore(stacktop);
     throw new TypeError('x must be a number');
   }
   const carg_x = x;
 
   // argument: double* si
-  const carg_si = cephes.stackAlloc(8); // No need to zero-set it.
+  const carg_si = cephes.misc.stackAlloc(8); // No need to zero-set it.
 
   // argument: double* ci
-  const carg_ci = cephes.stackAlloc(8); // No need to zero-set it.
+  const carg_ci = cephes.misc.stackAlloc(8); // No need to zero-set it.
 
   // return: int
   const fn_ret = cephes.cephes_shichi(carg_x, carg_si, carg_ci) | 0;
 
   // There are pointers, so return the values of thoese too
   const ret = [fn_ret, {
-    'si': cephes.getValue(carg_si, 'double'),
-    'ci': cephes.getValue(carg_ci, 'double'),
+    'si': cephes.misc.getValue(carg_si, 'double'),
+    'ci': cephes.misc.getValue(carg_ci, 'double'),
   }];
 
   // Restore internal stacktop before returning
-  cephes.stackRestore(stacktop);
+  cephes.misc.stackRestore(stacktop);
   return ret;
 };
 
-// from cephes/sici.c
+// from cephes/misc/sici.c
 exports.sici = function sici(/* double */ x) {
   //Save the STACKTOP because the following code will do some stack allocs
-  const stacktop = cephes.stackSave();
+  const stacktop = cephes.misc.stackSave();
 
   // argument: double x
   if (typeof x !== 'number') {
-    cephes.stackRestore(stacktop);
+    cephes.misc.stackRestore(stacktop);
     throw new TypeError('x must be a number');
   }
   const carg_x = x;
 
   // argument: double* si
-  const carg_si = cephes.stackAlloc(8); // No need to zero-set it.
+  const carg_si = cephes.misc.stackAlloc(8); // No need to zero-set it.
 
   // argument: double* ci
-  const carg_ci = cephes.stackAlloc(8); // No need to zero-set it.
+  const carg_ci = cephes.misc.stackAlloc(8); // No need to zero-set it.
 
   // return: int
   const fn_ret = cephes.cephes_sici(carg_x, carg_si, carg_ci) | 0;
 
   // There are pointers, so return the values of thoese too
   const ret = [fn_ret, {
-    'si': cephes.getValue(carg_si, 'double'),
-    'ci': cephes.getValue(carg_ci, 'double'),
+    'si': cephes.misc.getValue(carg_si, 'double'),
+    'ci': cephes.misc.getValue(carg_ci, 'double'),
   }];
 
   // Restore internal stacktop before returning
-  cephes.stackRestore(stacktop);
+  cephes.misc.stackRestore(stacktop);
   return ret;
 };
 
-// from cephes/beta.c
+// from cephes/misc/beta.c
 exports.lbeta = function lbeta(/* double */ a, /* double */ b) {
   // argument: double a
   if (typeof a !== 'number') {
@@ -947,7 +1015,7 @@ exports.lbeta = function lbeta(/* double */ a, /* double */ b) {
   return ret;
 };
 
-// from cephes/beta.c
+// from cephes/misc/beta.c
 exports.beta = function beta(/* double */ a, /* double */ b) {
   // argument: double a
   if (typeof a !== 'number') {
@@ -970,7 +1038,7 @@ exports.beta = function beta(/* double */ a, /* double */ b) {
   return ret;
 };
 
-// from cephes/fac.c
+// from cephes/misc/fac.c
 exports.fac = function fac(/* int */ i) {
   // argument: int i
   if (typeof i !== 'number') {
@@ -987,7 +1055,7 @@ exports.fac = function fac(/* int */ i) {
   return ret;
 };
 
-// from cephes/gamma.c
+// from cephes/cprob/gamma.c
 exports.gamma = function gamma(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
@@ -1004,7 +1072,7 @@ exports.gamma = function gamma(/* double */ x) {
   return ret;
 };
 
-// from cephes/gamma.c
+// from cephes/cprob/gamma.c
 exports.lgam = function lgam(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
@@ -1021,7 +1089,7 @@ exports.lgam = function lgam(/* double */ x) {
   return ret;
 };
 
-// from cephes/incbet.c
+// from cephes/cprob/incbet.c
 exports.incbet = function incbet(/* double */ aa, /* double */ bb, /* double */ xx) {
   // argument: double aa
   if (typeof aa !== 'number') {
@@ -1050,7 +1118,7 @@ exports.incbet = function incbet(/* double */ aa, /* double */ bb, /* double */ 
   return ret;
 };
 
-// from cephes/incbi.c
+// from cephes/cprob/incbi.c
 exports.incbi = function incbi(/* double */ aa, /* double */ bb, /* double */ yy0) {
   // argument: double aa
   if (typeof aa !== 'number') {
@@ -1079,7 +1147,7 @@ exports.incbi = function incbi(/* double */ aa, /* double */ bb, /* double */ yy
   return ret;
 };
 
-// from cephes/igam.c
+// from cephes/cprob/igam.c
 exports.igam = function igam(/* double */ a, /* double */ x) {
   // argument: double a
   if (typeof a !== 'number') {
@@ -1102,7 +1170,7 @@ exports.igam = function igam(/* double */ a, /* double */ x) {
   return ret;
 };
 
-// from cephes/igam.c
+// from cephes/cprob/igam.c
 exports.igamc = function igamc(/* double */ a, /* double */ x) {
   // argument: double a
   if (typeof a !== 'number') {
@@ -1125,7 +1193,7 @@ exports.igamc = function igamc(/* double */ a, /* double */ x) {
   return ret;
 };
 
-// from cephes/igami.c
+// from cephes/cprob/igami.c
 exports.igami = function igami(/* double */ a, /* double */ y0) {
   // argument: double a
   if (typeof a !== 'number') {
@@ -1148,7 +1216,7 @@ exports.igami = function igami(/* double */ a, /* double */ y0) {
   return ret;
 };
 
-// from cephes/psi.c
+// from cephes/misc/psi.c
 exports.psi = function psi(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
@@ -1165,7 +1233,7 @@ exports.psi = function psi(/* double */ x) {
   return ret;
 };
 
-// from cephes/rgamma.c
+// from cephes/misc/rgamma.c
 exports.rgamma = function rgamma(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
@@ -1182,7 +1250,7 @@ exports.rgamma = function rgamma(/* double */ x) {
   return ret;
 };
 
-// from cephes/ndtr.c
+// from cephes/cprob/ndtr.c
 exports.erf = function erf(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
@@ -1199,7 +1267,7 @@ exports.erf = function erf(/* double */ x) {
   return ret;
 };
 
-// from cephes/ndtr.c
+// from cephes/cprob/ndtr.c
 exports.erfc = function erfc(/* double */ a) {
   // argument: double a
   if (typeof a !== 'number') {
@@ -1216,7 +1284,7 @@ exports.erfc = function erfc(/* double */ a) {
   return ret;
 };
 
-// from cephes/dawsn.c
+// from cephes/misc/dawsn.c
 exports.dawsn = function dawsn(/* double */ xx) {
   // argument: double xx
   if (typeof xx !== 'number') {
@@ -1233,79 +1301,79 @@ exports.dawsn = function dawsn(/* double */ xx) {
   return ret;
 };
 
-// from cephes/fresnl.c
+// from cephes/misc/fresnl.c
 exports.fresnl = function fresnl(/* double */ xxa) {
   //Save the STACKTOP because the following code will do some stack allocs
-  const stacktop = cephes.stackSave();
+  const stacktop = cephes.misc.stackSave();
 
   // argument: double xxa
   if (typeof xxa !== 'number') {
-    cephes.stackRestore(stacktop);
+    cephes.misc.stackRestore(stacktop);
     throw new TypeError('xxa must be a number');
   }
   const carg_xxa = xxa;
 
   // argument: double* ssa
-  const carg_ssa = cephes.stackAlloc(8); // No need to zero-set it.
+  const carg_ssa = cephes.misc.stackAlloc(8); // No need to zero-set it.
 
   // argument: double* cca
-  const carg_cca = cephes.stackAlloc(8); // No need to zero-set it.
+  const carg_cca = cephes.misc.stackAlloc(8); // No need to zero-set it.
 
   // return: int
   const fn_ret = cephes.cephes_fresnl(carg_xxa, carg_ssa, carg_cca) | 0;
 
   // There are pointers, so return the values of thoese too
   const ret = [fn_ret, {
-    'ssa': cephes.getValue(carg_ssa, 'double'),
-    'cca': cephes.getValue(carg_cca, 'double'),
+    'ssa': cephes.misc.getValue(carg_ssa, 'double'),
+    'cca': cephes.misc.getValue(carg_cca, 'double'),
   }];
 
   // Restore internal stacktop before returning
-  cephes.stackRestore(stacktop);
+  cephes.misc.stackRestore(stacktop);
   return ret;
 };
 
-// from cephes/airy.c
+// from cephes/bessel/airy.c
 exports.airy = function airy(/* double */ x) {
   //Save the STACKTOP because the following code will do some stack allocs
-  const stacktop = cephes.stackSave();
+  const stacktop = cephes.bessel.stackSave();
 
   // argument: double x
   if (typeof x !== 'number') {
-    cephes.stackRestore(stacktop);
+    cephes.bessel.stackRestore(stacktop);
     throw new TypeError('x must be a number');
   }
   const carg_x = x;
 
   // argument: double* ai
-  const carg_ai = cephes.stackAlloc(8); // No need to zero-set it.
+  const carg_ai = cephes.bessel.stackAlloc(8); // No need to zero-set it.
 
   // argument: double* aip
-  const carg_aip = cephes.stackAlloc(8); // No need to zero-set it.
+  const carg_aip = cephes.bessel.stackAlloc(8); // No need to zero-set it.
 
   // argument: double* bi
-  const carg_bi = cephes.stackAlloc(8); // No need to zero-set it.
+  const carg_bi = cephes.bessel.stackAlloc(8); // No need to zero-set it.
 
   // argument: double* bip
-  const carg_bip = cephes.stackAlloc(8); // No need to zero-set it.
+  const carg_bip = cephes.bessel.stackAlloc(8); // No need to zero-set it.
 
   // return: int
   const fn_ret = cephes.cephes_airy(carg_x, carg_ai, carg_aip, carg_bi, carg_bip) | 0;
 
   // There are pointers, so return the values of thoese too
   const ret = [fn_ret, {
-    'ai': cephes.getValue(carg_ai, 'double'),
-    'aip': cephes.getValue(carg_aip, 'double'),
-    'bi': cephes.getValue(carg_bi, 'double'),
-    'bip': cephes.getValue(carg_bip, 'double'),
+    'ai': cephes.bessel.getValue(carg_ai, 'double'),
+    'aip': cephes.bessel.getValue(carg_aip, 'double'),
+    'bi': cephes.bessel.getValue(carg_bi, 'double'),
+    'bip': cephes.bessel.getValue(carg_bip, 'double'),
   }];
 
   // Restore internal stacktop before returning
-  cephes.stackRestore(stacktop);
+  cephes.bessel.stackRestore(stacktop);
   return ret;
 };
 
-// from cephes/j0.c
+// from cephes/bessel/j0.c
 exports.j0 = function j0(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
@@ -1322,7 +1390,7 @@ exports.j0 = function j0(/* double */ x) {
   return ret;
 };
 
-// from cephes/j1.c
+// from cephes/bessel/j1.c
 exports.j1 = function j1(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
@@ -1339,7 +1407,7 @@ exports.j1 = function j1(/* double */ x) {
   return ret;
 };
 
-// from cephes/jn.c
+// from cephes/bessel/jn.c
 exports.jn = function jn(/* int */ n, /* double */ x) {
   // argument: int n
   if (typeof n !== 'number') {
@@ -1362,7 +1430,7 @@ exports.jn = function jn(/* int */ n, /* double */ x) {
   return ret;
 };
 
-// from cephes/jv.c
+// from cephes/bessel/jv.c
 exports.jv = function jv(/* double */ n, /* double */ x) {
   // argument: double n
   if (typeof n !== 'number') {
@@ -1385,7 +1453,7 @@ exports.jv = function jv(/* double */ n, /* double */ x) {
   return ret;
 };
 
-// from cephes/j0.c
+// from cephes/bessel/j0.c
 exports.y0 = function y0(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
@@ -1402,7 +1470,7 @@ exports.y0 = function y0(/* double */ x) {
   return ret;
 };
 
-// from cephes/j1.c
+// from cephes/bessel/j1.c
 exports.y1 = function y1(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
@@ -1419,7 +1487,7 @@ exports.y1 = function y1(/* double */ x) {
   return ret;
 };
 
-// from cephes/yn.c
+// from cephes/bessel/yn.c
 exports.yn = function yn(/* int */ n, /* double */ x) {
   // argument: int n
   if (typeof n !== 'number') {
@@ -1442,7 +1510,7 @@ exports.yn = function yn(/* int */ n, /* double */ x) {
   return ret;
 };
 
-// from cephes/struve.c
+// from cephes/bessel/struve.c
 exports.yv = function yv(/* double */ v, /* double */ x) {
   // argument: double v
   if (typeof v !== 'number') {
@@ -1465,7 +1533,7 @@ exports.yv = function yv(/* double */ v, /* double */ x) {
   return ret;
 };
 
-// from cephes/i0.c
+// from cephes/bessel/i0.c
 exports.i0 = function i0(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
@@ -1482,7 +1550,7 @@ exports.i0 = function i0(/* double */ x) {
   return ret;
 };
 
-// from cephes/i0.c
+// from cephes/bessel/i0.c
 exports.i0e = function i0e(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
@@ -1499,7 +1567,7 @@ exports.i0e = function i0e(/* double */ x) {
   return ret;
 };
 
-// from cephes/i1.c
+// from cephes/bessel/i1.c
 exports.i1 = function i1(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
@@ -1516,7 +1584,7 @@ exports.i1 = function i1(/* double */ x) {
   return ret;
 };
 
-// from cephes/i1.c
+// from cephes/bessel/i1.c
 exports.i1e = function i1e(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
@@ -1533,7 +1601,7 @@ exports.i1e = function i1e(/* double */ x) {
   return ret;
 };
 
-// from cephes/iv.c
+// from cephes/bessel/iv.c
 exports.iv = function iv(/* double */ v, /* double */ x) {
   // argument: double v
   if (typeof v !== 'number') {
@@ -1556,7 +1624,7 @@ exports.iv = function iv(/* double */ v, /* double */ x) {
   return ret;
 };
 
-// from cephes/k0.c
+// from cephes/bessel/k0.c
 exports.k0 = function k0(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
@@ -1573,7 +1641,7 @@ exports.k0 = function k0(/* double */ x) {
   return ret;
 };
 
-// from cephes/k0.c
+// from cephes/bessel/k0.c
 exports.k0e = function k0e(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
@@ -1590,7 +1658,7 @@ exports.k0e = function k0e(/* double */ x) {
   return ret;
 };
 
-// from cephes/k1.c
+// from cephes/bessel/k1.c
 exports.k1 = function k1(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
@@ -1607,7 +1675,7 @@ exports.k1 = function k1(/* double */ x) {
   return ret;
 };
 
-// from cephes/k1.c
+// from cephes/bessel/k1.c
 exports.k1e = function k1e(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
@@ -1624,7 +1692,7 @@ exports.k1e = function k1e(/* double */ x) {
   return ret;
 };
 
-// from cephes/kn.c
+// from cephes/bessel/kn.c
 exports.kn = function kn(/* int */ nn, /* double */ x) {
   // argument: int nn
   if (typeof nn !== 'number') {
@@ -1647,7 +1715,7 @@ exports.kn = function kn(/* int */ nn, /* double */ x) {
   return ret;
 };
 
-// from cephes/hyperg.c
+// from cephes/bessel/hyperg.c
 exports.hyperg = function hyperg(/* double */ a, /* double */ b, /* double */ x) {
   // argument: double a
   if (typeof a !== 'number') {
@@ -1676,7 +1744,7 @@ exports.hyperg = function hyperg(/* double */ a, /* double */ b, /* double */ x)
   return ret;
 };
 
-// from cephes/hyp2f1.c
+// from cephes/bessel/hyp2f1.c
 exports.hyp2f1 = function hyp2f1(/* double */ a, /* double */ b, /* double */ c, /* double */ x) {
   // argument: double a
   if (typeof a !== 'number') {
@@ -1711,7 +1779,7 @@ exports.hyp2f1 = function hyp2f1(/* double */ a, /* double */ b, /* double */ c,
   return ret;
 };
 
-// from cephes/ellpe.c
+// from cephes/ellf/ellpe.c
 exports.ellpe = function ellpe(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
@@ -1728,7 +1796,7 @@ exports.ellpe = function ellpe(/* double */ x) {
   return ret;
 };
 
-// from cephes/ellie.c
+// from cephes/ellf/ellie.c
 exports.ellie = function ellie(/* double */ phi, /* double */ m) {
   // argument: double phi
   if (typeof phi !== 'number') {
@@ -1751,7 +1819,7 @@ exports.ellie = function ellie(/* double */ phi, /* double */ m) {
   return ret;
 };
 
-// from cephes/ellpk.c
+// from cephes/ellf/ellpk.c
 exports.ellpk = function ellpk(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
@@ -1768,7 +1836,7 @@ exports.ellpk = function ellpk(/* double */ x) {
   return ret;
 };
 
-// from cephes/ellik.c
+// from cephes/ellf/ellik.c
 exports.ellik = function ellik(/* double */ phi, /* double */ m) {
   // argument: double phi
   if (typeof phi !== 'number') {
@@ -1791,54 +1859,54 @@ exports.ellik = function ellik(/* double */ phi, /* double */ m) {
   return ret;
 };
 
-// from cephes/ellpj.c
+// from cephes/ellf/ellpj.c
 exports.ellpj = function ellpj(/* double */ u, /* double */ m) {
   //Save the STACKTOP because the following code will do some stack allocs
-  const stacktop = cephes.stackSave();
+  const stacktop = cephes.ellf.stackSave();
 
   // argument: double u
   if (typeof u !== 'number') {
-    cephes.stackRestore(stacktop);
+    cephes.ellf.stackRestore(stacktop);
     throw new TypeError('u must be a number');
   }
   const carg_u = u;
 
   // argument: double m
   if (typeof m !== 'number') {
-    cephes.stackRestore(stacktop);
+    cephes.ellf.stackRestore(stacktop);
     throw new TypeError('m must be a number');
   }
   const carg_m = m;
 
   // argument: double* sn
-  const carg_sn = cephes.stackAlloc(8); // No need to zero-set it.
+  const carg_sn = cephes.ellf.stackAlloc(8); // No need to zero-set it.
 
   // argument: double* cn
-  const carg_cn = cephes.stackAlloc(8); // No need to zero-set it.
+  const carg_cn = cephes.ellf.stackAlloc(8); // No need to zero-set it.
 
   // argument: double* dn
-  const carg_dn = cephes.stackAlloc(8); // No need to zero-set it.
+  const carg_dn = cephes.ellf.stackAlloc(8); // No need to zero-set it.
 
   // argument: double* ph
-  const carg_ph = cephes.stackAlloc(8); // No need to zero-set it.
+  const carg_ph = cephes.ellf.stackAlloc(8); // No need to zero-set it.
 
   // return: int
   const fn_ret = cephes.cephes_ellpj(carg_u, carg_m, carg_sn, carg_cn, carg_dn, carg_ph) | 0;
 
   // There are pointers, so return the values of thoese too
   const ret = [fn_ret, {
-    'sn': cephes.getValue(carg_sn, 'double'),
-    'cn': cephes.getValue(carg_cn, 'double'),
-    'dn': cephes.getValue(carg_dn, 'double'),
-    'ph': cephes.getValue(carg_ph, 'double'),
+    'sn': cephes.ellf.getValue(carg_sn, 'double'),
+    'cn': cephes.ellf.getValue(carg_cn, 'double'),
+    'dn': cephes.ellf.getValue(carg_dn, 'double'),
+    'ph': cephes.ellf.getValue(carg_ph, 'double'),
   }];
 
   // Restore internal stacktop before returning
-  cephes.stackRestore(stacktop);
+  cephes.ellf.stackRestore(stacktop);
   return ret;
 };
 
-// from cephes/btdtr.c
+// from cephes/cprob/btdtr.c
 exports.btdtr = function btdtr(/* double */ a, /* double */ b, /* double */ x) {
   // argument: double a
   if (typeof a !== 'number') {
@@ -1867,7 +1935,7 @@ exports.btdtr = function btdtr(/* double */ a, /* double */ b, /* double */ x) {
   return ret;
 };
 
-// from cephes/kolmogorov.c
+// from cephes/cprob/kolmogorov.c
 exports.smirnov = function smirnov(/* int */ n, /* double */ e) {
   // argument: int n
   if (typeof n !== 'number') {
@@ -1890,7 +1958,7 @@ exports.smirnov = function smirnov(/* int */ n, /* double */ e) {
   return ret;
 };
 
-// from cephes/kolmogorov.c
+// from cephes/cprob/kolmogorov.c
 exports.kolmogorov = function kolmogorov(/* double */ y) {
   // argument: double y
   if (typeof y !== 'number') {
@@ -1907,7 +1975,7 @@ exports.kolmogorov = function kolmogorov(/* double */ y) {
   return ret;
 };
 
-// from cephes/kolmogorov.c
+// from cephes/cprob/kolmogorov.c
 exports.smirnovi = function smirnovi(/* int */ n, /* double */ p) {
   // argument: int n
   if (typeof n !== 'number') {
@@ -1930,7 +1998,7 @@ exports.smirnovi = function smirnovi(/* int */ n, /* double */ p) {
   return ret;
 };
 
-// from cephes/kolmogorov.c
+// from cephes/cprob/kolmogorov.c
 exports.kolmogi = function kolmogi(/* double */ p) {
   // argument: double p
   if (typeof p !== 'number') {
@@ -1947,7 +2015,7 @@ exports.kolmogi = function kolmogi(/* double */ p) {
   return ret;
 };
 
-// from cephes/nbdtr.c
+// from cephes/cprob/nbdtr.c
 exports.nbdtri = function nbdtri(/* int */ k, /* int */ n, /* double */ p) {
   // argument: int k
   if (typeof k !== 'number') {
@@ -1976,7 +2044,7 @@ exports.nbdtri = function nbdtri(/* int */ k, /* int */ n, /* double */ p) {
   return ret;
 };
 
-// from cephes/stdtr.c
+// from cephes/cprob/stdtr.c
 exports.stdtri = function stdtri(/* int */ k, /* double */ p) {
   // argument: int k
   if (typeof k !== 'number') {
@@ -1999,7 +2067,7 @@ exports.stdtri = function stdtri(/* int */ k, /* double */ p) {
   return ret;
 };
 
-// from cephes/bdtr.c
+// from cephes/cprob/bdtr.c
 exports.bdtr = function bdtr(/* int */ k, /* int */ n, /* double */ p) {
   // argument: int k
   if (typeof k !== 'number') {
@@ -2028,7 +2096,7 @@ exports.bdtr = function bdtr(/* int */ k, /* int */ n, /* double */ p) {
   return ret;
 };
 
-// from cephes/bdtr.c
+// from cephes/cprob/bdtr.c
 exports.bdtrc = function bdtrc(/* int */ k, /* int */ n, /* double */ p) {
   // argument: int k
   if (typeof k !== 'number') {
@@ -2057,7 +2125,7 @@ exports.bdtrc = function bdtrc(/* int */ k, /* int */ n, /* double */ p) {
   return ret;
 };
 
-// from cephes/bdtr.c
+// from cephes/cprob/bdtr.c
 exports.bdtri = function bdtri(/* int */ k, /* int */ n, /* double */ y) {
   // argument: int k
   if (typeof k !== 'number') {
@@ -2086,7 +2154,7 @@ exports.bdtri = function bdtri(/* int */ k, /* int */ n, /* double */ y) {
   return ret;
 };
 
-// from cephes/chdtr.c
+// from cephes/cprob/chdtr.c
 exports.chdtr = function chdtr(/* double */ df, /* double */ x) {
   // argument: double df
   if (typeof df !== 'number') {
@@ -2109,7 +2177,7 @@ exports.chdtr = function chdtr(/* double */ df, /* double */ x) {
   return ret;
 };
 
-// from cephes/chdtr.c
+// from cephes/cprob/chdtr.c
 exports.chdtrc = function chdtrc(/* double */ df, /* double */ x) {
   // argument: double df
   if (typeof df !== 'number') {
@@ -2132,7 +2200,7 @@ exports.chdtrc = function chdtrc(/* double */ df, /* double */ x) {
   return ret;
 };
 
-// from cephes/chdtr.c
+// from cephes/cprob/chdtr.c
 exports.chdtri = function chdtri(/* double */ df, /* double */ y) {
   // argument: double df
   if (typeof df !== 'number') {
@@ -2155,7 +2223,7 @@ exports.chdtri = function chdtri(/* double */ df, /* double */ y) {
   return ret;
 };
 
-// from cephes/fdtr.c
+// from cephes/cprob/fdtr.c
 exports.fdtr = function fdtr(/* int */ ia, /* int */ ib, /* double */ x) {
   // argument: int ia
   if (typeof ia !== 'number') {
@@ -2184,7 +2252,7 @@ exports.fdtr = function fdtr(/* int */ ia, /* int */ ib, /* double */ x) {
   return ret;
 };
 
-// from cephes/fdtr.c
+// from cephes/cprob/fdtr.c
 exports.fdtrc = function fdtrc(/* int */ ia, /* int */ ib, /* double */ x) {
   // argument: int ia
   if (typeof ia !== 'number') {
@@ -2213,7 +2281,7 @@ exports.fdtrc = function fdtrc(/* int */ ia, /* int */ ib, /* double */ x) {
   return ret;
 };
 
-// from cephes/fdtr.c
+// from cephes/cprob/fdtr.c
 exports.fdtri = function fdtri(/* int */ ia, /* int */ ib, /* double */ y) {
   // argument: int ia
   if (typeof ia !== 'number') {
@@ -2242,7 +2310,7 @@ exports.fdtri = function fdtri(/* int */ ia, /* int */ ib, /* double */ y) {
   return ret;
 };
 
-// from cephes/gdtr.c
+// from cephes/cprob/gdtr.c
 exports.gdtr = function gdtr(/* double */ a, /* double */ b, /* double */ x) {
   // argument: double a
   if (typeof a !== 'number') {
@@ -2271,7 +2339,7 @@ exports.gdtr = function gdtr(/* double */ a, /* double */ b, /* double */ x) {
   return ret;
 };
 
-// from cephes/gdtr.c
+// from cephes/cprob/gdtr.c
 exports.gdtrc = function gdtrc(/* double */ a, /* double */ b, /* double */ x) {
   // argument: double a
   if (typeof a !== 'number') {
@@ -2300,7 +2368,7 @@ exports.gdtrc = function gdtrc(/* double */ a, /* double */ b, /* double */ x) {
   return ret;
 };
 
-// from cephes/nbdtr.c
+// from cephes/cprob/nbdtr.c
 exports.nbdtr = function nbdtr(/* int */ k, /* int */ n, /* double */ p) {
   // argument: int k
   if (typeof k !== 'number') {
@@ -2329,7 +2397,7 @@ exports.nbdtr = function nbdtr(/* int */ k, /* int */ n, /* double */ p) {
   return ret;
 };
 
-// from cephes/nbdtr.c
+// from cephes/cprob/nbdtr.c
 exports.nbdtrc = function nbdtrc(/* int */ k, /* int */ n, /* double */ p) {
   // argument: int k
   if (typeof k !== 'number') {
@@ -2358,7 +2426,7 @@ exports.nbdtrc = function nbdtrc(/* int */ k, /* int */ n, /* double */ p) {
   return ret;
 };
 
-// from cephes/ndtr.c
+// from cephes/cprob/ndtr.c
 exports.ndtr = function ndtr(/* double */ a) {
   // argument: double a
   if (typeof a !== 'number') {
@@ -2375,7 +2443,7 @@ exports.ndtr = function ndtr(/* double */ a) {
   return ret;
 };
 
-// from cephes/ndtri.c
+// from cephes/cprob/ndtri.c
 exports.ndtri = function ndtri(/* double */ y0) {
   // argument: double y0
   if (typeof y0 !== 'number') {
@@ -2392,7 +2460,7 @@ exports.ndtri = function ndtri(/* double */ y0) {
   return ret;
 };
 
-// from cephes/pdtr.c
+// from cephes/cprob/pdtr.c
 exports.pdtr = function pdtr(/* int */ k, /* double */ m) {
   // argument: int k
   if (typeof k !== 'number') {
@@ -2415,7 +2483,7 @@ exports.pdtr = function pdtr(/* int */ k, /* double */ m) {
   return ret;
 };
 
-// from cephes/pdtr.c
+// from cephes/cprob/pdtr.c
 exports.pdtrc = function pdtrc(/* int */ k, /* double */ m) {
   // argument: int k
   if (typeof k !== 'number') {
@@ -2438,7 +2506,7 @@ exports.pdtrc = function pdtrc(/* int */ k, /* double */ m) {
   return ret;
 };
 
-// from cephes/pdtr.c
+// from cephes/cprob/pdtr.c
 exports.pdtri = function pdtri(/* int */ k, /* double */ y) {
   // argument: int k
   if (typeof k !== 'number') {
@@ -2461,7 +2529,7 @@ exports.pdtri = function pdtri(/* int */ k, /* double */ y) {
   return ret;
 };
 
-// from cephes/stdtr.c
+// from cephes/cprob/stdtr.c
 exports.stdtr = function stdtr(/* int */ k, /* double */ t) {
   // argument: int k
   if (typeof k !== 'number') {
@@ -2484,7 +2552,7 @@ exports.stdtr = function stdtr(/* int */ k, /* double */ t) {
   return ret;
 };
 
-// from cephes/planck.c
+// from cephes/misc/planck.c
 exports.plancki = function plancki(/* double */ w, /* double */ T) {
   // argument: double w
   if (typeof w !== 'number') {
@@ -2507,7 +2575,7 @@ exports.plancki = function plancki(/* double */ w, /* double */ T) {
   return ret;
 };
 
-// from cephes/planck.c
+// from cephes/misc/planck.c
 exports.planckc = function planckc(/* double */ w, /* double */ T) {
   // argument: double w
   if (typeof w !== 'number') {
@@ -2530,7 +2598,7 @@ exports.planckc = function planckc(/* double */ w, /* double */ T) {
   return ret;
 };
 
-// from cephes/planck.c
+// from cephes/misc/planck.c
 exports.planckd = function planckd(/* double */ w, /* double */ T) {
   // argument: double w
   if (typeof w !== 'number') {
@@ -2553,7 +2621,7 @@ exports.planckd = function planckd(/* double */ w, /* double */ T) {
   return ret;
 };
 
-// from cephes/planck.c
+// from cephes/misc/planck.c
 exports.planckw = function planckw(/* double */ T) {
   // argument: double T
   if (typeof T !== 'number') {
@@ -2570,7 +2638,7 @@ exports.planckw = function planckw(/* double */ T) {
   return ret;
 };
 
-// from cephes/spence.c
+// from cephes/misc/spence.c
 exports.spence = function spence(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
@@ -2587,7 +2655,7 @@ exports.spence = function spence(/* double */ x) {
   return ret;
 };
 
-// from cephes/zetac.c
+// from cephes/misc/zetac.c
 exports.zetac = function zetac(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
@@ -2604,7 +2672,7 @@ exports.zetac = function zetac(/* double */ x) {
   return ret;
 };
 
-// from cephes/zeta.c
+// from cephes/misc/zeta.c
 exports.zeta = function zeta(/* double */ x, /* double */ q) {
   // argument: double x
   if (typeof x !== 'number') {
@@ -2627,7 +2695,7 @@ exports.zeta = function zeta(/* double */ x, /* double */ q) {
   return ret;
 };
 
-// from cephes/struve.c
+// from cephes/bessel/struve.c
 exports.struve = function struve(/* double */ v, /* double */ x) {
   // argument: double v
   if (typeof v !== 'number') {
@@ -2650,29 +2718,60 @@ exports.struve = function struve(/* double */ v, /* double */ x) {
   return ret;
 };
 
-// from cephes/polevl.c
+// from cephes/misc/simpsn.c
+exports.simpsn = function simpsn(/* double[] */ f, /* double */ delta) {
+  //Save the STACKTOP because the following code will do some stack allocs
+  const stacktop = cephes.misc.stackSave();
+
+  // argument: double[] f
+  if (!(f instanceof Float64Array)) {
+    cephes.misc.stackRestore(stacktop);
+    throw new TypeError('f must be either a Float64Array');
+  }
+  const carg_f = cephes.misc.stackAlloc(f.length << 3);
+  cephes.misc.writeArrayToMemory(new Uint8Array(f.buffer, f.byteOffset, f.byteLength), carg_f);
+
+  // argument: double delta
+  if (typeof delta !== 'number') {
+    cephes.misc.stackRestore(stacktop);
+    throw new TypeError('delta must be a number');
+  }
+  const carg_delta = delta;
+
+  // return: double
+  const fn_ret = cephes.cephes_simpsn(carg_f, carg_delta);
+
+  // No pointers, so just return fn_ret
+  const ret = fn_ret;
+
+  // Restore internal stacktop before returning
+  cephes.misc.stackRestore(stacktop);
+  return ret;
+};
+
+// from cephes/misc/polevl.c
 exports.p1evl = function p1evl(/* double */ x, /* double[] */ coef, /* int */ N) {
   //Save the STACKTOP because the following code will do some stack allocs
-  const stacktop = cephes.stackSave();
+  const stacktop = cephes.misc.stackSave();
 
   // argument: double x
   if (typeof x !== 'number') {
-    cephes.stackRestore(stacktop);
+    cephes.misc.stackRestore(stacktop);
     throw new TypeError('x must be a number');
   }
   const carg_x = x;
 
   // argument: double[] coef
   if (!(coef instanceof Float64Array)) {
-    cephes.stackRestore(stacktop);
+    cephes.misc.stackRestore(stacktop);
     throw new TypeError('coef must be either a Float64Array');
   }
-  const carg_coef = cephes.stackAlloc(coef.length << 3);
-  cephes.writeArrayToMemory(new Uint8Array(coef.buffer, coef.byteOffset, coef.byteLength), carg_coef);
+  const carg_coef = cephes.misc.stackAlloc(coef.length << 3);
+  cephes.misc.writeArrayToMemory(new Uint8Array(coef.buffer, coef.byteOffset, coef.byteLength), carg_coef);
 
   // argument: int N
   if (typeof N !== 'number') {
-    cephes.stackRestore(stacktop);
+    cephes.misc.stackRestore(stacktop);
     throw new TypeError('N must be a number');
   }
   const carg_N = N | 0;
@@ -2684,11 +2783,11 @@ exports.p1evl = function p1evl(/* double */ x, /* double[] */ coef, /* int */ N)
   const ret = fn_ret;
 
   // Restore internal stacktop before returning
-  cephes.stackRestore(stacktop);
+  cephes.misc.stackRestore(stacktop);
   return ret;
 };
 
-// from cephes/polylog.c
+// from cephes/misc/polylog.c
 exports.polylog = function polylog(/* int */ n, /* double */ x) {
   // argument: int n
   if (typeof n !== 'number') {

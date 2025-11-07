@@ -111,6 +111,11 @@ const value = ephes.polevl(1.1, arrayInput, arrayInput.length - 1);
     <td><a href="http://www.netlib.org/cephes/doubldoc.html#isfinite">c-doc</a>&nbsp;&nbsp;&#8226;&nbsp;&nbsp;<a href="#int--cephesisfinitex-double">js-doc</a></td>
 </tr>
   <tr>
+    <td><code>sqrt(x)</code></td>
+    <td>Square root</td>
+    <td><a href="http://www.netlib.org/cephes/doubldoc.html#sqrt">c-doc</a>&nbsp;&nbsp;&#8226;&nbsp;&nbsp;<a href="#double--cephessqrtx-double">js-doc</a></td>
+</tr>
+  <tr>
     <td><code>cbrt(x)</code></td>
     <td>Cube root</td>
     <td><a href="http://www.netlib.org/cephes/doubldoc.html#cbrt">c-doc</a>&nbsp;&nbsp;&#8226;&nbsp;&nbsp;<a href="#double--cephescbrtx-double">js-doc</a></td>
@@ -131,6 +136,16 @@ const value = ephes.polevl(1.1, arrayInput, arrayInput.length - 1);
     <td><a href="http://www.netlib.org/cephes/doubldoc.html#round">c-doc</a>&nbsp;&nbsp;&#8226;&nbsp;&nbsp;<a href="#double--cephesroundx-double">js-doc</a></td>
 </tr>
   <tr>
+    <td><code>ceil(x)</code></td>
+    <td>Truncate upward to integer</td>
+    <td><a href="http://www.netlib.org/cephes/doubldoc.html#ceil">c-doc</a>&nbsp;&nbsp;&#8226;&nbsp;&nbsp;<a href="#double--cephesceilx-double">js-doc</a></td>
+</tr>
+  <tr>
+    <td><code>floor(x)</code></td>
+    <td>Truncate downward to integer</td>
+    <td><a href="http://www.netlib.org/cephes/doubldoc.html#floor">c-doc</a>&nbsp;&nbsp;&#8226;&nbsp;&nbsp;<a href="#double--cephesfloorx-double">js-doc</a></td>
+</tr>
+  <tr>
     <td><code>frexp(x)</code></td>
     <td>Extract exponent</td>
     <td><a href="http://www.netlib.org/cephes/doubldoc.html#frexp">c-doc</a>&nbsp;&nbsp;&#8226;&nbsp;&nbsp;<a href="#double-extra--cephesfrexpx-double">js-doc</a></td>
@@ -139,6 +154,11 @@ const value = ephes.polevl(1.1, arrayInput, arrayInput.length - 1);
     <td><code>ldexp(x, pw2)</code></td>
     <td>Add integer to exponent</td>
     <td><a href="http://www.netlib.org/cephes/doubldoc.html#ldexp">c-doc</a>&nbsp;&nbsp;&#8226;&nbsp;&nbsp;<a href="#double--cephesldexpx-double-pw2-int">js-doc</a></td>
+</tr>
+  <tr>
+    <td><code>fabs(x)</code></td>
+    <td>Absolute value</td>
+    <td><a href="http://www.netlib.org/cephes/doubldoc.html#fabs">c-doc</a>&nbsp;&nbsp;&#8226;&nbsp;&nbsp;<a href="#double--cephesfabsx-double">js-doc</a></td>
 </tr>
   <tr>
     <td colspan="3"><strong>Exponential and Trigonometric</strong></td>
@@ -728,6 +748,14 @@ const value = ephes.polevl(1.1, arrayInput, arrayInput.length - 1);
     <td><a href="http://www.netlib.org/cephes/doubldoc.html#struve">c-doc</a>&nbsp;&nbsp;&#8226;&nbsp;&nbsp;<a href="#double--cephesstruvev-double-x-double">js-doc</a></td>
 </tr>
   <tr>
+    <td colspan="3"><strong>Numerical Integration</strong></td>
+  </tr>
+  <tr>
+    <td><code>simpsn(f, delta)</code></td>
+    <td>Simpson's rule</td>
+    <td><a href="http://www.netlib.org/cephes/doubldoc.html#simpsn">c-doc</a>&nbsp;&nbsp;&#8226;&nbsp;&nbsp;<a href="#double--cephessimpsnf-float64array-delta-double">js-doc</a></td>
+</tr>
+  <tr>
     <td colspan="3"><strong>Polynomials and Power Series</strong></td>
   </tr>
   <tr>
@@ -772,6 +800,14 @@ const ret = cephes.isnan(x);
 const ret = cephes.isfinite(x);
 ```
 
+#### double = cephes.sqrt(x: double)
+
+`sqrt` is the "Square root". You can read the full documentation at http://www.netlib.org/cephes/doubldoc.html#sqrt.
+
+```js
+const ret = cephes.sqrt(x);
+```
+
 #### double = cephes.cbrt(x: double)
 
 `cbrt` is the "Cube root". You can read the full documentation at http://www.netlib.org/cephes/doubldoc.html#cbrt.
@@ -804,6 +840,22 @@ const ret = cephes.chbevl(x, new Float64Array(array), n);
 const ret = cephes.round(x);
 ```
 
+#### double = cephes.ceil(x: double)
+
+`ceil` is the "Truncate upward to integer". You can read the full documentation at http://www.netlib.org/cephes/doubldoc.html#ceil.
+
+```js
+const ret = cephes.ceil(x);
+```
+
+#### double = cephes.floor(x: double)
+
+`floor` is the "Truncate downward to integer". You can read the full documentation at http://www.netlib.org/cephes/doubldoc.html#floor.
+
+```js
+const ret = cephes.floor(x);
+```
+
 #### [double, extra] = cephes.frexp(x: double)
 
 `frexp` is the "Extract exponent". You can read the full documentation at http://www.netlib.org/cephes/doubldoc.html#frexp.
@@ -826,6 +878,14 @@ const {
 
 ```js
 const ret = cephes.ldexp(x, pw2);
+```
+
+#### double = cephes.fabs(x: double)
+
+`fabs` is the "Absolute value". You can read the full documentation at http://www.netlib.org/cephes/doubldoc.html#fabs.
+
+```js
+const ret = cephes.fabs(x);
 ```
 
 ### Exponential and Trigonometric
@@ -1798,6 +1858,16 @@ const ret = cephes.zeta(x, q);
 
 ```js
 const ret = cephes.struve(v, x);
+```
+
+### Numerical Integration
+
+#### double = cephes.simpsn(f: Float64Array, delta: double)
+
+`simpsn` is the "Simpson's rule". You can read the full documentation at http://www.netlib.org/cephes/doubldoc.html#simpsn.
+
+```js
+const ret = cephes.simpsn(new Float64Array(f), delta);
 ```
 
 ### Polynomials and Power Series

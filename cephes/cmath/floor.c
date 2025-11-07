@@ -94,7 +94,7 @@ Copyright 1984, 1995, 2000 by Stephen L. Moshier
 
 extern double MAXNUM, NEGZERO;
 #ifdef ANSIPROT
-double ignore_floor(double);
+double floor(double);
 int isnan(double);
 int isfinite(double);
 double ldexp(double, int);
@@ -104,7 +104,7 @@ int isnan(), isfinite();
 double ldexp();
 #endif
 
-double ignore_ceil(x)
+double ceil(x)
 double x;
 {
   double y;
@@ -122,7 +122,7 @@ double x;
     return (x);
 #endif
 
-  y = ignore_floor(x);
+  y = floor(x);
   if (y < x)
     y += 1.0;
 #ifdef MINUSZERO
@@ -139,7 +139,7 @@ static unsigned short bmask[] = {
     0xfe00, 0xfc00, 0xf800, 0xf000, 0xe000, 0xc000, 0x8000, 0x0000,
 };
 
-double ignore_floor(x)
+double floor(x)
 double x;
 {
   union {

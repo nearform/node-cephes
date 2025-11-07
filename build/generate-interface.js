@@ -7,51 +7,54 @@ const type2llvm = {
 };
 
 const argGenerators = {
-  double: function (name, needStack) {
+  double: function (packageName, name, needStack) {
     let code = "";
     code += `  // argument: double ${name}\n`;
     code += `  if (typeof ${name} !== 'number') {\n`;
-    if (needStack) code += "    cephes.stackRestore(stacktop);\n";
+    if (needStack)
+      code += `    cephes.${packageName}.stackRestore(stacktop);\n`;
     code += `    throw new TypeError('${name} must be a number');\n`;
     code += `  }\n`;
     code += `  const carg_${name} = ${name};\n`;
     return code;
   },
 
-  int: function (name, needStack) {
+  int: function (packageName, name, needStack) {
     let code = "";
     code += `  // argument: int ${name}\n`;
     code += `  if (typeof ${name} !== 'number') {\n`;
-    if (needStack) code += "    cephes.stackRestore(stacktop);\n";
+    if (needStack)
+      code += `    cephes.${packageName}.stackRestore(stacktop);\n`;
     code += `    throw new TypeError('${name} must be a number');\n`;
     code += `  }\n`;
     code += `  const carg_${name} = ${name} | 0;\n`;
     return code;
   },
 
-  "double*": function (name, needStack) {
+  "double*": function (packageName, name) {
     let code = "";
     code += `  // argument: double* ${name}\n`;
-    code += `  const carg_${name} = cephes.stackAlloc(8); // No need to zero-set it.\n`;
+    code += `  const carg_${name} = cephes.${packageName}.stackAlloc(8); // No need to zero-set it.\n`;
     return code;
   },
 
-  "int*": function (name, needStack) {
+  "int*": function (packageName, name) {
     let code = "";
     code += `  // argument: int* ${name}\n`;
-    code += `  const carg_${name} = cephes.stackAlloc(4); // No need to zero-set it.\n`;
+    code += `  const carg_${name} = cephes.${packageName}.stackAlloc(4); // No need to zero-set it.\n`;
     return code;
   },
 
-  "double[]": function (name, needStack) {
+  "double[]": function (packageName, name, needStack) {
     let code = "";
     code += `  // argument: double[] ${name}\n`;
     code += `  if (!(${name} instanceof Float64Array)) {\n`;
-    if (needStack) code += "    cephes.stackRestore(stacktop);\n";
+    if (needStack)
+      code += `    cephes.${packageName}.stackRestore(stacktop);\n`;
     code += `    throw new TypeError('${name} must be either a Float64Array');\n`;
     code += `  }\n`;
-    code += `  const carg_${name} = cephes.stackAlloc(${name}.length << 3);\n`;
-    code += `  cephes.writeArrayToMemory(new Uint8Array(${name}.buffer, ${name}.byteOffset, ${name}.byteLength), carg_${name});\n`;
+    code += `  const carg_${name} = cephes.${packageName}.stackAlloc(${name}.length << 3);\n`;
+    code += `  cephes.${packageName}.writeArrayToMemory(new Uint8Array(${name}.buffer, ${name}.byteOffset, ${name}.byteLength), carg_${name});\n`;
     return code;
   },
 };
@@ -73,7 +76,13 @@ class InterfaceGenerator extends stream.Transform {
   }
 
   _transform(data, encoding, done) {
-    const { filename, returnType, functionName, functionArgs } = data;
+    const {
+      filename,
+      returnType,
+      functionName,
+      functionArgs,
+      package: packageName,
+    } = data;
 
     // Check if the stack will be needed because of isPointer or isArray
     const needStack = functionArgs.some((arg) => arg.isArray || arg.isPointer);
@@ -91,7 +100,7 @@ class InterfaceGenerator extends stream.Transform {
     //
 
     // function name
-    code += `// from cephes/${filename}.c\n`;
+    code += `// from cephes/${packageName}/${filename}.c\n`;
     code += `exports.${functionName} = function ${functionName}(`;
     // function arguments
     for (const { type, isPointer, isArray, name } of functionArgs) {
@@ -106,7 +115,7 @@ class InterfaceGenerator extends stream.Transform {
     if (needStack) {
       code +=
         "  //Save the STACKTOP because the following code will do some stack allocs\n";
-      code += `  const stacktop = cephes.stackSave();\n`;
+      code += `  const stacktop = cephes.${packageName}.stackSave();\n`;
       code += "\n";
     }
 
@@ -114,7 +123,7 @@ class InterfaceGenerator extends stream.Transform {
     // function arguments
     //
     for (const { fullType, name } of functionArgs) {
-      code += argGenerators[fullType](name, needStack);
+      code += argGenerators[fullType](packageName, name, needStack);
       code += "\n";
     }
 
@@ -142,7 +151,7 @@ class InterfaceGenerator extends stream.Transform {
       code += "  const ret = [fn_ret, {\n";
       for (const { isPointer, name, type } of functionArgs) {
         if (!isPointer) continue;
-        code += `    '${name}': cephes.getValue(carg_${name}, '${type2llvm[type]}'),\n`;
+        code += `    '${name}': cephes.${packageName}.getValue(carg_${name}, '${type2llvm[type]}'),\n`;
       }
       code += "  }];\n";
     } else {
@@ -156,7 +165,7 @@ class InterfaceGenerator extends stream.Transform {
     //
     if (needStack) {
       code += "  // Restore internal stacktop before returning\n";
-      code += "  cephes.stackRestore(stacktop);\n";
+      code += `  cephes.${packageName}.stackRestore(stacktop);\n`;
     }
     code += "  return ret;\n";
     code += "};\n";

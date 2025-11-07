@@ -1,4 +1,3 @@
-#include "mconf.h"
 /*							chbevl.c
  *
  *	Evaluate Chebyshev series

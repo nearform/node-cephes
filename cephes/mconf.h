@@ -1,3 +1,5 @@
+#ifndef MCONF_H
+#define MCONF_H
 /*							mconf.h
  *
  *	Common include file for math routines
@@ -62,13 +64,13 @@ Copyright 1984, 1987, 1989, 1995 by Stephen L. Moshier
 */
 
 /* Define if the `long double' type works.  */
-#define HAVE_LONG_DOUBLE 0
+#define HAVE_LONG_DOUBLE 1
 
 /* Define as the return type of signal handlers (int or void).  */
 #define RETSIGTYPE void
 
 /* Define if you have the ANSI C header files.  */
-#define STDC_HEADERS 0
+#define STDC_HEADERS 1
 
 /* Define if your processor stores words with the most significant
    byte first (like Motorola and SPARC, unlike Intel and VAX).  */
@@ -81,7 +83,7 @@ Copyright 1984, 1987, 1989, 1995 by Stephen L. Moshier
 #define SIZEOF_INT 4
 
 /* Define if you have the <string.h> header file.  */
-#define HAVE_STRING_H 0
+#define HAVE_STRING_H 1
 
 /* Name of package */
 #define PACKAGE "cephes"
@@ -123,7 +125,7 @@ typedef struct {
 
 /* Intel IEEE, low order words come first:
  */
-#define IBMPC 1
+/* #define IBMPC 1 */
 
 /* Motorola IEEE, high order words come first
  * (Sun 680x0 workstation):
@@ -136,7 +138,7 @@ typedef struct {
  * roundoff problems in pow.c:
  * (Sun SPARCstation)
  */
-/* #define UNK 1 */
+#define UNK 1
 
 /* If you define UNK, then be sure to set BIGENDIAN properly. */
 #ifdef FLOAT_WORDS_BIGENDIAN
@@ -193,6 +195,4 @@ int mtherr();
 
 /* Variable for error reporting.  See mtherr.c.  */
 extern int merror;
-
-/* rename defs to prevent conflict with default symbols */
-#include "cephes_names.h"
+#endif

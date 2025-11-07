@@ -2,7 +2,7 @@
 /* Used for removing _malloc and _free in the exports.
  *
  * This will generate a warning but it is worth not having to deal with the
- * extra memory mangement (dead functions and pointers) that are never going
+ * extra memory management (dead functions and pointers) that are never going
  * to be used.
  */
 

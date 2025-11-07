@@ -2,21 +2,21 @@ const stream = require("stream");
 const split2 = require("split2");
 const pumpify = require("pumpify");
 
-const SPLIT_COMMENT = /^\/\* cephes\/([a-z0-9]+)\.c \*\/$/;
-const SPLIT_PROTO =
-  /^(double|int) cephes_([a-z0-9]+)\(([A-Za-z0-9_ ,*\[\]]+)\);$/;
-const SPLIT_ARG = /^(double|int) (\*)?(?:cephes_)?([A-Za-z0-9]+)(\[\])?$/;
+const SPLIT_COMMENT = /^\/\*\s+cephes\/([^\/]+)\/([a-z0-9]+)\.c\s+\*\/$/;
+const SPLIT_PROTO = /^(double|int)\s+([a-z0-9]+)\(([A-Za-z0-9_ ,*\[\]]+)\);$/;
+const SPLIT_ARG = /^(double|int)\s+(\*)?([A-Za-z0-9]+)(\[\])?$/;
 
 class CprotoLineParser extends stream.Transform {
   constructor() {
     super({ objectMode: true });
-
     this._currentFilename = "";
+    this._currentPackage = "";
   }
 
   _parseFilename(comment) {
-    const [, filename] = comment.match(SPLIT_COMMENT);
+    const [, pkg, filename] = comment.match(SPLIT_COMMENT);
     this._currentFilename = filename;
+    this._currentPackage = pkg;
   }
 
   _parseProto(proto) {
@@ -48,16 +48,20 @@ class CprotoLineParser extends stream.Transform {
       functionName,
       functionArgs,
       filename: this._currentFilename,
+      package: this._currentPackage,
     });
   }
 
   _transform(line, encoding, done) {
     if (line.startsWith("/*")) {
       this._parseFilename(line);
-    } else {
+    } else if (
+      (line.startsWith("double") || line.startsWith("int")) &&
+      !line.includes("register") &&
+      !line.includes("void")
+    ) {
       this._parseProto(line);
     }
-
     done(null);
   }
 }
