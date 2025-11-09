@@ -8,7 +8,7 @@ GENERATEFILES := $(wildcard $(BUILDDIR)/*.js) $(wildcard $(BUILDDIR)/*.md)
 WASMS := $(wildcard cephes-*.wasm)
 
 CFLAGS:=-O2 -g3
-LFLAGS:=-O3 -g3
+LFLAGS:=-O2
 
 .PHONY: download build test
 
