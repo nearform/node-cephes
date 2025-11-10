@@ -79,7 +79,8 @@ double sinh(), cosh(), atan(), exp();
 #endif
 extern double PIO2, MACHEP;
 
-int ellpj(u, m, sn, cn, dn, ph) double u, m;
+int ellpj(u, m, sn, cn, dn, ph)
+double u, m;
 double *sn, *cn, *dn, *ph;
 {
   double ai, b, phi, t, twon;

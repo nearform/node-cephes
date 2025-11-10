@@ -73,7 +73,8 @@ double planck_c1 = 3.7417749e-16;
 /*  NIST value (1999):  h c / k  = 0.014 387 69 m K */
 double planck_c2 = 0.01438769;
 
-double plancki(w, T) double w, T;
+double plancki(w, T)
+double w, T;
 {
   double b, h, y, bw;
 
@@ -132,7 +133,8 @@ double plancki(w, T) double w, T;
  *
  */
 
-double planckc(w, T) double w;
+double planckc(w, T)
+double w;
 double T;
 {
   double b, d, p, u, y;
@@ -196,7 +198,8 @@ double T;
  *
  */
 
-double planckd(w, T) double w, T;
+double planckd(w, T)
+double w, T;
 {
   return (planck_c2 / ((w * w * w * w * w) * (exp(planck_c2 / (w * T)) - 1.0)));
 }
@@ -205,5 +208,8 @@ double planckd(w, T) double w, T;
    c2/wT = constant
    Wein displacement law.
   */
-double planckw(T) double T;
-{ return (planck_c2 / (4.96511423174427630 * T)); }
+double planckw(T)
+double T;
+{
+  return (planck_c2 / (4.96511423174427630 * T));
+}

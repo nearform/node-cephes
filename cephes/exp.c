@@ -141,7 +141,8 @@ extern double LOGE2, LOG2E, MAXLOG, MINLOG, MAXNUM;
 extern double INFINITY;
 #endif
 
-double exp(x) double x;
+double exp(x)
+double x;
 {
   double px, xx;
   int n;

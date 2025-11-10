@@ -58,7 +58,8 @@ double exp();
 extern double MAXLOG;
 extern double INFINITY;
 
-double expx2(x, sign) double x;
+double expx2(x, sign)
+double x;
 int sign;
 {
   double u, u1, m, f;

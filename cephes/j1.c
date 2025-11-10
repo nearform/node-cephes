@@ -354,7 +354,8 @@ double j1();
 #endif
 extern double TWOOPI, THPIO4, SQ2OPI;
 
-double j1(x) double x;
+double j1(x)
+double x;
 {
   double w, z, p, q, xn;
 
@@ -380,7 +381,8 @@ double j1(x) double x;
 
 extern double MAXNUM;
 
-double y1(x) double x;
+double y1(x)
+double x;
 {
   double w, z, p, q, xn;
 

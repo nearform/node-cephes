@@ -106,7 +106,8 @@ double hyp2f1();
 #endif
 extern double MAXNUM, MACHEP;
 
-double hyp2f1(a, b, c, x) double a, b, c, x;
+double hyp2f1(a, b, c, x)
+double a, b, c, x;
 {
   double d, d1, d2, e;
   double p, q, r, s, y, ax;
@@ -253,7 +254,8 @@ hypdiv:
 /* Apply transformations for |x| near 1
  * then call the power series
  */
-static double hyt2f1(a, b, c, x, loss) double a, b, c, x;
+static double hyt2f1(a, b, c, x, loss)
+double a, b, c, x;
 double *loss;
 {
   double p, q, r, s, t, y, d, err, err1;
@@ -378,7 +380,8 @@ done:
 
 /* Defining power series expansion of Gauss hypergeometric function */
 
-static double hys2f1(a, b, c, x, loss) double a, b, c, x;
+static double hys2f1(a, b, c, x, loss)
+double a, b, c, x;
 double *loss; /* estimates loss of significance */
 {
   double f, g, h, k, m, s, u, umax;

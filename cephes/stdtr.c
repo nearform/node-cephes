@@ -96,7 +96,8 @@ extern double fabs(double);
 double sqrt(), atan(), incbet(), incbi(), fabs();
 #endif
 
-double stdtr(k, t) int k;
+double stdtr(k, t)
+int k;
 double t;
 {
   double x, rk, z, f, tz, p, xsqk;
@@ -173,7 +174,8 @@ double t;
   return (p);
 }
 
-double stdtri(k, p) int k;
+double stdtri(k, p)
+int k;
 double p;
 {
   double t, rk, z;

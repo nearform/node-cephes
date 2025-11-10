@@ -55,7 +55,8 @@ double fabs(), j0(), j1();
 #endif
 extern double MACHEP;
 
-double jn(n, x) int n;
+double jn(n, x)
+int n;
 double x;
 {
   double pkm2, pkm1, pk, xk, r, ans;

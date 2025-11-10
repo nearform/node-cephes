@@ -45,7 +45,8 @@ double cephes_ellik(double phi, double m);
 /* cephes/ellpe.c */
 double cephes_ellpe(double x);
 /* cephes/ellpj.c */
-int cephes_ellpj(double u, double m, double *sn, double *cn, double *dn, double *ph);
+int cephes_ellpj(double u, double m, double *sn, double *cn, double *dn,
+                 double *ph);
 /* cephes/ellpk.c */
 double cephes_ellpk(double x);
 /* cephes/exp.c */

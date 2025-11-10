@@ -72,7 +72,8 @@ Copyright 1984, 1995 by Stephen L. Moshier
 
 /* Return 1 if the sign bit of x is 1, else 0.  */
 
-int signbit(x) double x;
+int signbit(x)
+double x;
 {
   union {
     double d;
@@ -107,7 +108,8 @@ int signbit(x) double x;
 
 /* Return 1 if x is a number that is Not a Number, else return 0.  */
 
-int isnan(x) double x;
+int isnan(x)
+double x;
 {
 #ifdef NANS
   union {
@@ -166,7 +168,8 @@ int isnan(x) double x;
 
 /* Return 1 if x is not infinite and is not a NaN.  */
 
-int isfinite(x) double x;
+int isfinite(x)
+double x;
 {
 #ifdef INFINITIES
   union {

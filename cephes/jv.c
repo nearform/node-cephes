@@ -87,7 +87,8 @@ static double recur(), jvs(), hankel(), jnx(), jnt();
 extern double MAXNUM, MACHEP, MINLOG, MAXLOG;
 #define BIG 1.44115188075855872E+17
 
-double jv(n, x) double n, x;
+double jv(n, x)
+double n, x;
 {
   double k, q, t, y, an;
   int i, sign, nint;
@@ -247,7 +248,8 @@ done:
  * AMS55 #9.1.27 and 9.1.73.
  */
 
-static double recur(n, x, newn, cancel) double *n;
+static double recur(n, x, newn, cancel)
+double *n;
 double x;
 double *newn;
 int cancel;
@@ -385,7 +387,8 @@ done:
 extern double PI;
 extern int sgngam;
 
-static double jvs(n, x) double n, x;
+static double jvs(n, x)
+double n, x;
 {
   double t, u, y, z, k;
   int ex;
@@ -448,7 +451,8 @@ static double jvs(n, x) double n, x;
  * AMS55 #9.2.5.
  */
 
-static double hankel(n, x) double n, x;
+static double hankel(n, x)
+double n, x;
 {
   double t, u, z, k, sign, conv;
   double p, q, j, m, pp, qq;
@@ -553,7 +557,8 @@ static double P7[] = {-1.9194576623184069963E3, 8.0617221817373093845E3,
                       -5.3056469786134031084E3, 1.2009029132163524628E3,
                       -1.0809091978839465550E2, 1.7277275025844573975E0};
 
-static double jnx(n, x) double n, x;
+static double jnx(n, x)
+double n, x;
 {
   double zeta, sqz, zz, zp, np;
   double cbn, n23, t, z, sz;
@@ -704,7 +709,8 @@ static double PG2[] = {-9.0000000000000000000e-3, 1.9396825396825396825e-1,
 static double PG3[] = {1.9607142857142857143e-2, -1.5983694083694083694e-1,
                        6.3838383838383838384e-3};
 
-static double jnt(n, x) double n, x;
+static double jnt(n, x)
+double n, x;
 {
   double z, zz, z3;
   double cbn, n23, cbtwo;

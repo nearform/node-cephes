@@ -19,7 +19,7 @@
  * The file also includes a conditional assembly definition
  * for the type of computer arithmetic (IEEE, DEC, Motorola
  * IEEE, or UNKnown).
- * 
+ *
  * For Digital Equipment PDP-11 and VAX computers, certain
  * IBM systems, and others that use numbers with a 56-bit
  * significand, the symbol DEC should be defined.  In this
@@ -60,7 +60,6 @@
 Cephes Math Library Release 2.3:  June, 1995
 Copyright 1984, 1987, 1989, 1995 by Stephen L. Moshier
 */
-
 
 /* Define if the `long double' type works.  */
 #define HAVE_LONG_DOUBLE 0
@@ -93,31 +92,28 @@ Copyright 1984, 1987, 1989, 1995 by Stephen L. Moshier
 /* Constant definitions for math error conditions
  */
 
-#define DOMAIN		1	/* argument domain error */
-#define SING		2	/* argument singularity */
-#define OVERFLOW	3	/* overflow range error */
-#define UNDERFLOW	4	/* underflow range error */
-#define TLOSS		5	/* total loss of precision */
-#define PLOSS		6	/* partial loss of precision */
+#define DOMAIN 1    /* argument domain error */
+#define SING 2      /* argument singularity */
+#define OVERFLOW 3  /* overflow range error */
+#define UNDERFLOW 4 /* underflow range error */
+#define TLOSS 5     /* total loss of precision */
+#define PLOSS 6     /* partial loss of precision */
 
-#define EDOM		33
-#define ERANGE		34
+#define EDOM 33
+#define ERANGE 34
 /* Complex numeral.  */
-typedef struct
-	{
-	double r;
-	double i;
-	} cmplx;
+typedef struct {
+  double r;
+  double i;
+} cmplx;
 
 #ifdef HAVE_LONG_DOUBLE
 /* Long double complex numeral.  */
-typedef struct
-	{
-	long double r;
-	long double i;
-	} cmplxl;
+typedef struct {
+  long double r;
+  long double i;
+} cmplxl;
 #endif
-
 
 /* Type of computer arithmetic */
 
@@ -190,7 +186,7 @@ typedef struct
 #if 1
 /* #ifdef __STDC__ */
 #define ANSIPROT 1
-int mtherr ( char *, int );
+int mtherr(char *, int);
 #else
 int mtherr();
 #endif

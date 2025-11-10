@@ -172,7 +172,8 @@ extern double PI, PIO2, PIO4, INFINITY, NEGZERO, MAXNUM;
 #define MOREBITS 6.123233995736765886130E-17
 #endif
 
-double atan(x) double x;
+double atan(x)
+double x;
 {
   double y, z;
   short sign, flag;
@@ -226,8 +227,7 @@ double atan2(y, x)
 #else
 double atan2(x, y)
 #endif
-    double x,
-    y;
+double x, y;
 {
   double z, w;
   short code;
