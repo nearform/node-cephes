@@ -1,8 +1,7 @@
-
-const stream = require('stream');
-const split2 = require('split2');
-const pumpify = require('pumpify');
-const EXTRA_DOCUMENTATION = require('./extra-documentation.js');
+const stream = require("stream");
+const split2 = require("split2");
+const pumpify = require("pumpify");
+const EXTRA_DOCUMENTATION = require("./extra-documentation.js");
 
 let constant_counter = 0;
 const STATE_INIT = constant_counter++;
@@ -11,15 +10,15 @@ const STATE_BODY = constant_counter++;
 const STATE_LAST_LINE_EMPTY = constant_counter++;
 const STATE_FOOTER = constant_counter++;
 
-const SPLIT_DOC = /^((?:[A-Za-z0-9,.'-]+| (?! )|\(digamma\))+) (\([A-Za-z']+\))? *([a-z0-9]+)/
-
+const SPLIT_DOC =
+  /^((?:[A-Za-z0-9,.'-]+| (?! )|\(digamma\))+) (\([A-Za-z']+\))? *([a-z0-9]+)/;
 
 class DocLineParser extends stream.Transform {
   constructor() {
     super({ objectMode: true });
 
     this._state = STATE_INIT;
-    this._category = '';
+    this._category = "";
     this._emittedFunctionNames = new Set();
   }
 
@@ -45,13 +44,13 @@ class DocLineParser extends stream.Transform {
       this.push({
         category: this._category,
         description: description,
-        functionName: functionName
+        functionName: functionName,
       });
     }
   }
 
   _parseBody(line) {
-    if (line.startsWith('   ')) {
+    if (line.startsWith("   ")) {
       this._setBodyCategory(line.trim());
     } else {
       this._parseBodyContent(line.trim());
@@ -61,7 +60,7 @@ class DocLineParser extends stream.Transform {
   _transform(line, encoding, done) {
     switch (this._state) {
       case STATE_INIT:
-        if (line.startsWith('--------')) {
+        if (line.startsWith("--------")) {
           this._state = STATE_HEADER_FOUND_SKIP_NEXT;
         }
         break;
@@ -71,7 +70,7 @@ class DocLineParser extends stream.Transform {
         break;
 
       case STATE_BODY:
-        if (line === '') {
+        if (line === "") {
           this._state = STATE_LAST_LINE_EMPTY;
         } else {
           this._parseBody(line);
@@ -79,7 +78,7 @@ class DocLineParser extends stream.Transform {
         break;
 
       case STATE_LAST_LINE_EMPTY:
-        if (line === '') {
+        if (line === "") {
           this._state = STATE_FOOTER;
         } else {
           this._state = STATE_BODY;
@@ -98,16 +97,13 @@ class DocLineParser extends stream.Transform {
   }
 
   _flush(done) {
-    this._setBodyCategory('Polynomials and Power Series');
+    this._setBodyCategory("Polynomials and Power Series");
     done(null);
   }
 }
 
 function docParser() {
-  return pumpify.obj(
-    split2(),
-    new DocLineParser()
-  );
+  return pumpify.obj(split2(), new DocLineParser());
 }
 
 module.exports = docParser;

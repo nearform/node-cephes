@@ -1,6 +1,5 @@
-
-const stream = require('stream');
-const reader = require('./reader.js');
+const stream = require("stream");
+const reader = require("./reader.js");
 
 const header = `
 ## Documentation
@@ -12,14 +11,12 @@ class JSDocCGenerator extends stream.Transform {
     super({ objectMode: true });
     this.push(header);
 
-    this._previuseCategory = '';
+    this._previuseCategory = "";
   }
 
   _transform(data, encoding, done) {
-    const {
-      category, description,
-      returnType, functionName, functionArgs
-    } = data;
+    const { category, description, returnType, functionName, functionArgs } =
+      data;
 
     // Check if there is extra data returned
     const extraReturn = functionArgs.some((arg) => arg.isPointer);
@@ -27,7 +24,7 @@ class JSDocCGenerator extends stream.Transform {
     //
     // Start code generation
     //
-    let code = '';
+    let code = "";
 
     //
     // Add category header
@@ -35,7 +32,7 @@ class JSDocCGenerator extends stream.Transform {
     if (this._previuseCategory !== category) {
       this._previuseCategory = category;
       code += `### ${category}\n`;
-      code += '\n';
+      code += "\n";
     }
 
     //
@@ -49,10 +46,10 @@ class JSDocCGenerator extends stream.Transform {
       code += `#### ${returnType} = cephes.${functionName}(`;
     }
     // function arguments
-    for (const {type, isPointer, isArray, fullType, name} of functionArgs) {
+    for (const { type, isPointer, isArray, fullType, name } of functionArgs) {
       if (isPointer) continue;
 
-      if (isArray && type === 'double') {
+      if (isArray && type === "double") {
         code += `${name}: Float64Array, `;
       } else if (!isArray) {
         code += `${name}: ${type}, `;
@@ -63,8 +60,8 @@ class JSDocCGenerator extends stream.Transform {
     // Remove training comma
     code = code.slice(0, -2);
     // finish function header
-    code += ')\n';
-    code += '\n';
+    code += ")\n";
+    code += "\n";
 
     //
     // Documentation content
@@ -73,22 +70,22 @@ class JSDocCGenerator extends stream.Transform {
     // Description
     code += `\`${functionName}\` is the "${description}". `;
     code += `You can read the full documentation at http://www.netlib.org/cephes/doubldoc.html#${functionName}.`;
-    code += '\n';
-    code += '\n';
+    code += "\n";
+    code += "\n";
 
     // Example
-    code += '```js\n';
+    code += "```js\n";
     if (extraReturn) {
-      code += 'const [ret, extra] = ';
+      code += "const [ret, extra] = ";
     } else {
-      code += 'const ret = ';
+      code += "const ret = ";
     }
     code += `cephes.${functionName}(`;
     // function arguments
-    for (const {type, isPointer, isArray, fullType, name} of functionArgs) {
+    for (const { type, isPointer, isArray, fullType, name } of functionArgs) {
       if (isPointer) continue;
 
-      if (isArray && type === 'double') {
+      if (isArray && type === "double") {
         code += `new Float64Array(${name}), `;
       } else if (!isArray) {
         code += `${name}, `;
@@ -97,31 +94,28 @@ class JSDocCGenerator extends stream.Transform {
       }
     }
     code = code.slice(0, -2);
-    code += ');\n';
-    code += '```\n';
-    code += '\n';
+    code += ");\n";
+    code += "```\n";
+    code += "\n";
 
     // extra return
     if (extraReturn) {
-      code += 'The `extra` object contains the following values: \n';
-      code += '\n';
-      code += '```js\n';
-      code += 'const {\n';
+      code += "The `extra` object contains the following values: \n";
+      code += "\n";
+      code += "```js\n";
+      code += "const {\n";
       for (const { isPointer, name, type } of functionArgs) {
         if (!isPointer) continue;
         code += `  ${name}: ${type},\n`;
       }
-      code = code.slice(0, -2) + '\n';
-      code += '} = extra;\n';
-      code += '```\n';
-      code += '\n';
+      code = code.slice(0, -2) + "\n";
+      code += "} = extra;\n";
+      code += "```\n";
+      code += "\n";
     }
 
     done(null, code);
   }
 }
 
-process.stdin
-  .pipe(reader())
-  .pipe(new JSDocCGenerator())
-  .pipe(process.stdout)
+process.stdin.pipe(reader()).pipe(new JSDocCGenerator()).pipe(process.stdout);

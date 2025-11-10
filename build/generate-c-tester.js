@@ -1,7 +1,6 @@
-
-const XorShift = require('xorshift').constructor;
-const stream = require('stream');
-const reader = require('./reader.js');
+const XorShift = require("xorshift").constructor;
+const stream = require("stream");
+const reader = require("./reader.js");
 
 const header = `
 #include "mconf.h"
@@ -20,18 +19,17 @@ int main() {
 const footer = `}\n`;
 
 var rng = new XorShift([
-  6724524440630955, 4369800304473057,
-  1956920014856890, 8721370862793116
+  6724524440630955, 4369800304473057, 1956920014856890, 8721370862793116,
 ]);
 
 const type2printf = {
-  'double': '%.20f',
-  'int': '%d'
+  double: "%.20f",
+  int: "%d",
 };
 
 const type2zero = {
-  'double': '0.0',
-  'int': '0'
+  double: "0.0",
+  int: "0",
 };
 
 const argGenerators = {
@@ -44,11 +42,11 @@ const argGenerators = {
   },
 
   "double[]": function () {
-    let code = '[';
-    code += (rng.random() * 20 - 10).toFixed(2) + ', ';
-    code += (rng.random() * 20 - 10).toFixed(2) + ', ';
-    code += (rng.random() * 20 - 10).toFixed(2) + ', ';
-    code += (rng.random() * 20 - 10).toFixed(2) + ']';
+    let code = "[";
+    code += (rng.random() * 20 - 10).toFixed(2) + ", ";
+    code += (rng.random() * 20 - 10).toFixed(2) + ", ";
+    code += (rng.random() * 20 - 10).toFixed(2) + ", ";
+    code += (rng.random() * 20 - 10).toFixed(2) + "]";
     return code;
   },
 
@@ -58,7 +56,7 @@ const argGenerators = {
   },
   "igami:a": function () {
     return (rng.random() * 10).toFixed(8);
-  }
+  },
 };
 
 class CTesterGenerator extends stream.Transform {
@@ -68,7 +66,7 @@ class CTesterGenerator extends stream.Transform {
   }
 
   _generateSampleCode(data) {
-    const {filename, returnType, functionName, functionArgs} = data;
+    const { filename, returnType, functionName, functionArgs } = data;
 
     // Check if there is extra data returned
     const extraReturn = functionArgs.some((arg) => arg.isPointer);
@@ -78,8 +76,8 @@ class CTesterGenerator extends stream.Transform {
     for (const { fullType, name, isPointer, isArrayLength } of functionArgs) {
       if (isPointer) continue;
       if (isArrayLength) {
-         // The array is of length 4, .length - 1 is not always the correct
-         // choice, but it is always the safe choice.
+        // The array is of length 4, .length - 1 is not always the correct
+        // choice, but it is always the safe choice.
         fnargs.set(name, "3");
       } else if (argGenerators.hasOwnProperty(`${functionName}:${name}`)) {
         fnargs.set(name, argGenerators[`${functionName}:${name}`]());
@@ -91,9 +89,9 @@ class CTesterGenerator extends stream.Transform {
     //
     // Start code generation
     //
-    let code = '';
+    let code = "";
     code += `  { /* ${functionName} from cephes/${filename}.c */\n`;
-    code += '     error_code = -1;\n';
+    code += "     error_code = -1;\n";
     //
     // Function call
     //
@@ -105,18 +103,17 @@ class CTesterGenerator extends stream.Transform {
     }
 
     // Call function
-    code += `    ${returnType} ret = cephes_${functionName}(`
+    code += `    ${returnType} ret = cephes_${functionName}(`;
     for (const { fullType, name, isPointer, isArray } of functionArgs) {
       if (isPointer) {
         code += `&extra_${name}, `;
       } else if (isArray) {
-        const c_array = fnargs.get(name).replace('[', '{').replace(']', '}');
+        const c_array = fnargs.get(name).replace("[", "{").replace("]", "}");
         code += `(${fullType}) ${c_array}, `;
-      }
-      else code += fnargs.get(name) + ', ';
+      } else code += fnargs.get(name) + ", ";
     }
     code = code.slice(0, -2);
-    code += ');\n';
+    code += ");\n";
 
     // Normalize return value
     code += `    ret = error_code == -1 ? ret : ${type2zero[returnType]};\n`;
@@ -160,8 +157,8 @@ class CTesterGenerator extends stream.Transform {
     code += `);\n`;
 
     //
-    code += '  }\n';
-    code += '\n';
+    code += "  }\n";
+    code += "\n";
 
     return code;
   }
@@ -179,7 +176,4 @@ class CTesterGenerator extends stream.Transform {
   }
 }
 
-process.stdin
-  .pipe(reader())
-  .pipe(new CTesterGenerator())
-  .pipe(process.stdout)
+process.stdin.pipe(reader()).pipe(new CTesterGenerator()).pipe(process.stdout);

@@ -1,18 +1,15 @@
+const fs = require("fs");
+const path = require("path");
+const stream = require("stream");
+const split2 = require("split2");
+const pumpify = require("pumpify");
 
-const fs = require('fs');
-const path = require('path');
-const stream = require('stream');
-const split2 = require('split2');
-const pumpify = require('pumpify');
+const cprotoParser = require("./reader-cproto-parser.js");
+const docParser = require("./reader-doc-parser.js");
 
-const cprotoParser = require('./reader-cproto-parser.js');
-const docParser = require('./reader-doc-parser.js');
+const DOC_FILE = path.resolve(__dirname, "..", "cephes", "cephes.txt");
 
-const DOC_FILE = path.resolve(__dirname, '..', 'cephes', 'cephes.txt');
-
-const INTERNAL_CEPHES_FUNCTIONS = new Set([
-  'hyp2f0', 'onef2', 'threef0'
-]);
+const INTERNAL_CEPHES_FUNCTIONS = new Set(["hyp2f0", "onef2", "threef0"]);
 
 class MergeDocumentation extends stream.Transform {
   constructor() {
@@ -23,11 +20,12 @@ class MergeDocumentation extends stream.Transform {
     this._documentationEnded = false;
     this._documentation = [];
 
-    this._documentationStream = fs.createReadStream(DOC_FILE)
+    this._documentationStream = fs
+      .createReadStream(DOC_FILE)
       .pipe(docParser())
-      .on('data', (doc) => this._documentation.push(doc))
-      .once('end', (err) => this._documentationEnded = true)
-      .on('error', (err) => this.emit('error', err));
+      .on("data", (doc) => this._documentation.push(doc))
+      .once("end", (err) => (this._documentationEnded = true))
+      .on("error", (err) => this.emit("error", err));
   }
 
   _transform(proto, encoding, done) {
@@ -68,17 +66,13 @@ class MergeDocumentation extends stream.Transform {
     if (this._documentationEnded) {
       process.nextTick(() => this._finish(done));
     } else {
-      this._documentationStream.once('end', () => this._finish(done));
+      this._documentationStream.once("end", () => this._finish(done));
     }
   }
 }
 
-
 function parser() {
-  return pumpify.obj(
-    cprotoParser(),
-    new MergeDocumentation()
-  );
+  return pumpify.obj(cprotoParser(), new MergeDocumentation());
 }
 
 module.exports = parser;
