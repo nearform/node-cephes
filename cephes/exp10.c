@@ -195,7 +195,8 @@ extern double MAXNUM;
 extern double INFINITY;
 #endif
 
-double exp10(x) double x;
+double exp10(x)
+double x;
 {
   double px, xx;
   short n;

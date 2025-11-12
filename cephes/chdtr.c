@@ -155,7 +155,8 @@ extern double igami(double, double);
 double igamc(), igam(), igami();
 #endif
 
-double chdtrc(df, x) double df, x;
+double chdtrc(df, x)
+double df, x;
 {
 
   if ((x < 0.0) || (df < 1.0)) {
@@ -165,7 +166,8 @@ double chdtrc(df, x) double df, x;
   return (igamc(df / 2.0, x / 2.0));
 }
 
-double chdtr(df, x) double df, x;
+double chdtr(df, x)
+double df, x;
 {
 
   if ((x < 0.0) || (df < 1.0)) {
@@ -175,7 +177,8 @@ double chdtr(df, x) double df, x;
   return (igam(df / 2.0, x / 2.0));
 }
 
-double chdtri(df, y) double df, y;
+double chdtri(df, y)
+double df, y;
 {
   double x;
 

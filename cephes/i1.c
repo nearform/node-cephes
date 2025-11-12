@@ -236,7 +236,8 @@ extern double fabs(double);
 double chbevl(), exp(), sqrt(), fabs();
 #endif
 
-double i1(x) double x;
+double i1(x)
+double x;
 {
   double y, z;
 
@@ -254,7 +255,8 @@ double i1(x) double x;
 
 /*							i1e()	*/
 
-double i1e(x) double x;
+double i1e(x)
+double x;
 {
   double y, z;
 

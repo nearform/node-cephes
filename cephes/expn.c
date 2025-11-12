@@ -62,7 +62,8 @@ double pow(), gamma(), log(), exp(), fabs();
 #define BIG 1.44115188075855872E+17
 extern double MAXNUM, MACHEP, MAXLOG;
 
-double expn(n, x) int n;
+double expn(n, x)
+int n;
 double x;
 {
   double ans, r, t, yk, xk;

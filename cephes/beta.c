@@ -76,7 +76,8 @@ double fabs(), gamma(), lgam(), exp(), log(), floor();
 extern double MAXLOG, MAXNUM;
 extern int sgngam;
 
-double beta(a, b) double a, b;
+double beta(a, b)
+double a, b;
 {
   double y;
   int sign;
@@ -125,7 +126,8 @@ double beta(a, b) double a, b;
 
 /* Natural log of |beta|.  Return the sign of beta in sgngam.  */
 
-double lbeta(a, b) double a, b;
+double lbeta(a, b)
+double a, b;
 {
   double y;
   int sign;

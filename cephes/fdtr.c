@@ -166,7 +166,8 @@ extern double incbi(double, double, double);
 double incbet(), incbi();
 #endif
 
-double fdtrc(ia, ib, x) int ia, ib;
+double fdtrc(ia, ib, x)
+int ia, ib;
 double x;
 {
   double a, b, w;
@@ -181,7 +182,8 @@ double x;
   return (incbet(0.5 * b, 0.5 * a, w));
 }
 
-double fdtr(ia, ib, x) int ia, ib;
+double fdtr(ia, ib, x)
+int ia, ib;
 double x;
 {
   double a, b, w;
@@ -197,7 +199,8 @@ double x;
   return (incbet(0.5 * a, 0.5 * b, w));
 }
 
-double fdtri(ia, ib, y) int ia, ib;
+double fdtri(ia, ib, y)
+int ia, ib;
 double y;
 {
   double a, b, w, x;

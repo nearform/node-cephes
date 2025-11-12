@@ -188,7 +188,8 @@ int isnan(), isfinite();
 #define SQRTH 0.70710678118654752440
 extern double LOGE2, INFINITY, NAN;
 
-double log2(x) double x;
+double log2(x)
+double x;
 {
   int e;
   double y;

@@ -104,7 +104,8 @@ int isnan(), isfinite();
 double ldexp();
 #endif
 
-double ignore_ceil(x) double x;
+double ignore_ceil(x)
+double x;
 {
   double y;
 
@@ -138,7 +139,8 @@ static unsigned short bmask[] = {
     0xfe00, 0xfc00, 0xf800, 0xf000, 0xe000, 0xc000, 0x8000, 0x0000,
 };
 
-double ignore_floor(x) double x;
+double ignore_floor(x)
+double x;
 {
   union {
     double y;
@@ -217,7 +219,8 @@ double ignore_floor(x) double x;
   return (u.y);
 }
 
-double frexp(x, pw2) double x;
+double frexp(x, pw2)
+double x;
 int *pw2;
 {
   union {
@@ -310,7 +313,8 @@ ieeedon:
 #endif
 }
 
-double ldexp(x, pw2) double x;
+double ldexp(x, pw2)
+double x;
 int pw2;
 {
   union {

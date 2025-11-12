@@ -55,5 +55,9 @@ extern double incbet(double, double, double);
 double incbet();
 #endif
 
-double btdtr(a, b, x) double a, b, x;
-{ return (incbet(a, b, x)); }
+double btdtr(a, b, x)
+double a, b, x;
+{
+
+  return (incbet(a, b, x));
+}

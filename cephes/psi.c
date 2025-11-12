@@ -101,7 +101,8 @@ double floor(), log(), tan(), polevl();
 #endif
 extern double PI, MAXNUM;
 
-double psi(x) double x;
+double psi(x)
+double x;
 {
   double p, q, nz, s, w, y, z;
   int i, n, negative;

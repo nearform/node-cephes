@@ -96,7 +96,8 @@ double fabs(), log(), polevl(), p1evl();
 #endif
 extern double INFINITY, NAN;
 
-double atanh(x) double x;
+double atanh(x)
+double x;
 {
   double s, z;
 

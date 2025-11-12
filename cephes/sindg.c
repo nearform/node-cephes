@@ -149,7 +149,8 @@ double polevl(), floor(), ldexp();
 #endif
 extern double PIO4;
 
-double sindg(x) double x;
+double sindg(x)
+double x;
 {
   double y, z, zz;
   int j, sign;
@@ -202,7 +203,8 @@ double sindg(x) double x;
   return (y);
 }
 
-double cosdg(x) double x;
+double cosdg(x)
+double x;
 {
   double y, z, zz;
   int j, sign;

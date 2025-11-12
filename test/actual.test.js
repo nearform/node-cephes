@@ -1,14 +1,14 @@
-const {it} = require('node:test');
-const assert = require('node:assert');
+const { it } = require("node:test");
+const assert = require("node:assert");
 
-const cephes = require('../index.js');
+const cephes = require("../index.js");
 const almostEqual = require("./almost-equal.js");
-const {errorMappings} = require('../utils');
+const { errorMappings } = require("../utils");
 
-const testsList = require('./expected.json').tests;
+const testsList = require("./expected.json").tests;
 
 function getArgs(args) {
-  return args.map(arg => Array.isArray(arg) ? new Float64Array(arg) : arg);
+  return args.map((arg) => (Array.isArray(arg) ? new Float64Array(arg) : arg));
 }
 
 for (const { fn, ret, args, extra = {}, error_code } of testsList) {

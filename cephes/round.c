@@ -39,7 +39,8 @@ double floor(double);
 double floor();
 #endif
 
-double round(x) double x;
+double round(x)
+double x;
 {
   double y, r;
 

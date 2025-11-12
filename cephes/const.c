@@ -65,7 +65,7 @@ Copyright 1984, 1995 by Stephen L. Moshier
 #if 1
 double MACHEP = 1.11022302462515654042E-16; /* 2**-53 */
 #else
-double MACHEP = 1.38777878078144567553E-17;   /* 2**-56 */
+double MACHEP = 1.38777878078144567553E-17; /* 2**-56 */
 #endif
 double UFLOWTHRESH = 2.22507385850720138309E-308; /* 2**-1022 */
 #ifdef DENORMAL
@@ -73,8 +73,8 @@ double MAXLOG = 7.09782712893383996732E2;        /* log(MAXNUM) */
 /* double MINLOG = -7.44440071921381262314E2; */ /* log(2**-1074) */
 double MINLOG = -7.451332191019412076235E2;      /* log(2**-1075) */
 #else
-double MAXLOG = 7.08396418532264106224E2;     /* log 2**1022 */
-double MINLOG = -7.08396418532264106224E2;    /* log 2**-1022 */
+double MAXLOG = 7.08396418532264106224E2;  /* log 2**1022 */
+double MINLOG = -7.08396418532264106224E2; /* log 2**-1022 */
 #endif
 double MAXNUM = 1.79769313486231570815E308;   /* 2**1024*(1-MACHEP) */
 double PI = 3.14159265358979323846;           /* pi */

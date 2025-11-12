@@ -105,11 +105,11 @@ download: | cephes/
 	cproto $(CEPHESDIR)/*.c | grep -v 'ignore_' >> $(CEPHESDIR)/cephes.h
 	echo '' >> $(CEPHESDIR)/cephes_names.h
 	echo '#endif' >> $(CEPHESDIR)/cephes.h
+	@for src in $(CEPHESDIR)/*.{c,h}; do \
+		clang-format -style=llvm -i "$$src"; \
+	done
 
 %.bc: %.c $(CEPHESDIR)/cephes_names.h $(CEPHESDIR)/mconf.h
-	@# Format the file so it looks readable
-	clang-format -style=llvm -i $<
-
 	@# Insert missing #include "mconf.h"
 	@if ! grep -q '#include "mconf.h"' $<; then \
 		printf '%s\n%s\n' '#include "mconf.h"' "$$(cat $<)" > $<; \

@@ -54,7 +54,8 @@ int signbit();
 #endif
 extern double NEGZERO, INFINITY, MAXNUM, MAXLOG, MINLOG, LOGE2;
 
-double powi(x, nn) double x;
+double powi(x, nn)
+double x;
 int nn;
 {
   int n, e, sign, asign, lx;

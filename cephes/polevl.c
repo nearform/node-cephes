@@ -49,7 +49,8 @@ Copyright 1984, 1987, 1988 by Stephen L. Moshier
 Direct inquiries to 30 Frost Street, Cambridge, MA 02140
 */
 
-double polevl(x, coef, N) double x;
+double polevl(x, coef, N)
+double x;
 double coef[];
 int N;
 {
@@ -74,7 +75,8 @@ int N;
  * Otherwise same as polevl.
  */
 
-double p1evl(x, coef, N) double x;
+double p1evl(x, coef, N)
+double x;
 double coef[];
 int N;
 {

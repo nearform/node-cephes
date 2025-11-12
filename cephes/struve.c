@@ -56,7 +56,8 @@ double onef2(), threef0();
 static double stop = 1.37e-17;
 extern double MACHEP;
 
-double onef2(a, b, c, x, err) double a, b, c, x;
+double onef2(a, b, c, x, err)
+double a, b, c, x;
 double *err;
 {
   double n, a0, sum, t;
@@ -119,7 +120,8 @@ xit:
   return (sum);
 }
 
-double threef0(a, b, c, x, err) double a, b, c, x;
+double threef0(a, b, c, x, err)
+double a, b, c, x;
 double *err;
 {
   double n, a0, sum, t, conv, conv1;
@@ -200,7 +202,8 @@ xit:
 
 extern double PI;
 
-double struve(v, x) double v, x;
+double struve(v, x)
+double v, x;
 {
   double y, ya, f, g, h, t;
   double onef2err, threef0err;
@@ -249,7 +252,8 @@ double struve(v, x) double v, x;
 /* Bessel function of noninteger order
  */
 
-double yv(v, x) double v, x;
+double yv(v, x)
+double v, x;
 {
   double y, t;
   int n;
