@@ -1,7 +1,6 @@
 const fs = require("fs");
 const path = require("path");
 const stream = require("stream");
-const split2 = require("split2");
 const pumpify = require("pumpify");
 
 const cprotoParser = require("./reader-cproto-parser.js");
@@ -9,7 +8,13 @@ const docParser = require("./reader-doc-parser.js");
 
 const DOC_FILE = path.resolve(__dirname, "..", "cephes", "cephes.txt");
 
-const INTERNAL_CEPHES_FUNCTIONS = new Set(["hyp2f0", "onef2", "threef0"]);
+const INTERNAL_CEPHES_FUNCTIONS = new Set([
+  "hyp2f0",
+  "onef2",
+  "threef0",
+  "hypot",
+  'drand'
+]);
 
 class MergeDocumentation extends stream.Transform {
   constructor() {

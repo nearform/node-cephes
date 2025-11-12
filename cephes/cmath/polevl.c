@@ -1,4 +1,3 @@
-#include "mconf.h"
 /*							polevl.c
  *							p1evl.c
  *

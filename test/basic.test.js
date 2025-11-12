@@ -68,3 +68,11 @@ it("compiled is a promise", async function (t) {
   await cephes.compiled;
   almostEqual(cephes.exp(2), Math.exp(2));
 });
+
+it("calculates ellie(1.0731208831306067, 0.9128794812874865) correctly", async function (t) {
+  await cephes.compiled;
+  almostEqual(
+    cephes.ellie(1.0731208831306067, 0.9128794812874865),
+    0.8994413957643846
+  );
+});
