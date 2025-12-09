@@ -60,16 +60,16 @@ const argGenerators = {
 };
 
 const header = `
-const cephes = require('./cephes.js');
+const cephes = require('./cephes.cjs');
 
 // Export compiled promise, in Node.js this is just a dummy promise as the
 // WebAssembly program will be compiled synchronously. It takes about 20ms
 // as of Node.js v10.6.1.
-exports.compiled = cephes.compiled;
-
+const compiled = cephes.compiled ?? Promise.resolve()
 `;
 
 class InterfaceGenerator extends stream.Transform {
+  #functions = [];
   constructor() {
     super({ objectMode: true });
     this.push(header);
@@ -101,7 +101,7 @@ class InterfaceGenerator extends stream.Transform {
 
     // function name
     code += `// from cephes/${packageName}/${filename}.c\n`;
-    code += `exports.${functionName} = function ${functionName}(`;
+    code += `function ${functionName}(`;
     // function arguments
     for (const { type, isPointer, isArray, name } of functionArgs) {
       if (isPointer) continue;
@@ -170,8 +170,12 @@ class InterfaceGenerator extends stream.Transform {
     code += "  return ret;\n";
     code += "};\n";
     code += "\n";
-
+    this.#functions.push(functionName);
     done(null, code);
+  }
+  _flush(callback) {
+    this.push("module.exports = {compiled," + this.#functions.join(",") + "}");
+    callback();
   }
 }
 

@@ -7,15 +7,18 @@
   },
   "version": "3.0.0",
   "main": "index.js",
+  "module": "index.mjs",
   "scripts": {
-    "test": "c8 node --test test/*.test.js"
+    "test": "c8 node --test test/*.test.{js,mjs}"
   },
-  "dependencies": {},
   "devDependencies": {
     "@babel/core": "^7.1.0",
     "@babel/plugin-transform-runtime": "^7.1.0",
     "@babel/preset-env": "^7.1.0",
     "@babel/runtime": "^7.0.0",
+    "@rollup/plugin-commonjs": "^29.0.0",
+    "@rollup/plugin-json": "^6.1.0",
+    "@rollup/plugin-node-resolve": "^16.0.3",
     "almost-equal": "^1.1.0",
     "babelify": "^10.0.0",
     "c8": "^10.1.2",
@@ -26,11 +29,20 @@
     "d3-selection": "^3.0.0",
     "d3-shape": "^1.2.2",
     "pumpify": "^2.0.1",
+    "rollup": "^4.53.3",
+    "rollup-plugin-node-polyfills": "^0.2.1",
     "split2": "^3.0.0",
     "xorshift": "^1.1.1"
   },
   "browser": {
-    "./cephes.js": "./cephes-browser.js"
+    "./cephes.cjs": "./cephes-browser.cjs"
   },
-  "license": "BSD-3-Clause"
+  "license": "BSD-3-Clause",
+  "dependencies": {
+    "buffer": "^6.0.3"
+  },
+  "exports": {
+    "import": "./index.mjs",
+    "require": "./index.js"
+  }
 }

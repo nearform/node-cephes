@@ -1,35 +1,20 @@
 const WASM_CODE = {};
 const WASM_METHODS = {};
-for (const [package, { buffer, methods }] of Object.entries(
+for (const [pkg, { buffer, methods }] of Object.entries(
   require("./cephes.wasm.base64.json")
 )) {
-  WASM_CODE[package] = Buffer.from(buffer, "base64");
-  WASM_METHODS[package] = methods.filter((el) => el.length);
+  WASM_CODE[pkg] = Buffer.from(buffer, "base64");
+  WASM_METHODS[pkg] = methods.filter((el) => el.length);
 }
 
-const { errorMappings } = require("./utils.js");
+const errorMappings = require("./errors.json");
 
 const TOTAL_STACK = 1024 * 1024; // 1MB
 
-class CephesWrapper {
-  #stack = {};
+class BaseCephesWrapper {
   #memory = {};
-  constructor(sync) {
-    // Compile and export program
-    if (sync) {
-      const program = this._compileSync();
-      this._exportPrograms(program);
-
-      // create a dummy compile promise
-      this.compiled = Promise.resolve();
-    } else {
-      // create a singleton compile promise
-      this.compiled = this._compileAsync().then((program) =>
-        this._exportPrograms(program)
-      );
-    }
-  }
-
+  #exported = false;
+  constructor() {}
   _AsciiToString(pkg, ptr) {
     let str = "";
     while (1) {
@@ -48,7 +33,7 @@ class CephesWrapper {
 
       mtherr: (name /* char* */, code /* int */) => {
         // from mtherr.c
-        const codemsg = errorMappings[code] || "unknown error";
+        const codemsg = errorMappings[String(code)] || "unknown error";
         const fnname = this._AsciiToString(pkg, name);
         const message = 'cephes reports "' + codemsg + '" in ' + fnname;
 
@@ -64,32 +49,12 @@ class CephesWrapper {
       wasi_snapshot_preview1: wasmImports,
     };
   }
-  _compileSync() {
-    return Object.fromEntries(
-      Object.entries(WASM_CODE).map(([pkg, code]) => [
-        pkg,
-        new WebAssembly.Instance(
-          new WebAssembly.Module(code),
-          this.getWasmImports(pkg)
-        ),
-      ])
-    );
-  }
-
-  _compileAsync() {
-    const entries = Object.entries(WASM_CODE).map(([pkg, code]) =>
-      WebAssembly.instantiate(code, this.getWasmImports()).then((result) => [
-        pkg,
-        result.instance,
-      ])
-    );
-
-    return Promise.all(entries).then((resolvedEntries) =>
-      Object.fromEntries(resolvedEntries)
-    );
-  }
 
   _exportPrograms(program) {
+    if (this.#exported) {
+      console.warn("This wrapper has already been exported");
+      return;
+    }
     for (const [pkg, methods] of Object.entries(WASM_METHODS)) {
       const _memory = program[pkg].exports.memory;
       this.#memory[pkg] = {
@@ -134,7 +99,43 @@ class CephesWrapper {
         this["cephes" + method] = program[pkg].exports[method.slice(1)];
       }
     }
+    this.#exported = true;
   }
 }
 
-module.exports = CephesWrapper;
+class CephesWrapper extends BaseCephesWrapper {
+  constructor() {
+    super();
+    const programs = Object.fromEntries(
+      Object.entries(WASM_CODE).map(([pkg, code]) => [
+        pkg,
+        new WebAssembly.Instance(
+          new WebAssembly.Module(code),
+          this.getWasmImports(pkg)
+        ),
+      ])
+    );
+    this._exportPrograms(programs);
+  }
+}
+
+class AsyncCephesWrapper extends BaseCephesWrapper {
+  constructor() {
+    super();
+    const compiled = async function () {
+      const entries = await Promise.all(
+        Object.entries(WASM_CODE).map(([pkg, code]) =>
+          WebAssembly.instantiate(code, this.getWasmImports()).then(
+            (result) => [pkg, result.instance]
+          )
+        )
+      );
+      const programs = Object.fromEntries(entries);
+      this._exportPrograms(programs);
+      this.compiled = Promise.resolve();
+    };
+    this.compiled = compiled.bind(this)();
+  }
+}
+
+module.exports = { CephesWrapper, AsyncCephesWrapper };

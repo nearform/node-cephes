@@ -3,7 +3,7 @@ const assert = require("node:assert");
 
 const cephes = require("../index.js");
 const almostEqual = require("./almost-equal.js");
-const { errorMappings } = require("../utils");
+const errorMappings = require("../errors.json");
 
 const testsList = require("./expected.json").tests;
 

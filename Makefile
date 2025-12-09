@@ -12,13 +12,13 @@ LFLAGS:=-O2
 
 .PHONY: download build test
 
-build: index.js compile-packages cephes.wasm.base64.json README.md
+build: index.js index.mjs compile-packages cephes.wasm.base64.json README.md
 
 clean:
 	rm -f $(JS_OBJS)
 	rm -f $(C_OBJS)
 	rm -f cephes.wasm cephes.wast
-	rm -f index.js
+	rm -f index.mjs index.js
 
 test: test/expected.json test/actual.test.js
 	npm test
@@ -99,6 +99,9 @@ cephes.wasm.base64.json: $(WASMS)
 	
 index.js: $(CPROTOFILES) $(GENERATEFILES)
 	cproto -I $(CEPHESDIR) $(CEPHESDIR)/*/*.c | node $(BUILDDIR)/generate-interface.js > index.js
+	
+index.mjs:
+	npx rollup -c 
 
 README.md: $(CEPHESDIR)/cephes.txt $(CPROTOFILES) $(GENERATEFILES)
 	cat $(BUILDDIR)/readme-header.md > README.md

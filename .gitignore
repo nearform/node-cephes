@@ -8,7 +8,6 @@ test/expected.c
 /cephes.standalone.wasm
 /cephes.wasm
 /cephes.wasm.base64.json
-/index.js
 article/bundle.js
 
 # Logs
