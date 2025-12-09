@@ -12,13 +12,14 @@ LFLAGS:=-O2
 
 .PHONY: download build test
 
-build: index.js compile-packages cephes.wasm.base64.json README.md
+build: index.cjs index.mjs compile-packages cephes.wasm.base64.json README.md
 
 clean:
 	rm -f $(JS_OBJS)
 	rm -f $(C_OBJS)
 	rm -f cephes.wasm cephes.wast
-	rm -f index.js
+	rm -f index.mjs
+	rm -f index.cjs
 
 test: test/expected.json test/actual.test.js
 	npm test
@@ -97,11 +98,14 @@ cephes.wasm.base64.json: $(WASMS)
 	rm -f cephes-*.wasm
 	rm -f cephes-*.txt
 	
-index.js: $(CPROTOFILES) $(GENERATEFILES)
-	cproto -I $(CEPHESDIR) $(CEPHESDIR)/*/*.c | node $(BUILDDIR)/generate-interface.js > index.js
+index.cjs: $(CPROTOFILES) $(GENERATEFILES)
+	cproto -I $(CEPHESDIR) $(CEPHESDIR)/*/*.c | node $(BUILDDIR)/generate-interface.js > index.cjs
 
 README.md: $(CEPHESDIR)/cephes.txt $(CPROTOFILES) $(GENERATEFILES)
 	cat $(BUILDDIR)/readme-header.md > README.md
 	cproto -I $(CEPHESDIR) $(CEPHESDIR)/*/*.c | node $(BUILDDIR)/generate-readme-toc.js >> README.md
 	cproto -I $(CEPHESDIR) $(CEPHESDIR)/*/*.c | node $(BUILDDIR)/generate-readme-jsdoc.js >> README.md
 	cat $(BUILDDIR)/readme-footer.md >> README.md
+
+index.mjs:
+	cproto -I $(CEPHESDIR) $(CEPHESDIR)/*/*.c | node $(BUILDDIR)/generate-interface.js > index.mjs --format esm

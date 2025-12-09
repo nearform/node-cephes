@@ -6,11 +6,12 @@
     "url": "git+https://github.com/nearform/node-cephes.git"
   },
   "version": "3.0.0",
-  "main": "index.js",
   "scripts": {
-    "test": "c8 node --test test/*.test.js"
+    "test": "c8 node --test test/*.test.{js,mjs}"
   },
-  "dependencies": {},
+  "dependencies": {
+    "buffer": "^6.0.3"
+  },
   "devDependencies": {
     "@babel/core": "^7.1.0",
     "@babel/plugin-transform-runtime": "^7.1.0",
@@ -29,8 +30,9 @@
     "split2": "^3.0.0",
     "xorshift": "^1.1.1"
   },
-  "browser": {
-    "./cephes.js": "./cephes-browser.js"
-  },
-  "license": "BSD-3-Clause"
+  "license": "BSD-3-Clause",
+  "exports": {
+    "import": "./index.mjs",
+    "require": "./index.cjs"
+  }
 }

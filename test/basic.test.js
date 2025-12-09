@@ -1,7 +1,7 @@
 const { it } = require("node:test");
 const assert = require("node:assert");
 
-const cephes = require("../index.js");
+const cephes = require("../index.cjs");
 const almostEqual = require("./almost-equal.js");
 
 it("plain function", function (t) {

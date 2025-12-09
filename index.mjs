@@ -1,13 +1,13 @@
 
-const cephes = require('./cephes.js');
+import cephes from './cephes.mjs';
 
 // Export compiled promise, in Node.js this is just a dummy promise as the
 // WebAssembly program will be compiled synchronously. It takes about 20ms
 // as of Node.js v10.6.1.
-exports.compiled = cephes.compiled;
+export const compiled = cephes.compiled;
 
 // from cephes/cmath/isnan.c
-exports.signbit = function signbit(/* double */ x) {
+export function signbit(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
     throw new TypeError('x must be a number');
@@ -24,7 +24,7 @@ exports.signbit = function signbit(/* double */ x) {
 };
 
 // from cephes/cmath/isnan.c
-exports.isnan = function isnan(/* double */ x) {
+export function isnan(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
     throw new TypeError('x must be a number');
@@ -41,7 +41,7 @@ exports.isnan = function isnan(/* double */ x) {
 };
 
 // from cephes/cmath/isnan.c
-exports.isfinite = function isfinite(/* double */ x) {
+export function isfinite(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
     throw new TypeError('x must be a number');
@@ -58,7 +58,7 @@ exports.isfinite = function isfinite(/* double */ x) {
 };
 
 // from cephes/cmath/sqrt.c
-exports.sqrt = function sqrt(/* double */ x) {
+export function sqrt(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
     throw new TypeError('x must be a number');
@@ -75,7 +75,7 @@ exports.sqrt = function sqrt(/* double */ x) {
 };
 
 // from cephes/cmath/cbrt.c
-exports.cbrt = function cbrt(/* double */ x) {
+export function cbrt(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
     throw new TypeError('x must be a number');
@@ -92,7 +92,7 @@ exports.cbrt = function cbrt(/* double */ x) {
 };
 
 // from cephes/misc/polevl.c
-exports.polevl = function polevl(/* double */ x, /* double[] */ coef, /* int */ N) {
+export function polevl(/* double */ x, /* double[] */ coef, /* int */ N) {
   //Save the STACKTOP because the following code will do some stack allocs
   const stacktop = cephes.misc.stackSave();
 
@@ -130,7 +130,7 @@ exports.polevl = function polevl(/* double */ x, /* double[] */ coef, /* int */ 
 };
 
 // from cephes/misc/chbevl.c
-exports.chbevl = function chbevl(/* double */ x, /* double[] */ array, /* int */ n) {
+export function chbevl(/* double */ x, /* double[] */ array, /* int */ n) {
   //Save the STACKTOP because the following code will do some stack allocs
   const stacktop = cephes.misc.stackSave();
 
@@ -168,7 +168,7 @@ exports.chbevl = function chbevl(/* double */ x, /* double[] */ array, /* int */
 };
 
 // from cephes/cmath/round.c
-exports.round = function round(/* double */ x) {
+export function round(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
     throw new TypeError('x must be a number');
@@ -185,7 +185,7 @@ exports.round = function round(/* double */ x) {
 };
 
 // from cephes/cmath/floor.c
-exports.ceil = function ceil(/* double */ x) {
+export function ceil(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
     throw new TypeError('x must be a number');
@@ -202,7 +202,7 @@ exports.ceil = function ceil(/* double */ x) {
 };
 
 // from cephes/cmath/floor.c
-exports.floor = function floor(/* double */ x) {
+export function floor(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
     throw new TypeError('x must be a number');
@@ -219,7 +219,7 @@ exports.floor = function floor(/* double */ x) {
 };
 
 // from cephes/cmath/floor.c
-exports.frexp = function frexp(/* double */ x) {
+export function frexp(/* double */ x) {
   //Save the STACKTOP because the following code will do some stack allocs
   const stacktop = cephes.cmath.stackSave();
 
@@ -247,7 +247,7 @@ exports.frexp = function frexp(/* double */ x) {
 };
 
 // from cephes/cmath/floor.c
-exports.ldexp = function ldexp(/* double */ x, /* int */ pw2) {
+export function ldexp(/* double */ x, /* int */ pw2) {
   // argument: double x
   if (typeof x !== 'number') {
     throw new TypeError('x must be a number');
@@ -270,7 +270,7 @@ exports.ldexp = function ldexp(/* double */ x, /* int */ pw2) {
 };
 
 // from cephes/cmath/fabs.c
-exports.fabs = function fabs(/* double */ x) {
+export function fabs(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
     throw new TypeError('x must be a number');
@@ -287,7 +287,7 @@ exports.fabs = function fabs(/* double */ x) {
 };
 
 // from cephes/cprob/expx2.c
-exports.expx2 = function expx2(/* double */ x, /* int */ sign) {
+export function expx2(/* double */ x, /* int */ sign) {
   // argument: double x
   if (typeof x !== 'number') {
     throw new TypeError('x must be a number');
@@ -310,7 +310,7 @@ exports.expx2 = function expx2(/* double */ x, /* int */ sign) {
 };
 
 // from cephes/cmath/sin.c
-exports.radian = function radian(/* double */ d, /* double */ m, /* double */ s) {
+export function radian(/* double */ d, /* double */ m, /* double */ s) {
   // argument: double d
   if (typeof d !== 'number') {
     throw new TypeError('d must be a number');
@@ -339,7 +339,7 @@ exports.radian = function radian(/* double */ d, /* double */ m, /* double */ s)
 };
 
 // from cephes/cmath/sincos.c
-exports.sincos = function sincos(/* double */ x, /* int */ flg) {
+export function sincos(/* double */ x, /* int */ flg) {
   //Save the STACKTOP because the following code will do some stack allocs
   const stacktop = cephes.cmath.stackSave();
 
@@ -378,7 +378,7 @@ exports.sincos = function sincos(/* double */ x, /* int */ flg) {
 };
 
 // from cephes/cmath/tan.c
-exports.cot = function cot(/* double */ x) {
+export function cot(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
     throw new TypeError('x must be a number');
@@ -395,7 +395,7 @@ exports.cot = function cot(/* double */ x) {
 };
 
 // from cephes/cmath/tandg.c
-exports.cotdg = function cotdg(/* double */ x) {
+export function cotdg(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
     throw new TypeError('x must be a number');
@@ -412,7 +412,7 @@ exports.cotdg = function cotdg(/* double */ x) {
 };
 
 // from cephes/cprob/unity.c
-exports.log1p = function log1p(/* double */ x) {
+export function log1p(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
     throw new TypeError('x must be a number');
@@ -429,7 +429,7 @@ exports.log1p = function log1p(/* double */ x) {
 };
 
 // from cephes/cprob/unity.c
-exports.expm1 = function expm1(/* double */ x) {
+export function expm1(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
     throw new TypeError('x must be a number');
@@ -446,7 +446,7 @@ exports.expm1 = function expm1(/* double */ x) {
 };
 
 // from cephes/cprob/unity.c
-exports.cosm1 = function cosm1(/* double */ x) {
+export function cosm1(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
     throw new TypeError('x must be a number');
@@ -463,7 +463,7 @@ exports.cosm1 = function cosm1(/* double */ x) {
 };
 
 // from cephes/cmath/asin.c
-exports.acos = function acos(/* double */ x) {
+export function acos(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
     throw new TypeError('x must be a number');
@@ -480,7 +480,7 @@ exports.acos = function acos(/* double */ x) {
 };
 
 // from cephes/cmath/acosh.c
-exports.acosh = function acosh(/* double */ x) {
+export function acosh(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
     throw new TypeError('x must be a number');
@@ -497,7 +497,7 @@ exports.acosh = function acosh(/* double */ x) {
 };
 
 // from cephes/cmath/asinh.c
-exports.asinh = function asinh(/* double */ xx) {
+export function asinh(/* double */ xx) {
   // argument: double xx
   if (typeof xx !== 'number') {
     throw new TypeError('xx must be a number');
@@ -514,7 +514,7 @@ exports.asinh = function asinh(/* double */ xx) {
 };
 
 // from cephes/cmath/atanh.c
-exports.atanh = function atanh(/* double */ x) {
+export function atanh(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
     throw new TypeError('x must be a number');
@@ -531,7 +531,7 @@ exports.atanh = function atanh(/* double */ x) {
 };
 
 // from cephes/cmath/asin.c
-exports.asin = function asin(/* double */ x) {
+export function asin(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
     throw new TypeError('x must be a number');
@@ -548,7 +548,7 @@ exports.asin = function asin(/* double */ x) {
 };
 
 // from cephes/cmath/atan.c
-exports.atan = function atan(/* double */ x) {
+export function atan(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
     throw new TypeError('x must be a number');
@@ -565,7 +565,7 @@ exports.atan = function atan(/* double */ x) {
 };
 
 // from cephes/cmath/atan.c
-exports.atan2 = function atan2(/* double */ y, /* double */ x) {
+export function atan2(/* double */ y, /* double */ x) {
   // argument: double y
   if (typeof y !== 'number') {
     throw new TypeError('y must be a number');
@@ -588,7 +588,7 @@ exports.atan2 = function atan2(/* double */ y, /* double */ x) {
 };
 
 // from cephes/cmath/sin.c
-exports.cos = function cos(/* double */ x) {
+export function cos(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
     throw new TypeError('x must be a number');
@@ -605,7 +605,7 @@ exports.cos = function cos(/* double */ x) {
 };
 
 // from cephes/cmath/sindg.c
-exports.cosdg = function cosdg(/* double */ x) {
+export function cosdg(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
     throw new TypeError('x must be a number');
@@ -622,7 +622,7 @@ exports.cosdg = function cosdg(/* double */ x) {
 };
 
 // from cephes/cmath/exp.c
-exports.exp = function exp(/* double */ x) {
+export function exp(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
     throw new TypeError('x must be a number');
@@ -639,7 +639,7 @@ exports.exp = function exp(/* double */ x) {
 };
 
 // from cephes/cmath/exp2.c
-exports.exp2 = function exp2(/* double */ x) {
+export function exp2(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
     throw new TypeError('x must be a number');
@@ -656,7 +656,7 @@ exports.exp2 = function exp2(/* double */ x) {
 };
 
 // from cephes/cmath/exp10.c
-exports.exp10 = function exp10(/* double */ x) {
+export function exp10(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
     throw new TypeError('x must be a number');
@@ -673,7 +673,7 @@ exports.exp10 = function exp10(/* double */ x) {
 };
 
 // from cephes/cmath/cosh.c
-exports.cosh = function cosh(/* double */ x) {
+export function cosh(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
     throw new TypeError('x must be a number');
@@ -690,7 +690,7 @@ exports.cosh = function cosh(/* double */ x) {
 };
 
 // from cephes/cmath/sinh.c
-exports.sinh = function sinh(/* double */ x) {
+export function sinh(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
     throw new TypeError('x must be a number');
@@ -707,7 +707,7 @@ exports.sinh = function sinh(/* double */ x) {
 };
 
 // from cephes/cmath/tanh.c
-exports.tanh = function tanh(/* double */ x) {
+export function tanh(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
     throw new TypeError('x must be a number');
@@ -724,7 +724,7 @@ exports.tanh = function tanh(/* double */ x) {
 };
 
 // from cephes/cmath/log.c
-exports.log = function log(/* double */ x) {
+export function log(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
     throw new TypeError('x must be a number');
@@ -741,7 +741,7 @@ exports.log = function log(/* double */ x) {
 };
 
 // from cephes/cmath/log2.c
-exports.log2 = function log2(/* double */ x) {
+export function log2(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
     throw new TypeError('x must be a number');
@@ -758,7 +758,7 @@ exports.log2 = function log2(/* double */ x) {
 };
 
 // from cephes/cmath/log10.c
-exports.log10 = function log10(/* double */ x) {
+export function log10(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
     throw new TypeError('x must be a number');
@@ -775,7 +775,7 @@ exports.log10 = function log10(/* double */ x) {
 };
 
 // from cephes/cmath/pow.c
-exports.pow = function pow(/* double */ x, /* double */ y) {
+export function pow(/* double */ x, /* double */ y) {
   // argument: double x
   if (typeof x !== 'number') {
     throw new TypeError('x must be a number');
@@ -798,7 +798,7 @@ exports.pow = function pow(/* double */ x, /* double */ y) {
 };
 
 // from cephes/cmath/powi.c
-exports.powi = function powi(/* double */ x, /* int */ nn) {
+export function powi(/* double */ x, /* int */ nn) {
   // argument: double x
   if (typeof x !== 'number') {
     throw new TypeError('x must be a number');
@@ -821,7 +821,7 @@ exports.powi = function powi(/* double */ x, /* int */ nn) {
 };
 
 // from cephes/cmath/sin.c
-exports.sin = function sin(/* double */ x) {
+export function sin(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
     throw new TypeError('x must be a number');
@@ -838,7 +838,7 @@ exports.sin = function sin(/* double */ x) {
 };
 
 // from cephes/cmath/sindg.c
-exports.sindg = function sindg(/* double */ x) {
+export function sindg(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
     throw new TypeError('x must be a number');
@@ -855,7 +855,7 @@ exports.sindg = function sindg(/* double */ x) {
 };
 
 // from cephes/cmath/tan.c
-exports.tan = function tan(/* double */ x) {
+export function tan(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
     throw new TypeError('x must be a number');
@@ -872,7 +872,7 @@ exports.tan = function tan(/* double */ x) {
 };
 
 // from cephes/cmath/tandg.c
-exports.tandg = function tandg(/* double */ x) {
+export function tandg(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
     throw new TypeError('x must be a number');
@@ -889,7 +889,7 @@ exports.tandg = function tandg(/* double */ x) {
 };
 
 // from cephes/misc/ei.c
-exports.ei = function ei(/* double */ x) {
+export function ei(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
     throw new TypeError('x must be a number');
@@ -906,7 +906,7 @@ exports.ei = function ei(/* double */ x) {
 };
 
 // from cephes/misc/expn.c
-exports.expn = function expn(/* int */ n, /* double */ x) {
+export function expn(/* int */ n, /* double */ x) {
   // argument: int n
   if (typeof n !== 'number') {
     throw new TypeError('n must be a number');
@@ -929,7 +929,7 @@ exports.expn = function expn(/* int */ n, /* double */ x) {
 };
 
 // from cephes/misc/shichi.c
-exports.shichi = function shichi(/* double */ x) {
+export function shichi(/* double */ x) {
   //Save the STACKTOP because the following code will do some stack allocs
   const stacktop = cephes.misc.stackSave();
 
@@ -961,7 +961,7 @@ exports.shichi = function shichi(/* double */ x) {
 };
 
 // from cephes/misc/sici.c
-exports.sici = function sici(/* double */ x) {
+export function sici(/* double */ x) {
   //Save the STACKTOP because the following code will do some stack allocs
   const stacktop = cephes.misc.stackSave();
 
@@ -993,7 +993,7 @@ exports.sici = function sici(/* double */ x) {
 };
 
 // from cephes/misc/beta.c
-exports.lbeta = function lbeta(/* double */ a, /* double */ b) {
+export function lbeta(/* double */ a, /* double */ b) {
   // argument: double a
   if (typeof a !== 'number') {
     throw new TypeError('a must be a number');
@@ -1016,7 +1016,7 @@ exports.lbeta = function lbeta(/* double */ a, /* double */ b) {
 };
 
 // from cephes/misc/beta.c
-exports.beta = function beta(/* double */ a, /* double */ b) {
+export function beta(/* double */ a, /* double */ b) {
   // argument: double a
   if (typeof a !== 'number') {
     throw new TypeError('a must be a number');
@@ -1039,7 +1039,7 @@ exports.beta = function beta(/* double */ a, /* double */ b) {
 };
 
 // from cephes/misc/fac.c
-exports.fac = function fac(/* int */ i) {
+export function fac(/* int */ i) {
   // argument: int i
   if (typeof i !== 'number') {
     throw new TypeError('i must be a number');
@@ -1056,7 +1056,7 @@ exports.fac = function fac(/* int */ i) {
 };
 
 // from cephes/cprob/gamma.c
-exports.gamma = function gamma(/* double */ x) {
+export function gamma(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
     throw new TypeError('x must be a number');
@@ -1073,7 +1073,7 @@ exports.gamma = function gamma(/* double */ x) {
 };
 
 // from cephes/cprob/gamma.c
-exports.lgam = function lgam(/* double */ x) {
+export function lgam(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
     throw new TypeError('x must be a number');
@@ -1090,7 +1090,7 @@ exports.lgam = function lgam(/* double */ x) {
 };
 
 // from cephes/cprob/incbet.c
-exports.incbet = function incbet(/* double */ aa, /* double */ bb, /* double */ xx) {
+export function incbet(/* double */ aa, /* double */ bb, /* double */ xx) {
   // argument: double aa
   if (typeof aa !== 'number') {
     throw new TypeError('aa must be a number');
@@ -1119,7 +1119,7 @@ exports.incbet = function incbet(/* double */ aa, /* double */ bb, /* double */ 
 };
 
 // from cephes/cprob/incbi.c
-exports.incbi = function incbi(/* double */ aa, /* double */ bb, /* double */ yy0) {
+export function incbi(/* double */ aa, /* double */ bb, /* double */ yy0) {
   // argument: double aa
   if (typeof aa !== 'number') {
     throw new TypeError('aa must be a number');
@@ -1148,7 +1148,7 @@ exports.incbi = function incbi(/* double */ aa, /* double */ bb, /* double */ yy
 };
 
 // from cephes/cprob/igam.c
-exports.igam = function igam(/* double */ a, /* double */ x) {
+export function igam(/* double */ a, /* double */ x) {
   // argument: double a
   if (typeof a !== 'number') {
     throw new TypeError('a must be a number');
@@ -1171,7 +1171,7 @@ exports.igam = function igam(/* double */ a, /* double */ x) {
 };
 
 // from cephes/cprob/igam.c
-exports.igamc = function igamc(/* double */ a, /* double */ x) {
+export function igamc(/* double */ a, /* double */ x) {
   // argument: double a
   if (typeof a !== 'number') {
     throw new TypeError('a must be a number');
@@ -1194,7 +1194,7 @@ exports.igamc = function igamc(/* double */ a, /* double */ x) {
 };
 
 // from cephes/cprob/igami.c
-exports.igami = function igami(/* double */ a, /* double */ y0) {
+export function igami(/* double */ a, /* double */ y0) {
   // argument: double a
   if (typeof a !== 'number') {
     throw new TypeError('a must be a number');
@@ -1217,7 +1217,7 @@ exports.igami = function igami(/* double */ a, /* double */ y0) {
 };
 
 // from cephes/misc/psi.c
-exports.psi = function psi(/* double */ x) {
+export function psi(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
     throw new TypeError('x must be a number');
@@ -1234,7 +1234,7 @@ exports.psi = function psi(/* double */ x) {
 };
 
 // from cephes/misc/rgamma.c
-exports.rgamma = function rgamma(/* double */ x) {
+export function rgamma(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
     throw new TypeError('x must be a number');
@@ -1251,7 +1251,7 @@ exports.rgamma = function rgamma(/* double */ x) {
 };
 
 // from cephes/cprob/ndtr.c
-exports.erf = function erf(/* double */ x) {
+export function erf(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
     throw new TypeError('x must be a number');
@@ -1268,7 +1268,7 @@ exports.erf = function erf(/* double */ x) {
 };
 
 // from cephes/cprob/ndtr.c
-exports.erfc = function erfc(/* double */ a) {
+export function erfc(/* double */ a) {
   // argument: double a
   if (typeof a !== 'number') {
     throw new TypeError('a must be a number');
@@ -1285,7 +1285,7 @@ exports.erfc = function erfc(/* double */ a) {
 };
 
 // from cephes/misc/dawsn.c
-exports.dawsn = function dawsn(/* double */ xx) {
+export function dawsn(/* double */ xx) {
   // argument: double xx
   if (typeof xx !== 'number') {
     throw new TypeError('xx must be a number');
@@ -1302,7 +1302,7 @@ exports.dawsn = function dawsn(/* double */ xx) {
 };
 
 // from cephes/misc/fresnl.c
-exports.fresnl = function fresnl(/* double */ xxa) {
+export function fresnl(/* double */ xxa) {
   //Save the STACKTOP because the following code will do some stack allocs
   const stacktop = cephes.misc.stackSave();
 
@@ -1334,7 +1334,7 @@ exports.fresnl = function fresnl(/* double */ xxa) {
 };
 
 // from cephes/bessel/airy.c
-exports.airy = function airy(/* double */ x) {
+export function airy(/* double */ x) {
   //Save the STACKTOP because the following code will do some stack allocs
   const stacktop = cephes.bessel.stackSave();
 
@@ -1374,7 +1374,7 @@ exports.airy = function airy(/* double */ x) {
 };
 
 // from cephes/bessel/j0.c
-exports.j0 = function j0(/* double */ x) {
+export function j0(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
     throw new TypeError('x must be a number');
@@ -1391,7 +1391,7 @@ exports.j0 = function j0(/* double */ x) {
 };
 
 // from cephes/bessel/j1.c
-exports.j1 = function j1(/* double */ x) {
+export function j1(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
     throw new TypeError('x must be a number');
@@ -1408,7 +1408,7 @@ exports.j1 = function j1(/* double */ x) {
 };
 
 // from cephes/bessel/jn.c
-exports.jn = function jn(/* int */ n, /* double */ x) {
+export function jn(/* int */ n, /* double */ x) {
   // argument: int n
   if (typeof n !== 'number') {
     throw new TypeError('n must be a number');
@@ -1431,7 +1431,7 @@ exports.jn = function jn(/* int */ n, /* double */ x) {
 };
 
 // from cephes/bessel/jv.c
-exports.jv = function jv(/* double */ n, /* double */ x) {
+export function jv(/* double */ n, /* double */ x) {
   // argument: double n
   if (typeof n !== 'number') {
     throw new TypeError('n must be a number');
@@ -1454,7 +1454,7 @@ exports.jv = function jv(/* double */ n, /* double */ x) {
 };
 
 // from cephes/bessel/j0.c
-exports.y0 = function y0(/* double */ x) {
+export function y0(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
     throw new TypeError('x must be a number');
@@ -1471,7 +1471,7 @@ exports.y0 = function y0(/* double */ x) {
 };
 
 // from cephes/bessel/j1.c
-exports.y1 = function y1(/* double */ x) {
+export function y1(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
     throw new TypeError('x must be a number');
@@ -1488,7 +1488,7 @@ exports.y1 = function y1(/* double */ x) {
 };
 
 // from cephes/bessel/yn.c
-exports.yn = function yn(/* int */ n, /* double */ x) {
+export function yn(/* int */ n, /* double */ x) {
   // argument: int n
   if (typeof n !== 'number') {
     throw new TypeError('n must be a number');
@@ -1511,7 +1511,7 @@ exports.yn = function yn(/* int */ n, /* double */ x) {
 };
 
 // from cephes/bessel/struve.c
-exports.yv = function yv(/* double */ v, /* double */ x) {
+export function yv(/* double */ v, /* double */ x) {
   // argument: double v
   if (typeof v !== 'number') {
     throw new TypeError('v must be a number');
@@ -1534,7 +1534,7 @@ exports.yv = function yv(/* double */ v, /* double */ x) {
 };
 
 // from cephes/bessel/i0.c
-exports.i0 = function i0(/* double */ x) {
+export function i0(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
     throw new TypeError('x must be a number');
@@ -1551,7 +1551,7 @@ exports.i0 = function i0(/* double */ x) {
 };
 
 // from cephes/bessel/i0.c
-exports.i0e = function i0e(/* double */ x) {
+export function i0e(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
     throw new TypeError('x must be a number');
@@ -1568,7 +1568,7 @@ exports.i0e = function i0e(/* double */ x) {
 };
 
 // from cephes/bessel/i1.c
-exports.i1 = function i1(/* double */ x) {
+export function i1(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
     throw new TypeError('x must be a number');
@@ -1585,7 +1585,7 @@ exports.i1 = function i1(/* double */ x) {
 };
 
 // from cephes/bessel/i1.c
-exports.i1e = function i1e(/* double */ x) {
+export function i1e(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
     throw new TypeError('x must be a number');
@@ -1602,7 +1602,7 @@ exports.i1e = function i1e(/* double */ x) {
 };
 
 // from cephes/bessel/iv.c
-exports.iv = function iv(/* double */ v, /* double */ x) {
+export function iv(/* double */ v, /* double */ x) {
   // argument: double v
   if (typeof v !== 'number') {
     throw new TypeError('v must be a number');
@@ -1625,7 +1625,7 @@ exports.iv = function iv(/* double */ v, /* double */ x) {
 };
 
 // from cephes/bessel/k0.c
-exports.k0 = function k0(/* double */ x) {
+export function k0(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
     throw new TypeError('x must be a number');
@@ -1642,7 +1642,7 @@ exports.k0 = function k0(/* double */ x) {
 };
 
 // from cephes/bessel/k0.c
-exports.k0e = function k0e(/* double */ x) {
+export function k0e(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
     throw new TypeError('x must be a number');
@@ -1659,7 +1659,7 @@ exports.k0e = function k0e(/* double */ x) {
 };
 
 // from cephes/bessel/k1.c
-exports.k1 = function k1(/* double */ x) {
+export function k1(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
     throw new TypeError('x must be a number');
@@ -1676,7 +1676,7 @@ exports.k1 = function k1(/* double */ x) {
 };
 
 // from cephes/bessel/k1.c
-exports.k1e = function k1e(/* double */ x) {
+export function k1e(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
     throw new TypeError('x must be a number');
@@ -1693,7 +1693,7 @@ exports.k1e = function k1e(/* double */ x) {
 };
 
 // from cephes/bessel/kn.c
-exports.kn = function kn(/* int */ nn, /* double */ x) {
+export function kn(/* int */ nn, /* double */ x) {
   // argument: int nn
   if (typeof nn !== 'number') {
     throw new TypeError('nn must be a number');
@@ -1716,7 +1716,7 @@ exports.kn = function kn(/* int */ nn, /* double */ x) {
 };
 
 // from cephes/bessel/hyperg.c
-exports.hyperg = function hyperg(/* double */ a, /* double */ b, /* double */ x) {
+export function hyperg(/* double */ a, /* double */ b, /* double */ x) {
   // argument: double a
   if (typeof a !== 'number') {
     throw new TypeError('a must be a number');
@@ -1745,7 +1745,7 @@ exports.hyperg = function hyperg(/* double */ a, /* double */ b, /* double */ x)
 };
 
 // from cephes/bessel/hyp2f1.c
-exports.hyp2f1 = function hyp2f1(/* double */ a, /* double */ b, /* double */ c, /* double */ x) {
+export function hyp2f1(/* double */ a, /* double */ b, /* double */ c, /* double */ x) {
   // argument: double a
   if (typeof a !== 'number') {
     throw new TypeError('a must be a number');
@@ -1780,7 +1780,7 @@ exports.hyp2f1 = function hyp2f1(/* double */ a, /* double */ b, /* double */ c,
 };
 
 // from cephes/ellf/ellpe.c
-exports.ellpe = function ellpe(/* double */ x) {
+export function ellpe(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
     throw new TypeError('x must be a number');
@@ -1797,7 +1797,7 @@ exports.ellpe = function ellpe(/* double */ x) {
 };
 
 // from cephes/ellf/ellie.c
-exports.ellie = function ellie(/* double */ phi, /* double */ m) {
+export function ellie(/* double */ phi, /* double */ m) {
   // argument: double phi
   if (typeof phi !== 'number') {
     throw new TypeError('phi must be a number');
@@ -1820,7 +1820,7 @@ exports.ellie = function ellie(/* double */ phi, /* double */ m) {
 };
 
 // from cephes/ellf/ellpk.c
-exports.ellpk = function ellpk(/* double */ x) {
+export function ellpk(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
     throw new TypeError('x must be a number');
@@ -1837,7 +1837,7 @@ exports.ellpk = function ellpk(/* double */ x) {
 };
 
 // from cephes/ellf/ellik.c
-exports.ellik = function ellik(/* double */ phi, /* double */ m) {
+export function ellik(/* double */ phi, /* double */ m) {
   // argument: double phi
   if (typeof phi !== 'number') {
     throw new TypeError('phi must be a number');
@@ -1860,7 +1860,7 @@ exports.ellik = function ellik(/* double */ phi, /* double */ m) {
 };
 
 // from cephes/ellf/ellpj.c
-exports.ellpj = function ellpj(/* double */ u, /* double */ m) {
+export function ellpj(/* double */ u, /* double */ m) {
   //Save the STACKTOP because the following code will do some stack allocs
   const stacktop = cephes.ellf.stackSave();
 
@@ -1907,7 +1907,7 @@ exports.ellpj = function ellpj(/* double */ u, /* double */ m) {
 };
 
 // from cephes/cprob/btdtr.c
-exports.btdtr = function btdtr(/* double */ a, /* double */ b, /* double */ x) {
+export function btdtr(/* double */ a, /* double */ b, /* double */ x) {
   // argument: double a
   if (typeof a !== 'number') {
     throw new TypeError('a must be a number');
@@ -1936,7 +1936,7 @@ exports.btdtr = function btdtr(/* double */ a, /* double */ b, /* double */ x) {
 };
 
 // from cephes/cprob/kolmogorov.c
-exports.smirnov = function smirnov(/* int */ n, /* double */ e) {
+export function smirnov(/* int */ n, /* double */ e) {
   // argument: int n
   if (typeof n !== 'number') {
     throw new TypeError('n must be a number');
@@ -1959,7 +1959,7 @@ exports.smirnov = function smirnov(/* int */ n, /* double */ e) {
 };
 
 // from cephes/cprob/kolmogorov.c
-exports.kolmogorov = function kolmogorov(/* double */ y) {
+export function kolmogorov(/* double */ y) {
   // argument: double y
   if (typeof y !== 'number') {
     throw new TypeError('y must be a number');
@@ -1976,7 +1976,7 @@ exports.kolmogorov = function kolmogorov(/* double */ y) {
 };
 
 // from cephes/cprob/kolmogorov.c
-exports.smirnovi = function smirnovi(/* int */ n, /* double */ p) {
+export function smirnovi(/* int */ n, /* double */ p) {
   // argument: int n
   if (typeof n !== 'number') {
     throw new TypeError('n must be a number');
@@ -1999,7 +1999,7 @@ exports.smirnovi = function smirnovi(/* int */ n, /* double */ p) {
 };
 
 // from cephes/cprob/kolmogorov.c
-exports.kolmogi = function kolmogi(/* double */ p) {
+export function kolmogi(/* double */ p) {
   // argument: double p
   if (typeof p !== 'number') {
     throw new TypeError('p must be a number');
@@ -2016,7 +2016,7 @@ exports.kolmogi = function kolmogi(/* double */ p) {
 };
 
 // from cephes/cprob/nbdtr.c
-exports.nbdtri = function nbdtri(/* int */ k, /* int */ n, /* double */ p) {
+export function nbdtri(/* int */ k, /* int */ n, /* double */ p) {
   // argument: int k
   if (typeof k !== 'number') {
     throw new TypeError('k must be a number');
@@ -2045,7 +2045,7 @@ exports.nbdtri = function nbdtri(/* int */ k, /* int */ n, /* double */ p) {
 };
 
 // from cephes/cprob/stdtr.c
-exports.stdtri = function stdtri(/* int */ k, /* double */ p) {
+export function stdtri(/* int */ k, /* double */ p) {
   // argument: int k
   if (typeof k !== 'number') {
     throw new TypeError('k must be a number');
@@ -2068,7 +2068,7 @@ exports.stdtri = function stdtri(/* int */ k, /* double */ p) {
 };
 
 // from cephes/cprob/bdtr.c
-exports.bdtr = function bdtr(/* int */ k, /* int */ n, /* double */ p) {
+export function bdtr(/* int */ k, /* int */ n, /* double */ p) {
   // argument: int k
   if (typeof k !== 'number') {
     throw new TypeError('k must be a number');
@@ -2097,7 +2097,7 @@ exports.bdtr = function bdtr(/* int */ k, /* int */ n, /* double */ p) {
 };
 
 // from cephes/cprob/bdtr.c
-exports.bdtrc = function bdtrc(/* int */ k, /* int */ n, /* double */ p) {
+export function bdtrc(/* int */ k, /* int */ n, /* double */ p) {
   // argument: int k
   if (typeof k !== 'number') {
     throw new TypeError('k must be a number');
@@ -2126,7 +2126,7 @@ exports.bdtrc = function bdtrc(/* int */ k, /* int */ n, /* double */ p) {
 };
 
 // from cephes/cprob/bdtr.c
-exports.bdtri = function bdtri(/* int */ k, /* int */ n, /* double */ y) {
+export function bdtri(/* int */ k, /* int */ n, /* double */ y) {
   // argument: int k
   if (typeof k !== 'number') {
     throw new TypeError('k must be a number');
@@ -2155,7 +2155,7 @@ exports.bdtri = function bdtri(/* int */ k, /* int */ n, /* double */ y) {
 };
 
 // from cephes/cprob/chdtr.c
-exports.chdtr = function chdtr(/* double */ df, /* double */ x) {
+export function chdtr(/* double */ df, /* double */ x) {
   // argument: double df
   if (typeof df !== 'number') {
     throw new TypeError('df must be a number');
@@ -2178,7 +2178,7 @@ exports.chdtr = function chdtr(/* double */ df, /* double */ x) {
 };
 
 // from cephes/cprob/chdtr.c
-exports.chdtrc = function chdtrc(/* double */ df, /* double */ x) {
+export function chdtrc(/* double */ df, /* double */ x) {
   // argument: double df
   if (typeof df !== 'number') {
     throw new TypeError('df must be a number');
@@ -2201,7 +2201,7 @@ exports.chdtrc = function chdtrc(/* double */ df, /* double */ x) {
 };
 
 // from cephes/cprob/chdtr.c
-exports.chdtri = function chdtri(/* double */ df, /* double */ y) {
+export function chdtri(/* double */ df, /* double */ y) {
   // argument: double df
   if (typeof df !== 'number') {
     throw new TypeError('df must be a number');
@@ -2224,7 +2224,7 @@ exports.chdtri = function chdtri(/* double */ df, /* double */ y) {
 };
 
 // from cephes/cprob/fdtr.c
-exports.fdtr = function fdtr(/* int */ ia, /* int */ ib, /* double */ x) {
+export function fdtr(/* int */ ia, /* int */ ib, /* double */ x) {
   // argument: int ia
   if (typeof ia !== 'number') {
     throw new TypeError('ia must be a number');
@@ -2253,7 +2253,7 @@ exports.fdtr = function fdtr(/* int */ ia, /* int */ ib, /* double */ x) {
 };
 
 // from cephes/cprob/fdtr.c
-exports.fdtrc = function fdtrc(/* int */ ia, /* int */ ib, /* double */ x) {
+export function fdtrc(/* int */ ia, /* int */ ib, /* double */ x) {
   // argument: int ia
   if (typeof ia !== 'number') {
     throw new TypeError('ia must be a number');
@@ -2282,7 +2282,7 @@ exports.fdtrc = function fdtrc(/* int */ ia, /* int */ ib, /* double */ x) {
 };
 
 // from cephes/cprob/fdtr.c
-exports.fdtri = function fdtri(/* int */ ia, /* int */ ib, /* double */ y) {
+export function fdtri(/* int */ ia, /* int */ ib, /* double */ y) {
   // argument: int ia
   if (typeof ia !== 'number') {
     throw new TypeError('ia must be a number');
@@ -2311,7 +2311,7 @@ exports.fdtri = function fdtri(/* int */ ia, /* int */ ib, /* double */ y) {
 };
 
 // from cephes/cprob/gdtr.c
-exports.gdtr = function gdtr(/* double */ a, /* double */ b, /* double */ x) {
+export function gdtr(/* double */ a, /* double */ b, /* double */ x) {
   // argument: double a
   if (typeof a !== 'number') {
     throw new TypeError('a must be a number');
@@ -2340,7 +2340,7 @@ exports.gdtr = function gdtr(/* double */ a, /* double */ b, /* double */ x) {
 };
 
 // from cephes/cprob/gdtr.c
-exports.gdtrc = function gdtrc(/* double */ a, /* double */ b, /* double */ x) {
+export function gdtrc(/* double */ a, /* double */ b, /* double */ x) {
   // argument: double a
   if (typeof a !== 'number') {
     throw new TypeError('a must be a number');
@@ -2369,7 +2369,7 @@ exports.gdtrc = function gdtrc(/* double */ a, /* double */ b, /* double */ x) {
 };
 
 // from cephes/cprob/nbdtr.c
-exports.nbdtr = function nbdtr(/* int */ k, /* int */ n, /* double */ p) {
+export function nbdtr(/* int */ k, /* int */ n, /* double */ p) {
   // argument: int k
   if (typeof k !== 'number') {
     throw new TypeError('k must be a number');
@@ -2398,7 +2398,7 @@ exports.nbdtr = function nbdtr(/* int */ k, /* int */ n, /* double */ p) {
 };
 
 // from cephes/cprob/nbdtr.c
-exports.nbdtrc = function nbdtrc(/* int */ k, /* int */ n, /* double */ p) {
+export function nbdtrc(/* int */ k, /* int */ n, /* double */ p) {
   // argument: int k
   if (typeof k !== 'number') {
     throw new TypeError('k must be a number');
@@ -2427,7 +2427,7 @@ exports.nbdtrc = function nbdtrc(/* int */ k, /* int */ n, /* double */ p) {
 };
 
 // from cephes/cprob/ndtr.c
-exports.ndtr = function ndtr(/* double */ a) {
+export function ndtr(/* double */ a) {
   // argument: double a
   if (typeof a !== 'number') {
     throw new TypeError('a must be a number');
@@ -2444,7 +2444,7 @@ exports.ndtr = function ndtr(/* double */ a) {
 };
 
 // from cephes/cprob/ndtri.c
-exports.ndtri = function ndtri(/* double */ y0) {
+export function ndtri(/* double */ y0) {
   // argument: double y0
   if (typeof y0 !== 'number') {
     throw new TypeError('y0 must be a number');
@@ -2461,7 +2461,7 @@ exports.ndtri = function ndtri(/* double */ y0) {
 };
 
 // from cephes/cprob/pdtr.c
-exports.pdtr = function pdtr(/* int */ k, /* double */ m) {
+export function pdtr(/* int */ k, /* double */ m) {
   // argument: int k
   if (typeof k !== 'number') {
     throw new TypeError('k must be a number');
@@ -2484,7 +2484,7 @@ exports.pdtr = function pdtr(/* int */ k, /* double */ m) {
 };
 
 // from cephes/cprob/pdtr.c
-exports.pdtrc = function pdtrc(/* int */ k, /* double */ m) {
+export function pdtrc(/* int */ k, /* double */ m) {
   // argument: int k
   if (typeof k !== 'number') {
     throw new TypeError('k must be a number');
@@ -2507,7 +2507,7 @@ exports.pdtrc = function pdtrc(/* int */ k, /* double */ m) {
 };
 
 // from cephes/cprob/pdtr.c
-exports.pdtri = function pdtri(/* int */ k, /* double */ y) {
+export function pdtri(/* int */ k, /* double */ y) {
   // argument: int k
   if (typeof k !== 'number') {
     throw new TypeError('k must be a number');
@@ -2530,7 +2530,7 @@ exports.pdtri = function pdtri(/* int */ k, /* double */ y) {
 };
 
 // from cephes/cprob/stdtr.c
-exports.stdtr = function stdtr(/* int */ k, /* double */ t) {
+export function stdtr(/* int */ k, /* double */ t) {
   // argument: int k
   if (typeof k !== 'number') {
     throw new TypeError('k must be a number');
@@ -2553,7 +2553,7 @@ exports.stdtr = function stdtr(/* int */ k, /* double */ t) {
 };
 
 // from cephes/misc/planck.c
-exports.plancki = function plancki(/* double */ w, /* double */ T) {
+export function plancki(/* double */ w, /* double */ T) {
   // argument: double w
   if (typeof w !== 'number') {
     throw new TypeError('w must be a number');
@@ -2576,7 +2576,7 @@ exports.plancki = function plancki(/* double */ w, /* double */ T) {
 };
 
 // from cephes/misc/planck.c
-exports.planckc = function planckc(/* double */ w, /* double */ T) {
+export function planckc(/* double */ w, /* double */ T) {
   // argument: double w
   if (typeof w !== 'number') {
     throw new TypeError('w must be a number');
@@ -2599,7 +2599,7 @@ exports.planckc = function planckc(/* double */ w, /* double */ T) {
 };
 
 // from cephes/misc/planck.c
-exports.planckd = function planckd(/* double */ w, /* double */ T) {
+export function planckd(/* double */ w, /* double */ T) {
   // argument: double w
   if (typeof w !== 'number') {
     throw new TypeError('w must be a number');
@@ -2622,7 +2622,7 @@ exports.planckd = function planckd(/* double */ w, /* double */ T) {
 };
 
 // from cephes/misc/planck.c
-exports.planckw = function planckw(/* double */ T) {
+export function planckw(/* double */ T) {
   // argument: double T
   if (typeof T !== 'number') {
     throw new TypeError('T must be a number');
@@ -2639,7 +2639,7 @@ exports.planckw = function planckw(/* double */ T) {
 };
 
 // from cephes/misc/spence.c
-exports.spence = function spence(/* double */ x) {
+export function spence(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
     throw new TypeError('x must be a number');
@@ -2656,7 +2656,7 @@ exports.spence = function spence(/* double */ x) {
 };
 
 // from cephes/misc/zetac.c
-exports.zetac = function zetac(/* double */ x) {
+export function zetac(/* double */ x) {
   // argument: double x
   if (typeof x !== 'number') {
     throw new TypeError('x must be a number');
@@ -2673,7 +2673,7 @@ exports.zetac = function zetac(/* double */ x) {
 };
 
 // from cephes/misc/zeta.c
-exports.zeta = function zeta(/* double */ x, /* double */ q) {
+export function zeta(/* double */ x, /* double */ q) {
   // argument: double x
   if (typeof x !== 'number') {
     throw new TypeError('x must be a number');
@@ -2696,7 +2696,7 @@ exports.zeta = function zeta(/* double */ x, /* double */ q) {
 };
 
 // from cephes/bessel/struve.c
-exports.struve = function struve(/* double */ v, /* double */ x) {
+export function struve(/* double */ v, /* double */ x) {
   // argument: double v
   if (typeof v !== 'number') {
     throw new TypeError('v must be a number');
@@ -2719,7 +2719,7 @@ exports.struve = function struve(/* double */ v, /* double */ x) {
 };
 
 // from cephes/misc/simpsn.c
-exports.simpsn = function simpsn(/* double[] */ f, /* double */ delta) {
+export function simpsn(/* double[] */ f, /* double */ delta) {
   //Save the STACKTOP because the following code will do some stack allocs
   const stacktop = cephes.misc.stackSave();
 
@@ -2750,7 +2750,7 @@ exports.simpsn = function simpsn(/* double[] */ f, /* double */ delta) {
 };
 
 // from cephes/misc/polevl.c
-exports.p1evl = function p1evl(/* double */ x, /* double[] */ coef, /* int */ N) {
+export function p1evl(/* double */ x, /* double[] */ coef, /* int */ N) {
   //Save the STACKTOP because the following code will do some stack allocs
   const stacktop = cephes.misc.stackSave();
 
@@ -2788,7 +2788,7 @@ exports.p1evl = function p1evl(/* double */ x, /* double[] */ coef, /* int */ N)
 };
 
 // from cephes/misc/polylog.c
-exports.polylog = function polylog(/* int */ n, /* double */ x) {
+export function polylog(/* int */ n, /* double */ x) {
   // argument: int n
   if (typeof n !== 'number') {
     throw new TypeError('n must be a number');

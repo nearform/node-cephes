@@ -59,20 +59,35 @@ const argGenerators = {
   },
 };
 
-const header = `
-const cephes = require('./cephes.js');
+const headers = {
+  cjs: `
+const cephes = require('./cephes.cjs');
 
 // Export compiled promise, in Node.js this is just a dummy promise as the
 // WebAssembly program will be compiled synchronously. It takes about 20ms
 // as of Node.js v10.6.1.
 exports.compiled = cephes.compiled;
 
-`;
+`,
+  esm: `
+import cephes from './cephes.mjs';
+
+// Export compiled promise, in Node.js this is just a dummy promise as the
+// WebAssembly program will be compiled synchronously. It takes about 20ms
+// as of Node.js v10.6.1.
+export const compiled = cephes.compiled;
+
+`,
+};
 
 class InterfaceGenerator extends stream.Transform {
-  constructor() {
+  constructor(format) {
     super({ objectMode: true });
-    this.push(header);
+    if (format !== "esm" && format !== "cjs") {
+      throw `Format "${format} is invalid."`;
+    }
+    this.format = format;
+    this.push(headers[this.format]);
   }
 
   _transform(data, encoding, done) {
@@ -101,7 +116,12 @@ class InterfaceGenerator extends stream.Transform {
 
     // function name
     code += `// from cephes/${packageName}/${filename}.c\n`;
-    code += `exports.${functionName} = function ${functionName}(`;
+    if (this.format === "cjs") {
+      code += `exports.${functionName} = function ${functionName}(`;
+    } else {
+      code += `export function ${functionName}(`;
+    }
+
     // function arguments
     for (const { type, isPointer, isArray, name } of functionArgs) {
       if (isPointer) continue;
@@ -174,8 +194,28 @@ class InterfaceGenerator extends stream.Transform {
     done(null, code);
   }
 }
+/**
+ *
+ * @param {string[]} args
+ * @returns {"cjs"|"esm"}
+ */
+const parseArgs = (args = process.argv.slice(2)) => {
+  let format = "cjs";
 
+  args.forEach((arg, index) => {
+    switch (arg) {
+      case "--format":
+        const value = args[index + 1];
+        if (value === "esm" || value === "cjs") {
+          format = value;
+        } else {
+          throw `Invalid format "${value}". Must be either "esm" or "cjs".`;
+        }
+    }
+  });
+  return format;
+};
 process.stdin
   .pipe(reader())
-  .pipe(new InterfaceGenerator())
+  .pipe(new InterfaceGenerator(parseArgs()))
   .pipe(process.stdout);
