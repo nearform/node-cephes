@@ -13,15 +13,10 @@
     "test:puppeteer": "c8 node --test 'test/*.puppeteer.test.{js,mjs}'"
   },
   "devDependencies": {
-    "@babel/core": "^7.1.0",
-    "@babel/plugin-transform-runtime": "^7.1.0",
-    "@babel/preset-env": "^7.1.0",
-    "@babel/runtime": "^7.0.0",
     "@rollup/plugin-commonjs": "^29.0.0",
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^16.0.3",
     "almost-equal": "^1.1.0",
-    "babelify": "^10.0.0",
     "c8": "^10.1.2",
     "d3-array": "^3.2.4",
     "d3-axis": "^1.0.12",
