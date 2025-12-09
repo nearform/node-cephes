@@ -14,7 +14,7 @@ jobs:
       - uses: actions/checkout@v6
       - uses: actions/setup-node@v6
         with:
-          node-version-file: '.nvmrc'
+          node-version-file: ".nvmrc"
       - name: install system dependencies
         run: |
           sudo apt-get update && sudo apt-get install -y clang-format cproto git cmake python3 curl libtinfo6
@@ -23,12 +23,18 @@ jobs:
         run: |
           git clone https://github.com/emscripten-core/emsdk.git
           cd emsdk && ./emsdk install latest && ./emsdk activate latest && source ./emsdk_env.sh && cd ..
-          
+
           npm install
           make build
       - name: test
         run: |
           npm test
+      - name: Run Puppeteer Browser Tests
+        run: |
+          export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=false
+          export PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
+          sudo apt-get update && sudo apt-get install -y chromium-browser
+          npm run test:puppeteer
   automerge:
     needs: main
     runs-on: ubuntu-latest
@@ -36,4 +42,4 @@ jobs:
       pull-requests: write
       contents: write
     steps:
-      - uses: fastify/github-action-merge-dependabot@v3          
+      - uses: fastify/github-action-merge-dependabot@v3

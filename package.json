@@ -9,7 +9,8 @@
   "main": "index.js",
   "module": "index.mjs",
   "scripts": {
-    "test": "c8 node --test test/*.test.{js,mjs}"
+    "test": "c8 node --test 'test/!(*.puppeteer).test.{js,mjs}'",
+    "test:puppeteer": "c8 node --test 'test/*.puppeteer.test.{js,mjs}'"
   },
   "devDependencies": {
     "@babel/core": "^7.1.0",
@@ -29,8 +30,10 @@
     "d3-selection": "^3.0.0",
     "d3-shape": "^1.2.2",
     "pumpify": "^2.0.1",
+    "puppeteer": "^24.32.1",
     "rollup": "^4.53.3",
     "rollup-plugin-node-polyfills": "^0.2.1",
+    "serve-handler": "^6.1.6",
     "split2": "^3.0.0",
     "xorshift": "^1.1.1"
   },
