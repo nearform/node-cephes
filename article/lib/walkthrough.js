@@ -1,18 +1,17 @@
+import { EventEmitter } from "events";
+import { select as _select } from "../d3.js";
 
-const events = require('events');
-const d3 = require('../d3.js');
-
-class Walkthrough extends events.EventEmitter {
+export default class Walkthrough extends EventEmitter {
   constructor({ container }) {
     super();
-    this._container = d3.select(container);
+    this._container = _select(container);
 
-    this._steps = this._container.selectAll('.ar-walkthrough-step');
-    this._pages = this._container.selectAll('.ar-walkthrough-page')
-      .on('click', (d) => this.emit('click', d));
+    this._steps = this._container.selectAll(".ar-walkthrough-step");
+    this._pages = this._container
+      .selectAll(".ar-walkthrough-page")
+      .on("click", (d) => this.emit("click", d));
 
-    const itemNumbers = this._steps.nodes()
-      .map((element, index) => index + 1);
+    const itemNumbers = this._steps.nodes().map((element, index) => index + 1);
     this._pages.data(itemNumbers);
     this._steps.data(itemNumbers);
 
@@ -24,9 +23,9 @@ class Walkthrough extends events.EventEmitter {
   }
 
   draw() {
-    this._steps
-      .classed('ar-walkthrough-selected', (d) => d === this._selectedItem);
+    this._steps.classed(
+      "ar-walkthrough-selected",
+      (d) => d === this._selectedItem
+    );
   }
 }
-
-module.exports = Walkthrough;

@@ -18,7 +18,7 @@ free to send a pull request if you need one of them._
 
 ## Install
 
-```
+```shell
 npm install cephes
 ```
 
