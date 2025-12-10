@@ -9,8 +9,6 @@ for (const [pkg, { buffer, methods }] of Object.entries(
 
 const errorMappings = require("./errors.json");
 
-const TOTAL_STACK = 1024 * 1024; // 1MB
-
 class BaseCephesWrapper {
   #memory = {};
   #exported = false;
@@ -26,11 +24,6 @@ class BaseCephesWrapper {
 
   getWasmImports(pkg) {
     const wasmImports = {
-      // memory
-      memory: this._wasmMemory,
-      STACKTOP: 0,
-      STACK_MAX: TOTAL_STACK,
-
       mtherr: (name /* char* */, code /* int */) => {
         // from mtherr.c
         const codemsg = errorMappings[String(code)] || "unknown error";
@@ -125,7 +118,7 @@ class AsyncCephesWrapper extends BaseCephesWrapper {
     const compiled = async function () {
       const entries = await Promise.all(
         Object.entries(WASM_CODE).map(([pkg, code]) =>
-          WebAssembly.instantiate(code, this.getWasmImports()).then(
+          WebAssembly.instantiate(code, this.getWasmImports(pkg)).then(
             (result) => [pkg, result.instance]
           )
         )
