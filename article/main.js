@@ -1,11 +1,11 @@
-const cephes = require("../");
-const d3 = require("./d3.js");
+import { schemeCategory10 } from "./d3.js";
+import cephes from "../index.mjs";
 
-const LazyGraphs = require("./lib/lazy-graphs.js");
-const Walkthrough = require("./lib/walkthrough.js");
-const LineGraph = require("./lib/line-graph.js");
+import LazyGraphs from "./lib/lazy-graphs.js";
+import Walkthrough from "./lib/walkthrough.js";
+import LineGraph from "./lib/line-graph.js";
 
-const colors = d3.schemeCategory10;
+const colors = schemeCategory10;
 
 async function setupDiagram() {
   const graphs = new LazyGraphs();
@@ -23,7 +23,8 @@ async function setupDiagram() {
   lineGraph.draw();
   walkthrough.draw();
 
-  walkthrough.on("click", function (pageNumber) {
+  walkthrough.on("click", function ({ target: { innerHTML: pageNumber } }) {
+    pageNumber = Number(pageNumber);
     walkthrough.select(pageNumber);
     lineGraph.setData(graphs.get(pageNumber));
     walkthrough.draw();

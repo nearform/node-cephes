@@ -9,6 +9,7 @@
   "main": "index.js",
   "module": "index.mjs",
   "scripts": {
+    "serve:article": "(cd article && npx rollup -c) && npx http-server article",
     "test": "c8 node --test 'test/!(*.puppeteer).test.{js,mjs}'",
     "test:puppeteer": "c8 node --test 'test/*.puppeteer.test.{js,mjs}'"
   },
