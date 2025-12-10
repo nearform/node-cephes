@@ -2273,8 +2273,6 @@ function requireCephesWrapper () {
 
 	const errorMappings = require$$1;
 
-	const TOTAL_STACK = 1024 * 1024; // 1MB
-
 	class BaseCephesWrapper {
 	  #memory = {};
 	  #exported = false;
@@ -2290,11 +2288,6 @@ function requireCephesWrapper () {
 
 	  getWasmImports(pkg) {
 	    const wasmImports = {
-	      // memory
-	      memory: this._wasmMemory,
-	      STACKTOP: 0,
-	      STACK_MAX: TOTAL_STACK,
-
 	      mtherr: (name /* char* */, code /* int */) => {
 	        // from mtherr.c
 	        const codemsg = errorMappings[String(code)] || "unknown error";
@@ -2389,7 +2382,7 @@ function requireCephesWrapper () {
 	    const compiled = async function () {
 	      const entries = await Promise.all(
 	        Object.entries(WASM_CODE).map(([pkg, code]) =>
-	          WebAssembly.instantiate(code, this.getWasmImports()).then(
+	          WebAssembly.instantiate(code, this.getWasmImports(pkg)).then(
 	            (result) => [pkg, result.instance]
 	          )
 	        )
