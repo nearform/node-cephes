@@ -12,13 +12,15 @@
   "scripts": {
     "build": "tsc && npx rollup -c",
     "clean": "rm -rf dist",
-    "prepare": "npm run clean && npm run build",
+    "lint": "npx @biomejs/biome format --write",
+    "prepare": "npm run clean && npm run build && npm run lint",
     "serve:article": "(cd article && npx rollup -c) && npx http-server article",
     "pretest": "npm run build",
     "test": "c8 node --test 'test/!(*.puppeteer).test.{js,mjs}'",
     "test:puppeteer": "c8 node --test 'test/*.puppeteer.test.{js,mjs}'"
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.3.8",
     "@rollup/plugin-alias": "^6.0.0",
     "@rollup/plugin-commonjs": "^29.0.0",
     "@rollup/plugin-inject": "^5.0.5",
