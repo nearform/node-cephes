@@ -4,9 +4,35 @@ import nodePolyfills from "rollup-plugin-node-polyfills";
 import json from "@rollup/plugin-json";
 import alias from "@rollup/plugin-alias";
 import inject from "@rollup/plugin-inject";
+import fs from 'fs';
 
-export default {
-  input: "index.js",
+function copyFilePlugin(options: { src: string, dest: string }) {
+  const { src, dest } = options
+  return {
+    name: 'copy-file-plugin',
+    writeBundle() {
+      fs.copyFileSync(src, dest);
+    },
+  };
+}
+export default [{
+  input: "./dist/index.js",
+  output: {
+    file: "index.js",
+    format: "commonjs",
+  },
+  plugins: [
+    commonjs(),
+    nodePolyfills(),
+    resolve({
+      preferBuiltins: true
+    }),
+    json(),
+    copyFilePlugin({ src: './dist/index.d.ts', dest: './index.d.ts' })
+  ],
+},
+{
+  input: "./dist/index.js",
   output: {
     file: "index.mjs",
     format: "es",
@@ -17,8 +43,8 @@ export default {
     alias({
       entries: [
         {
-          find: "./cephes.cjs",
-          replacement: "./cephes-browser.cjs",
+          find: "./cephes.js",
+          replacement: "./cephes-browser.js",
         },
       ],
     }),
@@ -31,3 +57,4 @@ export default {
     json(),
   ],
 }
+]

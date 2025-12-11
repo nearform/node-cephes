@@ -1,6 +1,5 @@
 
 import { CephesCompiled, type CephesPackage, type CephesPackageName, type Pointer, type PointerType, type TypedArray } from "./cephes-compiled.js";
-import { Buffer } from "buffer";
 
 import wasmMap from "./cephes.wasm.base64.json" with { type: "json" };;
 import errorMappings from "./errors.json" with { type: "json" };;
