@@ -29,7 +29,7 @@ before(async () => {
   page = await browser.newPage();
 
   page.on("console", (msg) =>
-    console.log(`[Browser ${msg.type()}] ${msg.text()}`)
+    console.log(`[Browser ${msg.type()}] ${msg.text()}`),
   );
   page.on("pageerror", (err) => console.error("[Browser pageerror]", err));
 });

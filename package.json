@@ -5,12 +5,12 @@
     "type": "git",
     "url": "git+https://github.com/nearform/node-cephes.git"
   },
-  "version": "3.1.1",
+  "version": "3.1.0",
   "main": "index.js",
   "module": "index.mjs",
   "types": "index.d.ts",
   "scripts": {
-    "build": "tsc && npx rollup -c",
+    "build": "tsc && npx rollup -c && npm run lint -- index.*s",
     "clean": "rm -rf dist",
     "lint": "npx @biomejs/biome format --write",
     "prepare": "npm run clean && npm run build && npm run lint",

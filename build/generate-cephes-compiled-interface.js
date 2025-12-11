@@ -67,7 +67,7 @@ class InterfaceGenerator extends stream.Transform {
     for (const { type, isPointer, isArray, name } of functionArgs) {
       // if (isPointer) continue;
       code += `${name}: ${
-        isArray || isPointer ? "Pointer" : nodeNumbers[type] ?? type
+        isArray || isPointer ? "Pointer" : (nodeNumbers[type] ?? type)
       }, `;
     }
     // Remove training comma
@@ -83,7 +83,7 @@ class InterfaceGenerator extends stream.Transform {
   _flush(done) {
     this.push("}\n");
     this.push(
-      `export type CephesPackageName = "${[...this.#packages].join('" | "')}"`
+      `export type CephesPackageName = "${[...this.#packages].join('" | "')}"`,
     );
     done();
   }
