@@ -22,11 +22,12 @@ const WASM_CODE: WasmCode = {} as WasmCode;
 
 const WASM_METHODS: WasmMethods = {} as WasmMethods;
 
-for (const [pkg, { buffer, methods }] of Object.entries(wasmMap)) {
-  WASM_CODE[pkg as any as CephesPackageName] = Buffer.from(buffer, "base64");
-  WASM_METHODS[pkg as any as CephesPackageName] = methods.filter(
-    (el) => el.length,
-  );
+for (const [pkg, { buffer, methods }] of Object.entries(wasmMap) as [
+  CephesPackageName,
+  { buffer: string; methods: string[] },
+][]) {
+  WASM_CODE[pkg] = Buffer.from(buffer, "base64");
+  WASM_METHODS[pkg] = methods.filter((el) => el.length);
 }
 
 class BaseCephesWrapper extends CephesCompiled {

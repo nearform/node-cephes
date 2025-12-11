@@ -10,24 +10,36 @@ WASMS := $(wildcard cephes-*.wasm)
 CFLAGS:=-O2 -g3
 LFLAGS:=-O2
 
-.PHONY: download build test
+.PHONY: clean download build test-suite test
 
-build: compile-packages src/cephes.wasm.base64.json src/index.ts src/cephes-compiled.ts npm-build README.md
+PACKAGE_CALLS = \
+    "pkg=cmath" \
+    "pkg=bessel additional_sources=\"$(CEPHESDIR)/cprob/gamma.c $(CEPHESDIR)/misc/chbevl.c $(CEPHESDIR)/misc/polevl.c $(CEPHESDIR)/cmath/isnan.c\"" \
+    "pkg=cprob additional_sources=\"$(CEPHESDIR)/cmath/isnan.c\"" \
+    "pkg=ellf additional_sources=\"$(CEPHESDIR)/cmath/isnan.c\"" \
+    "pkg=misc additional_sources=\"$(CEPHESDIR)/cprob/gamma.c $(CEPHESDIR)/cmath/isnan.c $(CEPHESDIR)/cmath/powi.c\""
 
-clean:
+define run_package_calls
+	@for args in $(PACKAGE_CALLS); do \
+	    eval make --silent $(1) $$args; \
+	done
+endef
+
+build: compile-packages src/cephes.wasm.base64.json src/index.ts src/cephes-compiled.ts npm-build README.md # Build the package after downloading
+
+clean: # Remove artifacts from previous build
 	rm -f $(JS_OBJS)
 	rm -f $(C_OBJS)
 	rm -f src/cephes.wasm.base64.json cephes.wasm.base64.json *.wasm src/index.ts src/cephes-compiled.ts
 	rm -f index.mjs index.js index.d.ts
 
-test: test/expected.json test/actual.test.js
+test: test/actual.test.js # Run the tests suite
 	npm test
 
-cephes/:
+cephes/: # Create the cephes package folder
 	mkdir -p $(CEPHESDIR)
 
-download: 
-	rm -rf $(CEPHESDIR)
+download: cephes/ # Download the cephes source code, remove unnecessary files
 	mkdir -p $(CEPHESDIR)
 	@# downloading cephes packages...
 	@for pkg in ${CEPHES_PACKAGES}; do \
@@ -50,7 +62,7 @@ download:
 		clang-format -style=llvm -i $$src ;\
 	done
 
-_compile-package: 
+_compile-package: # Compile individual packages
 	@if [ -z "$(pkg)" ]; then \
 		echo "Usage: make a pkg=<package>"; \
 		exit 1; \
@@ -82,32 +94,45 @@ _compile-package:
 		$(LFLAGS) $(CEPHESDIR)/$$pkg/*.c $$additional_sources $(CEPHESDIR)/const.c build/malloc_free.bc -I $(CEPHESDIR) -o cephes-$$pkg.js
 	rm -f cephes-$$pkg.js
 	
-
-compile-packages:
+compile-packages: # Compile all packages
 	@emcc -c -emit-llvm $(CFLAGS) $(BUILDDIR)/malloc_free.c -o $(BUILDDIR)/malloc_free.bc
 	@rm -f cephes.wasm.base64.json
-	@make --silent _compile-package pkg=cmath
-	@make --silent _compile-package pkg=bessel additional_sources="$(CEPHESDIR)/cprob/gamma.c $(CEPHESDIR)/misc/chbevl.c $(CEPHESDIR)/misc/polevl.c $(CEPHESDIR)/cmath/isnan.c"
-	@make --silent _compile-package pkg=cprob additional_sources="$(CEPHESDIR)/cmath/isnan.c"
-	@make --silent _compile-package pkg=ellf additional_sources="$(CEPHESDIR)/cmath/isnan.c"
-	@make --silent _compile-package pkg=misc additional_sources="$(CEPHESDIR)/cprob/gamma.c $(CEPHESDIR)/cmath/isnan.c  $(CEPHESDIR)/cmath/powi.c"
+	$(call run_package_calls,_compile-package)
 
-src/cephes.wasm.base64.json: $(WASMS)
+src/cephes.wasm.base64.json: $(WASMS) # Merge the wasm files into one json file
 	@node -p "JSON.stringify(Object.fromEntries(['cmath', 'cprob','bessel','ellf', 'misc'].map(pkg => [pkg, {buffer: fs.readFileSync('cephes-'+pkg+'.wasm', 'base64'),methods:fs.readFileSync('cephes-'+pkg+'.txt', 'utf-8').split('\n')}])))" > $@
 	rm -f cephes-*.wasm
 	rm -f cephes-*.txt
 
-README.md: $(CEPHESDIR)/cephes.txt $(CPROTOFILES) $(GENERATEFILES)
+README.md: $(CEPHESDIR)/cephes.txt $(CPROTOFILES) $(GENERATEFILES) # Create the README file
 	cat $(BUILDDIR)/readme-header.md > $@
 	cproto -I $(CEPHESDIR) $(CEPHESDIR)/*/*.c | node $(BUILDDIR)/generate-readme-toc.js >> $@
 	cproto -I $(CEPHESDIR) $(CEPHESDIR)/*/*.c | node $(BUILDDIR)/generate-readme-jsdoc.js >> $@
 	cat $(BUILDDIR)/readme-footer.md >> $@
 
-src/index.ts: $(CPROTOFILES) $(GENERATEFILES)
+src/index.ts: $(CPROTOFILES) $(GENERATEFILES) # Create the typescript entry point
 	cproto -I $(CEPHESDIR) $(CEPHESDIR)/*/*.c | node $(BUILDDIR)/generate-ts-interface.js > $@
 
-src/cephes-compiled.ts: $(CPROTOFILES) $(GENERATEFILES)
+src/cephes-compiled.ts: $(CPROTOFILES) $(GENERATEFILES) # Create the type definitions for CephesCompiled
 	cproto -I $(CEPHESDIR) $(CEPHESDIR)/*/*.c | node $(BUILDDIR)/generate-cephes-compiled-interface.js > $@
 
-npm-build:
+_test-suite: # Create a test-suite. Note that NaN and Infinity are set as strings which will need to be converted.
+	@if [ -z "$(pkg)" ]; then \
+		echo "Usage: make a pkg=<package>"; \
+		exit 1; \
+	fi; 
+	mkdir -p test/cephes_output
+	cproto -I $(CEPHESDIR) $(CEPHESDIR)/$$pkg/*.c > test-suite-$$pkg.h;
+	cat test-suite-$$pkg.h | node $(BUILDDIR)/generate-c-tester.js test-suite-$$pkg.h > test-suite-$$pkg.c
+	$(CC) -UHAVE_LONG_DOUBLE -USTDC_HEADERS -DUNK=1 -DIBMC=1 -DANSIPROT=1 -I $(CEPHESDIR) $(CEPHESDIR)/$$pkg/*.c $(CEPHESDIR)/const.c $$additional_sources test-suite-$$pkg.c -o x && ./x | grep '^{' \
+	| sed -E 's/(^|[^A-Za-z0-9_])(NaN|-?Infinity)($|[^A-Za-z0-9_])/\1"\2"\3/g' > cephes-tests-$$pkg.jsonl
+	rm -f x test-suite-*
+
+test-suite: $(CPROTOFILES) $(GENERATEFILES) # Create all tests
+	$(call run_package_calls,_test-suite)
+	node -p "const fs=require('fs'); JSON.stringify(['cmath','cprob','bessel','ellf','misc'].map(f=>[f, fs.readFileSync('cephes-tests-'+f+'.jsonl','utf-8').split('\n').filter(l=>l).map(JSON.parse)]).reduce((a,[k,v])=>({...a,[k]:v}),{}))" > test/expected.json
+	rm -f cephes-tests-*.jsonl
+	npm run lint -- test/expected.json
+
+npm-build: # Build the package (index.js, index.mjs, index.d.ts)
 	npm run prepare

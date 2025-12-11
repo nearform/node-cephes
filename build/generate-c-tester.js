@@ -1,12 +1,17 @@
-const XorShift = require("xorshift").constructor;
+const { constructor: XorShift } = require("xorshift");
 const stream = require("stream");
 const reader = require("./reader.js");
 
+//The default number of items in an array
+const DEFAULT_ARRAY_LENGTH = 4;
+//The number of times to run each method
+const NUM_CALLS = 6;
+
 const header = `
 #include "mconf.h"
-#include "cephes.h"
+#include "${process.argv[2]}"
 #include <stdio.h>
-
+extern double INFINITY, NAN;
 int error_code = -1;
 int mtherr(char *name, int code) {
   error_code = code;
@@ -25,11 +30,51 @@ var rng = new XorShift([
 const type2printf = {
   double: "%.20f",
   int: "%d",
+  void: "%s",
 };
 
 const type2zero = {
   double: "0.0",
   int: "0",
+};
+
+const _nInfiniteCounter = {};
+const _nNaNCounter = {};
+const doubleArrayGenerator = function (options) {
+  let { n = DEFAULT_ARRAY_LENGTH } = options ?? {};
+  let code = "[";
+  for (let i = 1; i < n; ++i) {
+    code += (rng.random() * 20 - 10).toFixed(2) + ", ";
+  }
+  code += (rng.random() * 20 - 10).toFixed(2) + "]";
+  return code;
+};
+const doubleGenerator = function (options) {
+  const { fname, nInfinite = 0, nNaN = 0 } = options ?? {};
+  if (fname) {
+    if (nInfinite) {
+      if (_nInfiniteCounter[fname] === undefined) {
+        _nInfiniteCounter[fname] = nInfinite;
+      }
+      const remaining = _nInfiniteCounter[fname];
+      if (remaining) {
+        --_nInfiniteCounter[fname];
+        return Number.POSITIVE_INFINITY;
+      }
+    }
+    if (nNaN) {
+      if (_nNaNCounter[fname] === undefined) {
+        _nNaNCounter[fname] = nNaN;
+      }
+      const remaining = _nNaNCounter[fname];
+      if (remaining) {
+        --_nNaNCounter[fname];
+        return Number.NaN;
+      }
+    }
+  }
+
+  return (rng.random() * 10).toFixed(8);
 };
 
 const argGenerators = {
@@ -41,15 +86,13 @@ const argGenerators = {
     return (rng.random() * 10 + 1).toFixed(0);
   },
 
-  "double[]": function () {
+  "double[]": doubleArrayGenerator,
+  Complex: function () {
     let code = "[";
-    code += (rng.random() * 20 - 10).toFixed(2) + ", ";
-    code += (rng.random() * 20 - 10).toFixed(2) + ", ";
     code += (rng.random() * 20 - 10).toFixed(2) + ", ";
     code += (rng.random() * 20 - 10).toFixed(2) + "]";
     return code;
   },
-
   // Bad range in igami, causes infinite loop
   "igami:y0": function () {
     return rng.random().toFixed(8);
@@ -57,6 +100,12 @@ const argGenerators = {
   "igami:a": function () {
     return (rng.random() * 10).toFixed(8);
   },
+  // special case as NCOTE is 8 and so there should be at least one more value than that
+  "simpsn:f": () => doubleArrayGenerator({ n: 9 }),
+  // Allow NaN and Infinite testing
+  "isnan:x": () => doubleGenerator({ fname: "isnan:x", nNaN: 1, nInfinite: 1 }),
+  "isfinite:x": () =>
+    doubleGenerator({ fname: "isfinite:x", nNaN: 1, nInf: 1 }),
 };
 
 class CTesterGenerator extends stream.Transform {
@@ -72,13 +121,13 @@ class CTesterGenerator extends stream.Transform {
     const extraReturn = functionArgs.some((arg) => arg.isPointer);
 
     // Sample function arguments
-    let fnargs = new Map();
+    const fnargs = new Map();
     for (const { fullType, name, isPointer, isArrayLength } of functionArgs) {
       if (isPointer) continue;
       if (isArrayLength) {
         // The array is of length 4, .length - 1 is not always the correct
         // choice, but it is always the safe choice.
-        fnargs.set(name, "3");
+        fnargs.set(name, String(DEFAULT_ARRAY_LENGTH - 1));
       } else if (argGenerators.hasOwnProperty(`${functionName}:${name}`)) {
         fnargs.set(name, argGenerators[`${functionName}:${name}`]());
       } else {
@@ -91,32 +140,52 @@ class CTesterGenerator extends stream.Transform {
     //
     let code = "";
     code += `  { /* ${functionName} from cephes/${filename}.c */\n`;
-    code += "     error_code = -1;\n";
+    code += "    error_code = -1;\n";
     //
     // Function call
     //
 
     // Create pointer inputs
     for (const { type, name, isPointer } of functionArgs) {
-      if (!isPointer) continue;
-      code += `    ${type} extra_${name} = ${type2zero[type]};\n`;
+      if (isPointer) {
+        code += `    ${type} extra_${name} = ${type2zero[type]};\n`;
+      }
+      if (type === "Complex") {
+        const c_array = fnargs.get(name).replace("[", "{").replace("]", "}");
+        code += `    cmplx ${name} = ${c_array};\n`;
+      }
     }
 
     // Call function
-    code += `    ${returnType} ret = cephes_${functionName}(`;
+    code += `    ${
+      returnType === "void" ? "" : `${returnType} ret = `
+    }${functionName}(`;
     for (const { fullType, name, isPointer, isArray } of functionArgs) {
       if (isPointer) {
         code += `&extra_${name}, `;
-      } else if (isArray) {
+      } else if (isArray || fullType === "Complex") {
         const c_array = fnargs.get(name).replace("[", "{").replace("]", "}");
-        code += `(${fullType}) ${c_array}, `;
-      } else code += fnargs.get(name) + ", ";
+        if (fullType === "Complex") {
+          code += `&${name}, `;
+        } else {
+          code += `(${fullType}) ${c_array}, `;
+        }
+      } else {
+        const value = fnargs.get(name);
+        if (Number.isNaN(value) || value === Number.POSITIVE_INFINITY) {
+          code += Number.isNaN(value) ? "NAN, " : "INFINITY, ";
+        } else {
+          code += value + ", ";
+        }
+      }
     }
     code = code.slice(0, -2);
     code += ");\n";
 
     // Normalize return value
-    code += `    ret = error_code == -1 ? ret : ${type2zero[returnType]};\n`;
+    if (returnType !== "void") {
+      code += `    ret = error_code == -1 ? ret : ${type2zero[returnType]};\n`;
+    }
 
     //
     // Print output
@@ -127,12 +196,27 @@ class CTesterGenerator extends stream.Transform {
     code += `           "\\"fn\\": \\"${functionName}\\", "\n`;
     code += `           "\\"ret\\": ${type2printf[returnType]}, "\n`;
     code += `           "\\"args\\": [`;
-    for (const { name, isPointer } of functionArgs) {
+    for (const { name, isPointer, fullType } of functionArgs) {
       if (isPointer) continue;
-      code += `${fnargs.get(name)}, `;
+      if (fullType === "Complex") {
+        const cmplx = JSON.parse(fnargs.get(name));
+        code += `{\\"real\\": ${cmplx[0]}, \\"imag\\":${cmplx[1]}}, `;
+      } else {
+        code += `${fnargs.get(name)}, `;
+      }
     }
     code = code.slice(0, -2);
     code += `], "\n`;
+    if (functionArgs.some((arg) => arg.fullType === "Complex")) {
+      code += `           "\\"complex\\": [`;
+      for (const { fullType } of functionArgs) {
+        if (fullType !== "Complex") continue;
+        code += `{\\"real\\": ${type2printf["double"]}, \\"imag\\": ${type2printf["double"]}}, `;
+      }
+      code = code.slice(0, -2);
+      code += `], "\n`;
+    }
+
     code += `           "\\"extra\\": {`;
     if (extraReturn) {
       for (const { type, name, isPointer } of functionArgs) {
@@ -146,10 +230,13 @@ class CTesterGenerator extends stream.Transform {
     code += `           "}\\n",\n`;
 
     // The printf content
-    code += `           ret, `;
-    for (const { fullType, name, isPointer } of functionArgs) {
-      if (!isPointer) continue;
-      code += `extra_${name}, `;
+    code += `           ${returnType === "void" ? '"null"' : "ret"}, `;
+    for (const { name, isPointer, type } of functionArgs) {
+      if (isPointer) {
+        code += `extra_${name}, `;
+      } else if (type === "Complex") {
+        code += `${name}.r, ${name}.i, `;
+      }
     }
     code += `error_code`;
 
@@ -164,7 +251,7 @@ class CTesterGenerator extends stream.Transform {
   }
 
   _transform(data, encoding, done) {
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < NUM_CALLS; i++) {
       this.push(this._generateSampleCode(data));
     }
     done(null);
