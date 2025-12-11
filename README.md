@@ -80,7 +80,24 @@ one less or one more. Check the specific function documentation to be sure.
 
 ```js
 const arrayInput = new Float64Array([2.2, 3.3, 4.4]);
-const value = ephes.polevl(1.1, arrayInput, arrayInput.length - 1);
+const value = cephes.polevl(1.1, arrayInput, arrayInput.length - 1);
+```
+
+#### 4. Functions that use Complex numbers
+
+Some functions use complex numbers. We have a convenience method in cephes (`createComplex`), which takes a real and imaginary part. Note most of the complex functions store the value in one of the arguments. For convenience, the last argument is returned by the function.
+
+Here is an example with `csin`.
+
+```js
+// Create the resulting complex
+const w = cephes.createComplex();
+// Run the function
+cephes.csin(cephes.createComplex(0.5, 0.5), w);
+
+// Output update of value to console
+console.log(w.toString()); // Expect 0.5406126857131534 + 0.4573041531842493i
+
 ```
 
 ## Table of Content
@@ -99,6 +116,46 @@ const value = ephes.polevl(1.1, arrayInput, arrayInput.length - 1);
     <td><code>signbit(x)</code></td>
     <td>Returns the sign bit</td>
     <td><a href="http://www.netlib.org/cephes/doubldoc.html#signbit">c-doc</a>&nbsp;&nbsp;&#8226;&nbsp;&nbsp;<a href="#int--cephessignbitx-double">js-doc</a></td>
+</tr>
+  <tr>
+    <td><code>csinh(z, w)</code></td>
+    <td>Complex hyperbolic sine</td>
+    <td><a href="http://www.netlib.org/cephes/doubldoc.html#csinh">c-doc</a>&nbsp;&nbsp;&#8226;&nbsp;&nbsp;<a href="#void--cephescsinhz-complex-w-complex">js-doc</a></td>
+</tr>
+  <tr>
+    <td><code>casinh(z, w)</code></td>
+    <td>Complex inverse hyperbolic sine</td>
+    <td><a href="http://www.netlib.org/cephes/doubldoc.html#casinh">c-doc</a>&nbsp;&nbsp;&#8226;&nbsp;&nbsp;<a href="#void--cephescasinhz-complex-w-complex">js-doc</a></td>
+</tr>
+  <tr>
+    <td><code>ccosh(z, w)</code></td>
+    <td>Complex hyperbolic cosine</td>
+    <td><a href="http://www.netlib.org/cephes/doubldoc.html#ccosh">c-doc</a>&nbsp;&nbsp;&#8226;&nbsp;&nbsp;<a href="#void--cephesccoshz-complex-w-complex">js-doc</a></td>
+</tr>
+  <tr>
+    <td><code>cacosh(z, w)</code></td>
+    <td>Complex inverse hyperbolic cosine</td>
+    <td><a href="http://www.netlib.org/cephes/doubldoc.html#cacosh">c-doc</a>&nbsp;&nbsp;&#8226;&nbsp;&nbsp;<a href="#void--cephescacoshz-complex-w-complex">js-doc</a></td>
+</tr>
+  <tr>
+    <td><code>ctanh(z, w)</code></td>
+    <td>Complex hyperbolic tangent</td>
+    <td><a href="http://www.netlib.org/cephes/doubldoc.html#ctanh">c-doc</a>&nbsp;&nbsp;&#8226;&nbsp;&nbsp;<a href="#void--cephesctanhz-complex-w-complex">js-doc</a></td>
+</tr>
+  <tr>
+    <td><code>catanh(z, w)</code></td>
+    <td>Complex inverse hyperbolic tangent</td>
+    <td><a href="http://www.netlib.org/cephes/doubldoc.html#catanh">c-doc</a>&nbsp;&nbsp;&#8226;&nbsp;&nbsp;<a href="#void--cephescatanhz-complex-w-complex">js-doc</a></td>
+</tr>
+  <tr>
+    <td><code>cpow(a, z, w)</code></td>
+    <td>Complex power function</td>
+    <td><a href="http://www.netlib.org/cephes/doubldoc.html#cpow">c-doc</a>&nbsp;&nbsp;&#8226;&nbsp;&nbsp;<a href="#void--cephescpowa-complex-z-complex-w-complex">js-doc</a></td>
+</tr>
+  <tr>
+    <td><code>cneg(a)</code></td>
+    <td>Complex negative</td>
+    <td><a href="http://www.netlib.org/cephes/doubldoc.html#cneg">c-doc</a>&nbsp;&nbsp;&#8226;&nbsp;&nbsp;<a href="#void--cephescnega-complex">js-doc</a></td>
 </tr>
   <tr>
     <td><code>isnan(x)</code></td>
@@ -756,6 +813,82 @@ const value = ephes.polevl(1.1, arrayInput, arrayInput.length - 1);
     <td><a href="http://www.netlib.org/cephes/doubldoc.html#simpsn">c-doc</a>&nbsp;&nbsp;&#8226;&nbsp;&nbsp;<a href="#double--cephessimpsnf-float64array-delta-double">js-doc</a></td>
 </tr>
   <tr>
+    <td colspan="3"><strong>Complex Arithmetic</strong></td>
+  </tr>
+  <tr>
+    <td><code>cadd(a, b, c)</code></td>
+    <td>Complex addition</td>
+    <td><a href="http://www.netlib.org/cephes/doubldoc.html#cadd">c-doc</a>&nbsp;&nbsp;&#8226;&nbsp;&nbsp;<a href="#void--cephescadda-complex-b-complex-c-complex">js-doc</a></td>
+</tr>
+  <tr>
+    <td><code>csub(a, b, c)</code></td>
+    <td>Subtraction</td>
+    <td><a href="http://www.netlib.org/cephes/doubldoc.html#csub">c-doc</a>&nbsp;&nbsp;&#8226;&nbsp;&nbsp;<a href="#void--cephescsuba-complex-b-complex-c-complex">js-doc</a></td>
+</tr>
+  <tr>
+    <td><code>cmul(a, b, c)</code></td>
+    <td>Multiplication</td>
+    <td><a href="http://www.netlib.org/cephes/doubldoc.html#cmul">c-doc</a>&nbsp;&nbsp;&#8226;&nbsp;&nbsp;<a href="#void--cephescmula-complex-b-complex-c-complex">js-doc</a></td>
+</tr>
+  <tr>
+    <td><code>cdiv(a, b, c)</code></td>
+    <td>Division</td>
+    <td><a href="http://www.netlib.org/cephes/doubldoc.html#cdiv">c-doc</a>&nbsp;&nbsp;&#8226;&nbsp;&nbsp;<a href="#void--cephescdiva-complex-b-complex-c-complex">js-doc</a></td>
+</tr>
+  <tr>
+    <td><code>csqrt(z, w)</code></td>
+    <td>Square root</td>
+    <td><a href="http://www.netlib.org/cephes/doubldoc.html#csqrt">c-doc</a>&nbsp;&nbsp;&#8226;&nbsp;&nbsp;<a href="#void--cephescsqrtz-complex-w-complex">js-doc</a></td>
+</tr>
+  <tr>
+    <td colspan="3"><strong>Complex Exponential and Trigonometric</strong></td>
+  </tr>
+  <tr>
+    <td><code>cexp(z, w)</code></td>
+    <td>Exponential</td>
+    <td><a href="http://www.netlib.org/cephes/doubldoc.html#cexp">c-doc</a>&nbsp;&nbsp;&#8226;&nbsp;&nbsp;<a href="#void--cephescexpz-complex-w-complex">js-doc</a></td>
+</tr>
+  <tr>
+    <td><code>clog(z, w)</code></td>
+    <td>Logarithm</td>
+    <td><a href="http://www.netlib.org/cephes/doubldoc.html#clog">c-doc</a>&nbsp;&nbsp;&#8226;&nbsp;&nbsp;<a href="#void--cephesclogz-complex-w-complex">js-doc</a></td>
+</tr>
+  <tr>
+    <td><code>ccos(z, w)</code></td>
+    <td>Cosine</td>
+    <td><a href="http://www.netlib.org/cephes/doubldoc.html#ccos">c-doc</a>&nbsp;&nbsp;&#8226;&nbsp;&nbsp;<a href="#void--cephesccosz-complex-w-complex">js-doc</a></td>
+</tr>
+  <tr>
+    <td><code>cacos(z, w)</code></td>
+    <td>Arc cosine</td>
+    <td><a href="http://www.netlib.org/cephes/doubldoc.html#cacos">c-doc</a>&nbsp;&nbsp;&#8226;&nbsp;&nbsp;<a href="#void--cephescacosz-complex-w-complex">js-doc</a></td>
+</tr>
+  <tr>
+    <td><code>csin(z, w)</code></td>
+    <td>Sine</td>
+    <td><a href="http://www.netlib.org/cephes/doubldoc.html#csin">c-doc</a>&nbsp;&nbsp;&#8226;&nbsp;&nbsp;<a href="#void--cephescsinz-complex-w-complex">js-doc</a></td>
+</tr>
+  <tr>
+    <td><code>casin(z, w)</code></td>
+    <td>Arc sine</td>
+    <td><a href="http://www.netlib.org/cephes/doubldoc.html#casin">c-doc</a>&nbsp;&nbsp;&#8226;&nbsp;&nbsp;<a href="#void--cephescasinz-complex-w-complex">js-doc</a></td>
+</tr>
+  <tr>
+    <td><code>ctan(z, w)</code></td>
+    <td>Tangent</td>
+    <td><a href="http://www.netlib.org/cephes/doubldoc.html#ctan">c-doc</a>&nbsp;&nbsp;&#8226;&nbsp;&nbsp;<a href="#void--cephesctanz-complex-w-complex">js-doc</a></td>
+</tr>
+  <tr>
+    <td><code>catan(z, w)</code></td>
+    <td>Arc tangent</td>
+    <td><a href="http://www.netlib.org/cephes/doubldoc.html#catan">c-doc</a>&nbsp;&nbsp;&#8226;&nbsp;&nbsp;<a href="#void--cephescatanz-complex-w-complex">js-doc</a></td>
+</tr>
+  <tr>
+    <td><code>ccot(z, w)</code></td>
+    <td>Cotangent</td>
+    <td><a href="http://www.netlib.org/cephes/doubldoc.html#ccot">c-doc</a>&nbsp;&nbsp;&#8226;&nbsp;&nbsp;<a href="#void--cephesccotz-complex-w-complex">js-doc</a></td>
+</tr>
+  <tr>
     <td colspan="3"><strong>Polynomials and Power Series</strong></td>
   </tr>
   <tr>
@@ -782,6 +915,70 @@ const value = ephes.polevl(1.1, arrayInput, arrayInput.length - 1);
 
 ```js
 const ret = cephes.signbit(x);
+```
+
+#### void = cephes.csinh(z: Complex, w: Complex)
+
+`csinh` is the "Complex hyperbolic sine". You can read the full documentation at http://www.netlib.org/cephes/doubldoc.html#csinh.
+
+```js
+const ret = cephes.csinh(z, w);
+```
+
+#### void = cephes.casinh(z: Complex, w: Complex)
+
+`casinh` is the "Complex inverse hyperbolic sine". You can read the full documentation at http://www.netlib.org/cephes/doubldoc.html#casinh.
+
+```js
+const ret = cephes.casinh(z, w);
+```
+
+#### void = cephes.ccosh(z: Complex, w: Complex)
+
+`ccosh` is the "Complex hyperbolic cosine". You can read the full documentation at http://www.netlib.org/cephes/doubldoc.html#ccosh.
+
+```js
+const ret = cephes.ccosh(z, w);
+```
+
+#### void = cephes.cacosh(z: Complex, w: Complex)
+
+`cacosh` is the "Complex inverse hyperbolic cosine". You can read the full documentation at http://www.netlib.org/cephes/doubldoc.html#cacosh.
+
+```js
+const ret = cephes.cacosh(z, w);
+```
+
+#### void = cephes.ctanh(z: Complex, w: Complex)
+
+`ctanh` is the "Complex hyperbolic tangent". You can read the full documentation at http://www.netlib.org/cephes/doubldoc.html#ctanh.
+
+```js
+const ret = cephes.ctanh(z, w);
+```
+
+#### void = cephes.catanh(z: Complex, w: Complex)
+
+`catanh` is the "Complex inverse hyperbolic tangent". You can read the full documentation at http://www.netlib.org/cephes/doubldoc.html#catanh.
+
+```js
+const ret = cephes.catanh(z, w);
+```
+
+#### void = cephes.cpow(a: Complex, z: Complex, w: Complex)
+
+`cpow` is the "Complex power function". You can read the full documentation at http://www.netlib.org/cephes/doubldoc.html#cpow.
+
+```js
+const ret = cephes.cpow(a, z, w);
+```
+
+#### void = cephes.cneg(a: Complex)
+
+`cneg` is the "Complex negative". You can read the full documentation at http://www.netlib.org/cephes/doubldoc.html#cneg.
+
+```js
+const ret = cephes.cneg(a);
 ```
 
 #### int = cephes.isnan(x: double)
@@ -1868,6 +2065,122 @@ const ret = cephes.struve(v, x);
 
 ```js
 const ret = cephes.simpsn(new Float64Array(f), delta);
+```
+
+### Complex Arithmetic
+
+#### void = cephes.cadd(a: Complex, b: Complex, c: Complex)
+
+`cadd` is the "Complex addition". You can read the full documentation at http://www.netlib.org/cephes/doubldoc.html#cadd.
+
+```js
+const ret = cephes.cadd(a, b, c);
+```
+
+#### void = cephes.csub(a: Complex, b: Complex, c: Complex)
+
+`csub` is the "Subtraction". You can read the full documentation at http://www.netlib.org/cephes/doubldoc.html#csub.
+
+```js
+const ret = cephes.csub(a, b, c);
+```
+
+#### void = cephes.cmul(a: Complex, b: Complex, c: Complex)
+
+`cmul` is the "Multiplication". You can read the full documentation at http://www.netlib.org/cephes/doubldoc.html#cmul.
+
+```js
+const ret = cephes.cmul(a, b, c);
+```
+
+#### void = cephes.cdiv(a: Complex, b: Complex, c: Complex)
+
+`cdiv` is the "Division". You can read the full documentation at http://www.netlib.org/cephes/doubldoc.html#cdiv.
+
+```js
+const ret = cephes.cdiv(a, b, c);
+```
+
+#### void = cephes.csqrt(z: Complex, w: Complex)
+
+`csqrt` is the "Square root". You can read the full documentation at http://www.netlib.org/cephes/doubldoc.html#csqrt.
+
+```js
+const ret = cephes.csqrt(z, w);
+```
+
+### Complex Exponential and Trigonometric
+
+#### void = cephes.cexp(z: Complex, w: Complex)
+
+`cexp` is the "Exponential". You can read the full documentation at http://www.netlib.org/cephes/doubldoc.html#cexp.
+
+```js
+const ret = cephes.cexp(z, w);
+```
+
+#### void = cephes.clog(z: Complex, w: Complex)
+
+`clog` is the "Logarithm". You can read the full documentation at http://www.netlib.org/cephes/doubldoc.html#clog.
+
+```js
+const ret = cephes.clog(z, w);
+```
+
+#### void = cephes.ccos(z: Complex, w: Complex)
+
+`ccos` is the "Cosine". You can read the full documentation at http://www.netlib.org/cephes/doubldoc.html#ccos.
+
+```js
+const ret = cephes.ccos(z, w);
+```
+
+#### void = cephes.cacos(z: Complex, w: Complex)
+
+`cacos` is the "Arc cosine". You can read the full documentation at http://www.netlib.org/cephes/doubldoc.html#cacos.
+
+```js
+const ret = cephes.cacos(z, w);
+```
+
+#### void = cephes.csin(z: Complex, w: Complex)
+
+`csin` is the "Sine". You can read the full documentation at http://www.netlib.org/cephes/doubldoc.html#csin.
+
+```js
+const ret = cephes.csin(z, w);
+```
+
+#### void = cephes.casin(z: Complex, w: Complex)
+
+`casin` is the "Arc sine". You can read the full documentation at http://www.netlib.org/cephes/doubldoc.html#casin.
+
+```js
+const ret = cephes.casin(z, w);
+```
+
+#### void = cephes.ctan(z: Complex, w: Complex)
+
+`ctan` is the "Tangent". You can read the full documentation at http://www.netlib.org/cephes/doubldoc.html#ctan.
+
+```js
+const ret = cephes.ctan(z, w);
+```
+
+#### void = cephes.catan(z: Complex, w: Complex)
+
+`catan` is the "Arc tangent". You can read the full documentation at http://www.netlib.org/cephes/doubldoc.html#catan.
+
+```js
+const ret = cephes.catan(z, w);
+```
+
+#### void = cephes.ccot(z: Complex, w: Complex)
+
+`ccot` is the "Cotangent". You can read the full documentation at http://www.netlib.org/cephes/doubldoc.html#ccot.
+
+```js
+const ret = cephes.ccot(z, w);
 ```
 
 ### Polynomials and Power Series
