@@ -4,6 +4,7 @@ const reader = require("./reader.js");
 const nodeNumbers = { double: "number", int: "number" };
 
 const header = `
+import type {Complex} from "./complex.js"
 export type TypedArray =
   | Int8Array
   | Int16Array
@@ -14,16 +15,18 @@ export type TypedArray =
   | Float32Array
   | Float64Array;
 export type Pointer = number
-export type PointerType = "i8" | "i16" | "i32" | "i64" | "float" | "double"
+export type PointerType = "i8" | "i16" | "i32" | "i64" | "float" | "double" | "Complex"
 export interface CephesPackage {
   stackSave: () => number
   stackRestore: (ptr: Pointer) => void
   stackAlloc: (n: number) => Pointer
   writeArrayToMemory: (arr: TypedArray, p: Pointer) => void
-  getValue: (ptr: Pointer, type: PointerType) => number
+  getValue(ptr: Pointer, type: Exclude<PointerType, "Complex">): number;
+  getValue(ptr: Pointer, type: "Complex"): [number, number];
 }
 export class CephesCompiled {
   compiled?: Promise<void>
+  createComplex!: (real?: number, imag?: number) => Complex
 `;
 
 class InterfaceGenerator extends stream.Transform {
@@ -41,12 +44,6 @@ class InterfaceGenerator extends stream.Transform {
       functionArgs,
       package: packageName,
     } = data;
-
-    // Check if the stack will be needed because of isPointer or isArray
-    const needStack = functionArgs.some((arg) => arg.isArray || arg.isPointer);
-
-    // Check if there is extra data returned
-    const extraReturn = functionArgs.some((arg) => arg.isPointer);
 
     //
     // Start code generation
@@ -67,7 +64,9 @@ class InterfaceGenerator extends stream.Transform {
     for (const { type, isPointer, isArray, name } of functionArgs) {
       // if (isPointer) continue;
       code += `${name}: ${
-        isArray || isPointer ? "Pointer" : (nodeNumbers[type] ?? type)
+        isArray || isPointer || type === "Complex"
+          ? "Pointer"
+          : (nodeNumbers[type] ?? type)
       }, `;
     }
     // Remove training comma
@@ -75,7 +74,7 @@ class InterfaceGenerator extends stream.Transform {
     // finish function header
     code += `)=>`;
 
-    code += `${nodeNumbers[returnType]};\n`;
+    code += `${nodeNumbers[returnType] ?? returnType};\n`;
 
     code += "\n";
     done(null, code);

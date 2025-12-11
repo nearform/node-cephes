@@ -97,13 +97,18 @@ class BaseCephesWrapper extends CephesCompiled {
           if (type.charAt(type.length - 1) === "*") {
             type = "i32"; // pointers are 32-bit
           }
-          const getValueMapping: { [k in PointerType]: () => number } = {
+          const getValueMapping = {
             i8: () => this.#memory[pkg][8][ptr >> 0],
             i16: () => this.#memory[pkg][16][ptr >> 1],
             i32: () => this.#memory[pkg][32][ptr >> 2],
             i64: () => this.#memory[pkg][32][ptr >> 2],
             float: () => this.#memory[pkg]["F32"][ptr >> 2],
             double: () => this.#memory[pkg]["F64"][ptr >> 3],
+            Complex: () =>
+              [
+                this.#memory[pkg]["F64"][ptr >> 3],
+                this.#memory[pkg]["F64"][(ptr >> 3) + 1],
+              ] as [number, number],
           } as const;
 
           const fn = getValueMapping[type as PointerType];
