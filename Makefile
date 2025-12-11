@@ -12,7 +12,7 @@ LFLAGS:=-O2
 
 .PHONY: download build test
 
-build: index.js index.mjs compile-packages cephes.wasm.base64.json README.md
+build: compile-packages cephes.wasm.base64.json index.js index.mjs README.md
 
 clean:
 	rm -f $(JS_OBJS)
@@ -98,13 +98,13 @@ cephes.wasm.base64.json: $(WASMS)
 	rm -f cephes-*.txt
 	
 index.js: $(CPROTOFILES) $(GENERATEFILES)
-	cproto -I $(CEPHESDIR) $(CEPHESDIR)/*/*.c | node $(BUILDDIR)/generate-interface.js > index.js
+	cproto -I $(CEPHESDIR) $(CEPHESDIR)/*/*.c | node $(BUILDDIR)/generate-interface.js > $@
 	
 index.mjs:
 	npx rollup -c 
 
 README.md: $(CEPHESDIR)/cephes.txt $(CPROTOFILES) $(GENERATEFILES)
-	cat $(BUILDDIR)/readme-header.md > README.md
-	cproto -I $(CEPHESDIR) $(CEPHESDIR)/*/*.c | node $(BUILDDIR)/generate-readme-toc.js >> README.md
-	cproto -I $(CEPHESDIR) $(CEPHESDIR)/*/*.c | node $(BUILDDIR)/generate-readme-jsdoc.js >> README.md
-	cat $(BUILDDIR)/readme-footer.md >> README.md
+	cat $(BUILDDIR)/readme-header.md > $@
+	cproto -I $(CEPHESDIR) $(CEPHESDIR)/*/*.c | node $(BUILDDIR)/generate-readme-toc.js >> $@
+	cproto -I $(CEPHESDIR) $(CEPHESDIR)/*/*.c | node $(BUILDDIR)/generate-readme-jsdoc.js >> $@
+	cat $(BUILDDIR)/readme-footer.md >> $@
