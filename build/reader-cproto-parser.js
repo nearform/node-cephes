@@ -1,6 +1,7 @@
 const stream = require("stream");
 const split2 = require("split2");
 const pumpify = require("pumpify");
+const { type } = require("os");
 
 const SPLIT_COMMENT = /^\/\*\s+cephes\/([^\/]+)\/([a-z0-9]+)\.c\s+\*\/$/;
 const SPLIT_PROTO =
@@ -33,7 +34,8 @@ class CprotoLineParser extends stream.Transform {
         isPointer: pointer === "*",
         name,
         isArray,
-        isArrayLength: i === rawFunctionArgs.length - 1 && prevIsArray,
+        isArrayLength:
+          prevIsArray && mainType === "int" && name.toLowerCase() === "n",
         fullType: `${mainType}${pointer || ""}${array || ""}`,
       };
       prevIsArray = isArray;
