@@ -9,15 +9,23 @@
   "main": "index.js",
   "module": "index.mjs",
   "scripts": {
+    "build": "tsc && npx rollup -c",
+    "clean": "rm -rf dist",
+    "prepare": "npm run clean && npm run build",
     "serve:article": "(cd article && npx rollup -c) && npx http-server article",
+    "pretest": "npm run build",
     "test": "c8 node --test 'test/!(*.puppeteer).test.{js,mjs}'",
     "test:puppeteer": "c8 node --test 'test/*.puppeteer.test.{js,mjs}'"
   },
   "devDependencies": {
+    "@rollup/plugin-alias": "^6.0.0",
     "@rollup/plugin-commonjs": "^29.0.0",
+    "@rollup/plugin-inject": "^5.0.5",
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^16.0.3",
+    "@types/node": "^25.0.0",
     "almost-equal": "^1.1.0",
+    "buffer": "^6.0.3",
     "c8": "^10.1.2",
     "d3-array": "^3.2.4",
     "d3-axis": "^1.0.12",
@@ -31,15 +39,11 @@
     "rollup-plugin-node-polyfills": "^0.2.1",
     "serve-handler": "^6.1.6",
     "split2": "^3.0.0",
+    "typescript": "^5.9.3",
     "xorshift": "^1.1.1"
   },
-  "browser": {
-    "./cephes.cjs": "./cephes-browser.cjs"
-  },
   "license": "BSD-3-Clause",
-  "dependencies": {
-    "buffer": "^6.0.3"
-  },
+  "dependencies": {},
   "exports": {
     "import": "./index.mjs",
     "require": "./index.js"

@@ -2,7 +2,7 @@ import { it } from "node:test";
 import { throws } from "node:assert";
 
 import almostEqual from "./almost-equal.js";
-import { AsyncCephesWrapper, CephesWrapper } from "../cephes-wrapper.cjs";
+import { AsyncCephesWrapper, CephesWrapper } from "../dist/cephes-wrapper.js";
 
 it("not waiting fails in async mode", function () {
   const cephes = new AsyncCephesWrapper();
