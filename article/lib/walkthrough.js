@@ -25,7 +25,7 @@ export default class Walkthrough extends EventEmitter {
   draw() {
     this._steps.classed(
       "ar-walkthrough-selected",
-      (d) => d === this._selectedItem
+      (d) => d === this._selectedItem,
     );
   }
 }
