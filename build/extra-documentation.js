@@ -116,6 +116,46 @@ module.exports = new Map([
       },
       {
         category: "Arithmetic and Algebraic",
+        functionName: "csinh",
+        description: "Complex hyperbolic sine",
+      },
+      {
+        category: "Arithmetic and Algebraic",
+        functionName: "casinh",
+        description: "Complex inverse hyperbolic sine",
+      },
+      {
+        category: "Arithmetic and Algebraic",
+        functionName: "ccosh",
+        description: "Complex hyperbolic cosine",
+      },
+      {
+        category: "Arithmetic and Algebraic",
+        functionName: "cacosh",
+        description: "Complex inverse hyperbolic cosine",
+      },
+      {
+        category: "Arithmetic and Algebraic",
+        functionName: "ctanh",
+        description: "Complex hyperbolic tangent",
+      },
+      {
+        category: "Arithmetic and Algebraic",
+        functionName: "catanh",
+        description: "Complex inverse hyperbolic tangent",
+      },
+      {
+        category: "Arithmetic and Algebraic",
+        functionName: "cpow",
+        description: "Complex power function",
+      },
+      {
+        category: "Arithmetic and Algebraic",
+        functionName: "cneg",
+        description: "Complex negative",
+      },
+      {
+        category: "Arithmetic and Algebraic",
         functionName: "isnan",
         description: "Check if Not-A-Number",
       },

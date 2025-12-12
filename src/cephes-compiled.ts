@@ -1,3 +1,4 @@
+import type { Complex } from "./complex.js";
 export type TypedArray =
   | Int8Array
   | Int16Array
@@ -8,19 +9,53 @@ export type TypedArray =
   | Float32Array
   | Float64Array;
 export type Pointer = number;
-export type PointerType = "i8" | "i16" | "i32" | "i64" | "float" | "double";
+export type PointerType =
+  | "i8"
+  | "i16"
+  | "i32"
+  | "i64"
+  | "float"
+  | "double"
+  | "Complex";
 export interface CephesPackage {
   stackSave: () => number;
   stackRestore: (ptr: Pointer) => void;
   stackAlloc: (n: number) => Pointer;
   writeArrayToMemory: (arr: TypedArray, p: Pointer) => void;
-  getValue: (ptr: Pointer, type: PointerType) => number;
+  getValue(ptr: Pointer, type: Exclude<PointerType, "Complex">): number;
+  getValue(ptr: Pointer, type: "Complex"): [number, number];
 }
 export class CephesCompiled {
   compiled?: Promise<void>;
+  createComplex!: (real?: number, imag?: number) => Complex;
   cmath!: CephesPackage;
   // from cephes/cmath/isnan.c
   cephes_signbit!: (x: number) => number;
+
+  // from cephes/cmath/clog.c
+  cephes_csinh!: (z: Pointer, w: Pointer) => void;
+
+  // from cephes/cmath/clog.c
+  cephes_casinh!: (z: Pointer, w: Pointer) => void;
+
+  // from cephes/cmath/clog.c
+  cephes_ccosh!: (z: Pointer, w: Pointer) => void;
+
+  // from cephes/cmath/clog.c
+  cephes_cacosh!: (z: Pointer, w: Pointer) => void;
+
+  // from cephes/cmath/clog.c
+  cephes_ctanh!: (z: Pointer, w: Pointer) => void;
+
+  // from cephes/cmath/clog.c
+  cephes_catanh!: (z: Pointer, w: Pointer) => void;
+
+  // from cephes/cmath/clog.c
+  cephes_cpow!: (a: Pointer, z: Pointer, w: Pointer) => void;
+
+  ellf!: CephesPackage;
+  // from cephes/ellf/cmplx.c
+  cephes_cneg!: (a: Pointer) => void;
 
   // from cephes/cmath/isnan.c
   cephes_isnan!: (x: number) => number;
@@ -286,7 +321,6 @@ export class CephesCompiled {
   // from cephes/bessel/hyp2f1.c
   cephes_hyp2f1!: (a: number, b: number, c: number, x: number) => number;
 
-  ellf!: CephesPackage;
   // from cephes/ellf/ellpe.c
   cephes_ellpe!: (x: number) => number;
 
@@ -414,10 +448,52 @@ export class CephesCompiled {
   // from cephes/misc/simpsn.c
   cephes_simpsn!: (f: Pointer, delta: number) => number;
 
+  // from cephes/ellf/cmplx.c
+  cephes_cadd!: (a: Pointer, b: Pointer, c: Pointer) => void;
+
+  // from cephes/ellf/cmplx.c
+  cephes_csub!: (a: Pointer, b: Pointer, c: Pointer) => void;
+
+  // from cephes/ellf/cmplx.c
+  cephes_cmul!: (a: Pointer, b: Pointer, c: Pointer) => void;
+
+  // from cephes/ellf/cmplx.c
+  cephes_cdiv!: (a: Pointer, b: Pointer, c: Pointer) => void;
+
+  // from cephes/ellf/cmplx.c
+  cephes_csqrt!: (z: Pointer, w: Pointer) => void;
+
+  // from cephes/cmath/clog.c
+  cephes_cexp!: (z: Pointer, w: Pointer) => void;
+
+  // from cephes/cmath/clog.c
+  cephes_clog!: (z: Pointer, w: Pointer) => void;
+
+  // from cephes/cmath/clog.c
+  cephes_ccos!: (z: Pointer, w: Pointer) => void;
+
+  // from cephes/cmath/clog.c
+  cephes_cacos!: (z: Pointer, w: Pointer) => void;
+
+  // from cephes/cmath/clog.c
+  cephes_csin!: (z: Pointer, w: Pointer) => void;
+
+  // from cephes/cmath/clog.c
+  cephes_casin!: (z: Pointer, w: Pointer) => void;
+
+  // from cephes/cmath/clog.c
+  cephes_ctan!: (z: Pointer, w: Pointer) => void;
+
+  // from cephes/cmath/clog.c
+  cephes_catan!: (z: Pointer, w: Pointer) => void;
+
+  // from cephes/cmath/clog.c
+  cephes_ccot!: (z: Pointer, w: Pointer) => void;
+
   // from cephes/misc/polevl.c
   cephes_p1evl!: (x: number, coef: Pointer, N: number) => number;
 
   // from cephes/misc/polylog.c
   cephes_polylog!: (n: number, x: number) => number;
 }
-export type CephesPackageName = "cmath" | "misc" | "cprob" | "bessel" | "ellf";
+export type CephesPackageName = "cmath" | "ellf" | "misc" | "cprob" | "bessel";

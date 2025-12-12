@@ -1,11 +1,13 @@
 const stream = require("stream");
 const split2 = require("split2");
 const pumpify = require("pumpify");
+const { type } = require("os");
 
 const SPLIT_COMMENT = /^\/\*\s+cephes\/([^\/]+)\/([a-z0-9]+)\.c\s+\*\/$/;
-const SPLIT_PROTO = /^(double|int)\s+([a-z0-9]+)\(([A-Za-z0-9_ ,*\[\]]+)\);$/;
-const SPLIT_ARG = /^(double|int)\s+(\*)?([A-Za-z0-9]+)(\[\])?$/;
-
+const SPLIT_PROTO =
+  /^(double|int|void)\s+([a-z0-9]+)\(([A-Za-z0-9_ ,*\[\]]+)\);$/;
+const SPLIT_ARG = /^(double|int|Complex)\s+(\*)?([A-Za-z0-9]+)(\[\])?$/;
+const COMPLEX_ARG = /((?:register\s+)?(?:cmplx\s+)\*\s*)([A-Za-z0-9]+)/g;
 class CprotoLineParser extends stream.Transform {
   constructor() {
     super({ objectMode: true });
@@ -22,26 +24,23 @@ class CprotoLineParser extends stream.Transform {
   _parseProto(proto) {
     const [, returnType, functionName, functionArgsStr] =
       proto.match(SPLIT_PROTO);
-
-    const functionArgs = functionArgsStr.split(/, ?/).map(function (arg) {
+    const rawFunctionArgs = functionArgsStr.split(/, ?/);
+    let prevIsArray = false;
+    const functionArgs = rawFunctionArgs.map(function (arg, i) {
       const [, mainType, pointer, name, array] = arg.match(SPLIT_ARG);
-      return {
+      const isArray = array === "[]";
+      const result = {
         type: mainType,
         isPointer: pointer === "*",
-        name: name,
-        isArray: array === "[]",
-        isArrayLength: false,
+        name,
+        isArray,
+        isArrayLength:
+          prevIsArray && mainType === "int" && name.toLowerCase() === "n",
         fullType: `${mainType}${pointer || ""}${array || ""}`,
       };
+      prevIsArray = isArray;
+      return result;
     });
-
-    let lastIsArray = false;
-    for (const functionArg of functionArgs) {
-      if (lastIsArray && functionArg.name.toLowerCase() === "n") {
-        functionArg.isArrayLength = true;
-      }
-      lastIsArray = functionArg.isArray;
-    }
 
     this.push({
       returnType,
@@ -61,6 +60,8 @@ class CprotoLineParser extends stream.Transform {
       !line.includes("void")
     ) {
       this._parseProto(line);
+    } else if (line.startsWith("void") && line.match(/\bcmplx\b/)) {
+      this._parseProto(line.replaceAll(COMPLEX_ARG, "Complex $2"));
     }
     done(null);
   }
