@@ -83,3 +83,5 @@ typings/
 
 # Serverless directories
 .serverless
+/.vscode
+/dist

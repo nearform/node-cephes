@@ -2,7 +2,7 @@ const { it } = require("node:test");
 const assert = require("node:assert");
 
 const cephes = require("../index.js");
-const asyncCephes = require("../cephes-browser.cjs");
+const asyncCephes = require("../dist/cephes-browser.js").default;
 const almostEqual = require("./almost-equal.js");
 
 it("plain function", function () {

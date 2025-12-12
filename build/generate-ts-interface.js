@@ -60,12 +60,12 @@ const argGenerators = {
 };
 
 const header = `
-const cephes = require('./cephes.cjs');
+import cephes from './cephes.js';
 
 // Export compiled promise, in Node.js this is just a dummy promise as the
 // WebAssembly program will be compiled synchronously. It takes about 20ms
 // as of Node.js v10.6.1.
-const compiled = cephes.compiled ?? Promise.resolve()
+export const compiled = cephes.compiled ?? Promise.resolve()
 `;
 
 class InterfaceGenerator extends stream.Transform {
@@ -95,17 +95,25 @@ class InterfaceGenerator extends stream.Transform {
     //
     let code = "";
 
-    //
-    // function header
-    //
-
     // function name
     code += `// from cephes/${packageName}/${filename}.c\n`;
-    code += `function ${functionName}(`;
+    code += `export function ${functionName}(`;
     // function arguments
     for (const { type, isPointer, isArray, name } of functionArgs) {
       if (isPointer) continue;
-      code += `/* ${type}${isArray ? "[]" : ""} */ ${name}, `;
+      if (isArray) {
+        switch (type) {
+          case "double":
+            code += `${name}: Float64Array, `;
+            break;
+          default:
+            throw `Unknown type ${type}`;
+        }
+      } else {
+        code += `${name}: ${
+          { double: "number", int: "number" }[type] ?? type
+        }, `;
+      }
     }
     // Remove training comma
     code = code.slice(0, -2);
@@ -153,7 +161,7 @@ class InterfaceGenerator extends stream.Transform {
         if (!isPointer) continue;
         code += `    '${name}': cephes.${packageName}.getValue(carg_${name}, '${type2llvm[type]}'),\n`;
       }
-      code += "  }];\n";
+      code += "  }] as const;\n";
     } else {
       code += "  // No pointers, so just return fn_ret\n";
       code += "  const ret = fn_ret;\n";
@@ -174,7 +182,7 @@ class InterfaceGenerator extends stream.Transform {
     done(null, code);
   }
   _flush(callback) {
-    this.push("module.exports = {compiled," + this.#functions.join(",") + "}");
+    this.push("export default {compiled," + this.#functions.join(",") + "}");
     callback();
   }
 }
