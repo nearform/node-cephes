@@ -13,7 +13,7 @@ const INTERNAL_CEPHES_FUNCTIONS = new Set([
   "onef2",
   "threef0",
   "hypot",
-  'drand'
+  "drand",
 ]);
 
 class MergeDocumentation extends stream.Transform {
@@ -41,7 +41,7 @@ class MergeDocumentation extends stream.Transform {
   _finish(done) {
     // Validate that no documentation is missing
     const documentationParts = new Set(
-      this._documentation.map((doc) => doc.functionName)
+      this._documentation.map((doc) => doc.functionName),
     );
     for (const protoFunctionName of this._prototypes.keys()) {
       if (INTERNAL_CEPHES_FUNCTIONS.has(protoFunctionName)) continue;
@@ -59,7 +59,7 @@ class MergeDocumentation extends stream.Transform {
 
       if (this._prototypes.has(doc.functionName)) {
         this.push(
-          Object.assign({}, doc, this._prototypes.get(doc.functionName))
+          Object.assign({}, doc, this._prototypes.get(doc.functionName)),
         );
       }
     }

@@ -1,15 +1,14 @@
-
-import cephes from './cephes.js';
+import cephes from "./cephes.js";
 
 // Export compiled promise, in Node.js this is just a dummy promise as the
 // WebAssembly program will be compiled synchronously. It takes about 20ms
 // as of Node.js v10.6.1.
-export const compiled = cephes.compiled ?? Promise.resolve()
+export const compiled = cephes.compiled ?? Promise.resolve();
 // from cephes/cmath/isnan.c
 export function signbit(x: number) {
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -20,13 +19,13 @@ export function signbit(x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cmath/isnan.c
 export function isnan(x: number) {
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -37,13 +36,13 @@ export function isnan(x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cmath/isnan.c
 export function isfinite(x: number) {
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -54,13 +53,13 @@ export function isfinite(x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cmath/sqrt.c
 export function sqrt(x: number) {
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -71,13 +70,13 @@ export function sqrt(x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cmath/cbrt.c
 export function cbrt(x: number) {
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -88,7 +87,7 @@ export function cbrt(x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/misc/polevl.c
 export function polevl(x: number, coef: Float64Array, N: number) {
@@ -96,24 +95,27 @@ export function polevl(x: number, coef: Float64Array, N: number) {
   const stacktop = cephes.misc.stackSave();
 
   // argument: double x
-  if (typeof x !== 'number') {
+  if (typeof x !== "number") {
     cephes.misc.stackRestore(stacktop);
-    throw new TypeError('x must be a number');
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
   // argument: double[] coef
   if (!(coef instanceof Float64Array)) {
     cephes.misc.stackRestore(stacktop);
-    throw new TypeError('coef must be either a Float64Array');
+    throw new TypeError("coef must be either a Float64Array");
   }
   const carg_coef = cephes.misc.stackAlloc(coef.length << 3);
-  cephes.misc.writeArrayToMemory(new Uint8Array(coef.buffer, coef.byteOffset, coef.byteLength), carg_coef);
+  cephes.misc.writeArrayToMemory(
+    new Uint8Array(coef.buffer, coef.byteOffset, coef.byteLength),
+    carg_coef,
+  );
 
   // argument: int N
-  if (typeof N !== 'number') {
+  if (typeof N !== "number") {
     cephes.misc.stackRestore(stacktop);
-    throw new TypeError('N must be a number');
+    throw new TypeError("N must be a number");
   }
   const carg_N = N | 0;
 
@@ -126,7 +128,7 @@ export function polevl(x: number, coef: Float64Array, N: number) {
   // Restore internal stacktop before returning
   cephes.misc.stackRestore(stacktop);
   return ret;
-};
+}
 
 // from cephes/misc/chbevl.c
 export function chbevl(x: number, array: Float64Array, n: number) {
@@ -134,24 +136,27 @@ export function chbevl(x: number, array: Float64Array, n: number) {
   const stacktop = cephes.misc.stackSave();
 
   // argument: double x
-  if (typeof x !== 'number') {
+  if (typeof x !== "number") {
     cephes.misc.stackRestore(stacktop);
-    throw new TypeError('x must be a number');
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
   // argument: double[] array
   if (!(array instanceof Float64Array)) {
     cephes.misc.stackRestore(stacktop);
-    throw new TypeError('array must be either a Float64Array');
+    throw new TypeError("array must be either a Float64Array");
   }
   const carg_array = cephes.misc.stackAlloc(array.length << 3);
-  cephes.misc.writeArrayToMemory(new Uint8Array(array.buffer, array.byteOffset, array.byteLength), carg_array);
+  cephes.misc.writeArrayToMemory(
+    new Uint8Array(array.buffer, array.byteOffset, array.byteLength),
+    carg_array,
+  );
 
   // argument: int n
-  if (typeof n !== 'number') {
+  if (typeof n !== "number") {
     cephes.misc.stackRestore(stacktop);
-    throw new TypeError('n must be a number');
+    throw new TypeError("n must be a number");
   }
   const carg_n = n | 0;
 
@@ -164,13 +169,13 @@ export function chbevl(x: number, array: Float64Array, n: number) {
   // Restore internal stacktop before returning
   cephes.misc.stackRestore(stacktop);
   return ret;
-};
+}
 
 // from cephes/cmath/round.c
 export function round(x: number) {
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -181,13 +186,13 @@ export function round(x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cmath/floor.c
 export function ceil(x: number) {
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -198,13 +203,13 @@ export function ceil(x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cmath/floor.c
 export function floor(x: number) {
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -215,7 +220,7 @@ export function floor(x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cmath/floor.c
 export function frexp(x: number) {
@@ -223,9 +228,9 @@ export function frexp(x: number) {
   const stacktop = cephes.cmath.stackSave();
 
   // argument: double x
-  if (typeof x !== 'number') {
+  if (typeof x !== "number") {
     cephes.cmath.stackRestore(stacktop);
-    throw new TypeError('x must be a number');
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -236,26 +241,29 @@ export function frexp(x: number) {
   const fn_ret = cephes.cephes_frexp(carg_x, carg_pw2);
 
   // There are pointers, so return the values of thoese too
-  const ret = [fn_ret, {
-    'pw2': cephes.cmath.getValue(carg_pw2, 'i32'),
-  }] as const;
+  const ret = [
+    fn_ret,
+    {
+      pw2: cephes.cmath.getValue(carg_pw2, "i32"),
+    },
+  ] as const;
 
   // Restore internal stacktop before returning
   cephes.cmath.stackRestore(stacktop);
   return ret;
-};
+}
 
 // from cephes/cmath/floor.c
 export function ldexp(x: number, pw2: number) {
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
   // argument: int pw2
-  if (typeof pw2 !== 'number') {
-    throw new TypeError('pw2 must be a number');
+  if (typeof pw2 !== "number") {
+    throw new TypeError("pw2 must be a number");
   }
   const carg_pw2 = pw2 | 0;
 
@@ -266,13 +274,13 @@ export function ldexp(x: number, pw2: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cmath/fabs.c
 export function fabs(x: number) {
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -283,19 +291,19 @@ export function fabs(x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cprob/expx2.c
 export function expx2(x: number, sign: number) {
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
   // argument: int sign
-  if (typeof sign !== 'number') {
-    throw new TypeError('sign must be a number');
+  if (typeof sign !== "number") {
+    throw new TypeError("sign must be a number");
   }
   const carg_sign = sign | 0;
 
@@ -306,25 +314,25 @@ export function expx2(x: number, sign: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cmath/sin.c
 export function radian(d: number, m: number, s: number) {
   // argument: double d
-  if (typeof d !== 'number') {
-    throw new TypeError('d must be a number');
+  if (typeof d !== "number") {
+    throw new TypeError("d must be a number");
   }
   const carg_d = d;
 
   // argument: double m
-  if (typeof m !== 'number') {
-    throw new TypeError('m must be a number');
+  if (typeof m !== "number") {
+    throw new TypeError("m must be a number");
   }
   const carg_m = m;
 
   // argument: double s
-  if (typeof s !== 'number') {
-    throw new TypeError('s must be a number');
+  if (typeof s !== "number") {
+    throw new TypeError("s must be a number");
   }
   const carg_s = s;
 
@@ -335,7 +343,7 @@ export function radian(d: number, m: number, s: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cmath/sincos.c
 export function sincos(x: number, flg: number) {
@@ -343,9 +351,9 @@ export function sincos(x: number, flg: number) {
   const stacktop = cephes.cmath.stackSave();
 
   // argument: double x
-  if (typeof x !== 'number') {
+  if (typeof x !== "number") {
     cephes.cmath.stackRestore(stacktop);
-    throw new TypeError('x must be a number');
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -356,9 +364,9 @@ export function sincos(x: number, flg: number) {
   const carg_c = cephes.cmath.stackAlloc(8); // No need to zero-set it.
 
   // argument: int flg
-  if (typeof flg !== 'number') {
+  if (typeof flg !== "number") {
     cephes.cmath.stackRestore(stacktop);
-    throw new TypeError('flg must be a number');
+    throw new TypeError("flg must be a number");
   }
   const carg_flg = flg | 0;
 
@@ -366,21 +374,24 @@ export function sincos(x: number, flg: number) {
   const fn_ret = cephes.cephes_sincos(carg_x, carg_s, carg_c, carg_flg) | 0;
 
   // There are pointers, so return the values of thoese too
-  const ret = [fn_ret, {
-    's': cephes.cmath.getValue(carg_s, 'double'),
-    'c': cephes.cmath.getValue(carg_c, 'double'),
-  }] as const;
+  const ret = [
+    fn_ret,
+    {
+      s: cephes.cmath.getValue(carg_s, "double"),
+      c: cephes.cmath.getValue(carg_c, "double"),
+    },
+  ] as const;
 
   // Restore internal stacktop before returning
   cephes.cmath.stackRestore(stacktop);
   return ret;
-};
+}
 
 // from cephes/cmath/tan.c
 export function cot(x: number) {
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -391,13 +402,13 @@ export function cot(x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cmath/tandg.c
 export function cotdg(x: number) {
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -408,13 +419,13 @@ export function cotdg(x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cprob/unity.c
 export function log1p(x: number) {
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -425,13 +436,13 @@ export function log1p(x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cprob/unity.c
 export function expm1(x: number) {
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -442,13 +453,13 @@ export function expm1(x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cprob/unity.c
 export function cosm1(x: number) {
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -459,13 +470,13 @@ export function cosm1(x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cmath/asin.c
 export function acos(x: number) {
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -476,13 +487,13 @@ export function acos(x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cmath/acosh.c
 export function acosh(x: number) {
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -493,13 +504,13 @@ export function acosh(x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cmath/asinh.c
 export function asinh(xx: number) {
   // argument: double xx
-  if (typeof xx !== 'number') {
-    throw new TypeError('xx must be a number');
+  if (typeof xx !== "number") {
+    throw new TypeError("xx must be a number");
   }
   const carg_xx = xx;
 
@@ -510,13 +521,13 @@ export function asinh(xx: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cmath/atanh.c
 export function atanh(x: number) {
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -527,13 +538,13 @@ export function atanh(x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cmath/asin.c
 export function asin(x: number) {
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -544,13 +555,13 @@ export function asin(x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cmath/atan.c
 export function atan(x: number) {
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -561,19 +572,19 @@ export function atan(x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cmath/atan.c
 export function atan2(y: number, x: number) {
   // argument: double y
-  if (typeof y !== 'number') {
-    throw new TypeError('y must be a number');
+  if (typeof y !== "number") {
+    throw new TypeError("y must be a number");
   }
   const carg_y = y;
 
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -584,13 +595,13 @@ export function atan2(y: number, x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cmath/sin.c
 export function cos(x: number) {
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -601,13 +612,13 @@ export function cos(x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cmath/sindg.c
 export function cosdg(x: number) {
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -618,13 +629,13 @@ export function cosdg(x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cmath/exp.c
 export function exp(x: number) {
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -635,13 +646,13 @@ export function exp(x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cmath/exp2.c
 export function exp2(x: number) {
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -652,13 +663,13 @@ export function exp2(x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cmath/exp10.c
 export function exp10(x: number) {
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -669,13 +680,13 @@ export function exp10(x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cmath/cosh.c
 export function cosh(x: number) {
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -686,13 +697,13 @@ export function cosh(x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cmath/sinh.c
 export function sinh(x: number) {
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -703,13 +714,13 @@ export function sinh(x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cmath/tanh.c
 export function tanh(x: number) {
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -720,13 +731,13 @@ export function tanh(x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cmath/log.c
 export function log(x: number) {
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -737,13 +748,13 @@ export function log(x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cmath/log2.c
 export function log2(x: number) {
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -754,13 +765,13 @@ export function log2(x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cmath/log10.c
 export function log10(x: number) {
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -771,19 +782,19 @@ export function log10(x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cmath/pow.c
 export function pow(x: number, y: number) {
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
   // argument: double y
-  if (typeof y !== 'number') {
-    throw new TypeError('y must be a number');
+  if (typeof y !== "number") {
+    throw new TypeError("y must be a number");
   }
   const carg_y = y;
 
@@ -794,19 +805,19 @@ export function pow(x: number, y: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cmath/powi.c
 export function powi(x: number, nn: number) {
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
   // argument: int nn
-  if (typeof nn !== 'number') {
-    throw new TypeError('nn must be a number');
+  if (typeof nn !== "number") {
+    throw new TypeError("nn must be a number");
   }
   const carg_nn = nn | 0;
 
@@ -817,13 +828,13 @@ export function powi(x: number, nn: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cmath/sin.c
 export function sin(x: number) {
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -834,13 +845,13 @@ export function sin(x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cmath/sindg.c
 export function sindg(x: number) {
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -851,13 +862,13 @@ export function sindg(x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cmath/tan.c
 export function tan(x: number) {
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -868,13 +879,13 @@ export function tan(x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cmath/tandg.c
 export function tandg(x: number) {
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -885,13 +896,13 @@ export function tandg(x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/misc/ei.c
 export function ei(x: number) {
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -902,19 +913,19 @@ export function ei(x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/misc/expn.c
 export function expn(n: number, x: number) {
   // argument: int n
-  if (typeof n !== 'number') {
-    throw new TypeError('n must be a number');
+  if (typeof n !== "number") {
+    throw new TypeError("n must be a number");
   }
   const carg_n = n | 0;
 
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -925,7 +936,7 @@ export function expn(n: number, x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/misc/shichi.c
 export function shichi(x: number) {
@@ -933,9 +944,9 @@ export function shichi(x: number) {
   const stacktop = cephes.misc.stackSave();
 
   // argument: double x
-  if (typeof x !== 'number') {
+  if (typeof x !== "number") {
     cephes.misc.stackRestore(stacktop);
-    throw new TypeError('x must be a number');
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -949,15 +960,18 @@ export function shichi(x: number) {
   const fn_ret = cephes.cephes_shichi(carg_x, carg_si, carg_ci) | 0;
 
   // There are pointers, so return the values of thoese too
-  const ret = [fn_ret, {
-    'si': cephes.misc.getValue(carg_si, 'double'),
-    'ci': cephes.misc.getValue(carg_ci, 'double'),
-  }] as const;
+  const ret = [
+    fn_ret,
+    {
+      si: cephes.misc.getValue(carg_si, "double"),
+      ci: cephes.misc.getValue(carg_ci, "double"),
+    },
+  ] as const;
 
   // Restore internal stacktop before returning
   cephes.misc.stackRestore(stacktop);
   return ret;
-};
+}
 
 // from cephes/misc/sici.c
 export function sici(x: number) {
@@ -965,9 +979,9 @@ export function sici(x: number) {
   const stacktop = cephes.misc.stackSave();
 
   // argument: double x
-  if (typeof x !== 'number') {
+  if (typeof x !== "number") {
     cephes.misc.stackRestore(stacktop);
-    throw new TypeError('x must be a number');
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -981,27 +995,30 @@ export function sici(x: number) {
   const fn_ret = cephes.cephes_sici(carg_x, carg_si, carg_ci) | 0;
 
   // There are pointers, so return the values of thoese too
-  const ret = [fn_ret, {
-    'si': cephes.misc.getValue(carg_si, 'double'),
-    'ci': cephes.misc.getValue(carg_ci, 'double'),
-  }] as const;
+  const ret = [
+    fn_ret,
+    {
+      si: cephes.misc.getValue(carg_si, "double"),
+      ci: cephes.misc.getValue(carg_ci, "double"),
+    },
+  ] as const;
 
   // Restore internal stacktop before returning
   cephes.misc.stackRestore(stacktop);
   return ret;
-};
+}
 
 // from cephes/misc/beta.c
 export function lbeta(a: number, b: number) {
   // argument: double a
-  if (typeof a !== 'number') {
-    throw new TypeError('a must be a number');
+  if (typeof a !== "number") {
+    throw new TypeError("a must be a number");
   }
   const carg_a = a;
 
   // argument: double b
-  if (typeof b !== 'number') {
-    throw new TypeError('b must be a number');
+  if (typeof b !== "number") {
+    throw new TypeError("b must be a number");
   }
   const carg_b = b;
 
@@ -1012,19 +1029,19 @@ export function lbeta(a: number, b: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/misc/beta.c
 export function beta(a: number, b: number) {
   // argument: double a
-  if (typeof a !== 'number') {
-    throw new TypeError('a must be a number');
+  if (typeof a !== "number") {
+    throw new TypeError("a must be a number");
   }
   const carg_a = a;
 
   // argument: double b
-  if (typeof b !== 'number') {
-    throw new TypeError('b must be a number');
+  if (typeof b !== "number") {
+    throw new TypeError("b must be a number");
   }
   const carg_b = b;
 
@@ -1035,13 +1052,13 @@ export function beta(a: number, b: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/misc/fac.c
 export function fac(i: number) {
   // argument: int i
-  if (typeof i !== 'number') {
-    throw new TypeError('i must be a number');
+  if (typeof i !== "number") {
+    throw new TypeError("i must be a number");
   }
   const carg_i = i | 0;
 
@@ -1052,13 +1069,13 @@ export function fac(i: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cprob/gamma.c
 export function gamma(x: number) {
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -1069,13 +1086,13 @@ export function gamma(x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cprob/gamma.c
 export function lgam(x: number) {
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -1086,25 +1103,25 @@ export function lgam(x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cprob/incbet.c
 export function incbet(aa: number, bb: number, xx: number) {
   // argument: double aa
-  if (typeof aa !== 'number') {
-    throw new TypeError('aa must be a number');
+  if (typeof aa !== "number") {
+    throw new TypeError("aa must be a number");
   }
   const carg_aa = aa;
 
   // argument: double bb
-  if (typeof bb !== 'number') {
-    throw new TypeError('bb must be a number');
+  if (typeof bb !== "number") {
+    throw new TypeError("bb must be a number");
   }
   const carg_bb = bb;
 
   // argument: double xx
-  if (typeof xx !== 'number') {
-    throw new TypeError('xx must be a number');
+  if (typeof xx !== "number") {
+    throw new TypeError("xx must be a number");
   }
   const carg_xx = xx;
 
@@ -1115,25 +1132,25 @@ export function incbet(aa: number, bb: number, xx: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cprob/incbi.c
 export function incbi(aa: number, bb: number, yy0: number) {
   // argument: double aa
-  if (typeof aa !== 'number') {
-    throw new TypeError('aa must be a number');
+  if (typeof aa !== "number") {
+    throw new TypeError("aa must be a number");
   }
   const carg_aa = aa;
 
   // argument: double bb
-  if (typeof bb !== 'number') {
-    throw new TypeError('bb must be a number');
+  if (typeof bb !== "number") {
+    throw new TypeError("bb must be a number");
   }
   const carg_bb = bb;
 
   // argument: double yy0
-  if (typeof yy0 !== 'number') {
-    throw new TypeError('yy0 must be a number');
+  if (typeof yy0 !== "number") {
+    throw new TypeError("yy0 must be a number");
   }
   const carg_yy0 = yy0;
 
@@ -1144,19 +1161,19 @@ export function incbi(aa: number, bb: number, yy0: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cprob/igam.c
 export function igam(a: number, x: number) {
   // argument: double a
-  if (typeof a !== 'number') {
-    throw new TypeError('a must be a number');
+  if (typeof a !== "number") {
+    throw new TypeError("a must be a number");
   }
   const carg_a = a;
 
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -1167,19 +1184,19 @@ export function igam(a: number, x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cprob/igam.c
 export function igamc(a: number, x: number) {
   // argument: double a
-  if (typeof a !== 'number') {
-    throw new TypeError('a must be a number');
+  if (typeof a !== "number") {
+    throw new TypeError("a must be a number");
   }
   const carg_a = a;
 
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -1190,19 +1207,19 @@ export function igamc(a: number, x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cprob/igami.c
 export function igami(a: number, y0: number) {
   // argument: double a
-  if (typeof a !== 'number') {
-    throw new TypeError('a must be a number');
+  if (typeof a !== "number") {
+    throw new TypeError("a must be a number");
   }
   const carg_a = a;
 
   // argument: double y0
-  if (typeof y0 !== 'number') {
-    throw new TypeError('y0 must be a number');
+  if (typeof y0 !== "number") {
+    throw new TypeError("y0 must be a number");
   }
   const carg_y0 = y0;
 
@@ -1213,13 +1230,13 @@ export function igami(a: number, y0: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/misc/psi.c
 export function psi(x: number) {
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -1230,13 +1247,13 @@ export function psi(x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/misc/rgamma.c
 export function rgamma(x: number) {
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -1247,13 +1264,13 @@ export function rgamma(x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cprob/ndtr.c
 export function erf(x: number) {
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -1264,13 +1281,13 @@ export function erf(x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cprob/ndtr.c
 export function erfc(a: number) {
   // argument: double a
-  if (typeof a !== 'number') {
-    throw new TypeError('a must be a number');
+  if (typeof a !== "number") {
+    throw new TypeError("a must be a number");
   }
   const carg_a = a;
 
@@ -1281,13 +1298,13 @@ export function erfc(a: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/misc/dawsn.c
 export function dawsn(xx: number) {
   // argument: double xx
-  if (typeof xx !== 'number') {
-    throw new TypeError('xx must be a number');
+  if (typeof xx !== "number") {
+    throw new TypeError("xx must be a number");
   }
   const carg_xx = xx;
 
@@ -1298,7 +1315,7 @@ export function dawsn(xx: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/misc/fresnl.c
 export function fresnl(xxa: number) {
@@ -1306,9 +1323,9 @@ export function fresnl(xxa: number) {
   const stacktop = cephes.misc.stackSave();
 
   // argument: double xxa
-  if (typeof xxa !== 'number') {
+  if (typeof xxa !== "number") {
     cephes.misc.stackRestore(stacktop);
-    throw new TypeError('xxa must be a number');
+    throw new TypeError("xxa must be a number");
   }
   const carg_xxa = xxa;
 
@@ -1322,15 +1339,18 @@ export function fresnl(xxa: number) {
   const fn_ret = cephes.cephes_fresnl(carg_xxa, carg_ssa, carg_cca) | 0;
 
   // There are pointers, so return the values of thoese too
-  const ret = [fn_ret, {
-    'ssa': cephes.misc.getValue(carg_ssa, 'double'),
-    'cca': cephes.misc.getValue(carg_cca, 'double'),
-  }] as const;
+  const ret = [
+    fn_ret,
+    {
+      ssa: cephes.misc.getValue(carg_ssa, "double"),
+      cca: cephes.misc.getValue(carg_cca, "double"),
+    },
+  ] as const;
 
   // Restore internal stacktop before returning
   cephes.misc.stackRestore(stacktop);
   return ret;
-};
+}
 
 // from cephes/bessel/airy.c
 export function airy(x: number) {
@@ -1338,9 +1358,9 @@ export function airy(x: number) {
   const stacktop = cephes.bessel.stackSave();
 
   // argument: double x
-  if (typeof x !== 'number') {
+  if (typeof x !== "number") {
     cephes.bessel.stackRestore(stacktop);
-    throw new TypeError('x must be a number');
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -1357,26 +1377,30 @@ export function airy(x: number) {
   const carg_bip = cephes.bessel.stackAlloc(8); // No need to zero-set it.
 
   // return: int
-  const fn_ret = cephes.cephes_airy(carg_x, carg_ai, carg_aip, carg_bi, carg_bip) | 0;
+  const fn_ret =
+    cephes.cephes_airy(carg_x, carg_ai, carg_aip, carg_bi, carg_bip) | 0;
 
   // There are pointers, so return the values of thoese too
-  const ret = [fn_ret, {
-    'ai': cephes.bessel.getValue(carg_ai, 'double'),
-    'aip': cephes.bessel.getValue(carg_aip, 'double'),
-    'bi': cephes.bessel.getValue(carg_bi, 'double'),
-    'bip': cephes.bessel.getValue(carg_bip, 'double'),
-  }] as const;
+  const ret = [
+    fn_ret,
+    {
+      ai: cephes.bessel.getValue(carg_ai, "double"),
+      aip: cephes.bessel.getValue(carg_aip, "double"),
+      bi: cephes.bessel.getValue(carg_bi, "double"),
+      bip: cephes.bessel.getValue(carg_bip, "double"),
+    },
+  ] as const;
 
   // Restore internal stacktop before returning
   cephes.bessel.stackRestore(stacktop);
   return ret;
-};
+}
 
 // from cephes/bessel/j0.c
 export function j0(x: number) {
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -1387,13 +1411,13 @@ export function j0(x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/bessel/j1.c
 export function j1(x: number) {
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -1404,19 +1428,19 @@ export function j1(x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/bessel/jn.c
 export function jn(n: number, x: number) {
   // argument: int n
-  if (typeof n !== 'number') {
-    throw new TypeError('n must be a number');
+  if (typeof n !== "number") {
+    throw new TypeError("n must be a number");
   }
   const carg_n = n | 0;
 
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -1427,19 +1451,19 @@ export function jn(n: number, x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/bessel/jv.c
 export function jv(n: number, x: number) {
   // argument: double n
-  if (typeof n !== 'number') {
-    throw new TypeError('n must be a number');
+  if (typeof n !== "number") {
+    throw new TypeError("n must be a number");
   }
   const carg_n = n;
 
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -1450,13 +1474,13 @@ export function jv(n: number, x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/bessel/j0.c
 export function y0(x: number) {
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -1467,13 +1491,13 @@ export function y0(x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/bessel/j1.c
 export function y1(x: number) {
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -1484,19 +1508,19 @@ export function y1(x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/bessel/yn.c
 export function yn(n: number, x: number) {
   // argument: int n
-  if (typeof n !== 'number') {
-    throw new TypeError('n must be a number');
+  if (typeof n !== "number") {
+    throw new TypeError("n must be a number");
   }
   const carg_n = n | 0;
 
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -1507,19 +1531,19 @@ export function yn(n: number, x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/bessel/struve.c
 export function yv(v: number, x: number) {
   // argument: double v
-  if (typeof v !== 'number') {
-    throw new TypeError('v must be a number');
+  if (typeof v !== "number") {
+    throw new TypeError("v must be a number");
   }
   const carg_v = v;
 
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -1530,13 +1554,13 @@ export function yv(v: number, x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/bessel/i0.c
 export function i0(x: number) {
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -1547,13 +1571,13 @@ export function i0(x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/bessel/i0.c
 export function i0e(x: number) {
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -1564,13 +1588,13 @@ export function i0e(x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/bessel/i1.c
 export function i1(x: number) {
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -1581,13 +1605,13 @@ export function i1(x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/bessel/i1.c
 export function i1e(x: number) {
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -1598,19 +1622,19 @@ export function i1e(x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/bessel/iv.c
 export function iv(v: number, x: number) {
   // argument: double v
-  if (typeof v !== 'number') {
-    throw new TypeError('v must be a number');
+  if (typeof v !== "number") {
+    throw new TypeError("v must be a number");
   }
   const carg_v = v;
 
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -1621,13 +1645,13 @@ export function iv(v: number, x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/bessel/k0.c
 export function k0(x: number) {
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -1638,13 +1662,13 @@ export function k0(x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/bessel/k0.c
 export function k0e(x: number) {
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -1655,13 +1679,13 @@ export function k0e(x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/bessel/k1.c
 export function k1(x: number) {
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -1672,13 +1696,13 @@ export function k1(x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/bessel/k1.c
 export function k1e(x: number) {
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -1689,19 +1713,19 @@ export function k1e(x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/bessel/kn.c
 export function kn(nn: number, x: number) {
   // argument: int nn
-  if (typeof nn !== 'number') {
-    throw new TypeError('nn must be a number');
+  if (typeof nn !== "number") {
+    throw new TypeError("nn must be a number");
   }
   const carg_nn = nn | 0;
 
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -1712,25 +1736,25 @@ export function kn(nn: number, x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/bessel/hyperg.c
 export function hyperg(a: number, b: number, x: number) {
   // argument: double a
-  if (typeof a !== 'number') {
-    throw new TypeError('a must be a number');
+  if (typeof a !== "number") {
+    throw new TypeError("a must be a number");
   }
   const carg_a = a;
 
   // argument: double b
-  if (typeof b !== 'number') {
-    throw new TypeError('b must be a number');
+  if (typeof b !== "number") {
+    throw new TypeError("b must be a number");
   }
   const carg_b = b;
 
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -1741,31 +1765,31 @@ export function hyperg(a: number, b: number, x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/bessel/hyp2f1.c
 export function hyp2f1(a: number, b: number, c: number, x: number) {
   // argument: double a
-  if (typeof a !== 'number') {
-    throw new TypeError('a must be a number');
+  if (typeof a !== "number") {
+    throw new TypeError("a must be a number");
   }
   const carg_a = a;
 
   // argument: double b
-  if (typeof b !== 'number') {
-    throw new TypeError('b must be a number');
+  if (typeof b !== "number") {
+    throw new TypeError("b must be a number");
   }
   const carg_b = b;
 
   // argument: double c
-  if (typeof c !== 'number') {
-    throw new TypeError('c must be a number');
+  if (typeof c !== "number") {
+    throw new TypeError("c must be a number");
   }
   const carg_c = c;
 
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -1776,13 +1800,13 @@ export function hyp2f1(a: number, b: number, c: number, x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/ellf/ellpe.c
 export function ellpe(x: number) {
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -1793,19 +1817,19 @@ export function ellpe(x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/ellf/ellie.c
 export function ellie(phi: number, m: number) {
   // argument: double phi
-  if (typeof phi !== 'number') {
-    throw new TypeError('phi must be a number');
+  if (typeof phi !== "number") {
+    throw new TypeError("phi must be a number");
   }
   const carg_phi = phi;
 
   // argument: double m
-  if (typeof m !== 'number') {
-    throw new TypeError('m must be a number');
+  if (typeof m !== "number") {
+    throw new TypeError("m must be a number");
   }
   const carg_m = m;
 
@@ -1816,13 +1840,13 @@ export function ellie(phi: number, m: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/ellf/ellpk.c
 export function ellpk(x: number) {
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -1833,19 +1857,19 @@ export function ellpk(x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/ellf/ellik.c
 export function ellik(phi: number, m: number) {
   // argument: double phi
-  if (typeof phi !== 'number') {
-    throw new TypeError('phi must be a number');
+  if (typeof phi !== "number") {
+    throw new TypeError("phi must be a number");
   }
   const carg_phi = phi;
 
   // argument: double m
-  if (typeof m !== 'number') {
-    throw new TypeError('m must be a number');
+  if (typeof m !== "number") {
+    throw new TypeError("m must be a number");
   }
   const carg_m = m;
 
@@ -1856,7 +1880,7 @@ export function ellik(phi: number, m: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/ellf/ellpj.c
 export function ellpj(u: number, m: number) {
@@ -1864,16 +1888,16 @@ export function ellpj(u: number, m: number) {
   const stacktop = cephes.ellf.stackSave();
 
   // argument: double u
-  if (typeof u !== 'number') {
+  if (typeof u !== "number") {
     cephes.ellf.stackRestore(stacktop);
-    throw new TypeError('u must be a number');
+    throw new TypeError("u must be a number");
   }
   const carg_u = u;
 
   // argument: double m
-  if (typeof m !== 'number') {
+  if (typeof m !== "number") {
     cephes.ellf.stackRestore(stacktop);
-    throw new TypeError('m must be a number');
+    throw new TypeError("m must be a number");
   }
   const carg_m = m;
 
@@ -1890,38 +1914,42 @@ export function ellpj(u: number, m: number) {
   const carg_ph = cephes.ellf.stackAlloc(8); // No need to zero-set it.
 
   // return: int
-  const fn_ret = cephes.cephes_ellpj(carg_u, carg_m, carg_sn, carg_cn, carg_dn, carg_ph) | 0;
+  const fn_ret =
+    cephes.cephes_ellpj(carg_u, carg_m, carg_sn, carg_cn, carg_dn, carg_ph) | 0;
 
   // There are pointers, so return the values of thoese too
-  const ret = [fn_ret, {
-    'sn': cephes.ellf.getValue(carg_sn, 'double'),
-    'cn': cephes.ellf.getValue(carg_cn, 'double'),
-    'dn': cephes.ellf.getValue(carg_dn, 'double'),
-    'ph': cephes.ellf.getValue(carg_ph, 'double'),
-  }] as const;
+  const ret = [
+    fn_ret,
+    {
+      sn: cephes.ellf.getValue(carg_sn, "double"),
+      cn: cephes.ellf.getValue(carg_cn, "double"),
+      dn: cephes.ellf.getValue(carg_dn, "double"),
+      ph: cephes.ellf.getValue(carg_ph, "double"),
+    },
+  ] as const;
 
   // Restore internal stacktop before returning
   cephes.ellf.stackRestore(stacktop);
   return ret;
-};
+}
 
 // from cephes/cprob/btdtr.c
 export function btdtr(a: number, b: number, x: number) {
   // argument: double a
-  if (typeof a !== 'number') {
-    throw new TypeError('a must be a number');
+  if (typeof a !== "number") {
+    throw new TypeError("a must be a number");
   }
   const carg_a = a;
 
   // argument: double b
-  if (typeof b !== 'number') {
-    throw new TypeError('b must be a number');
+  if (typeof b !== "number") {
+    throw new TypeError("b must be a number");
   }
   const carg_b = b;
 
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -1932,19 +1960,19 @@ export function btdtr(a: number, b: number, x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cprob/kolmogorov.c
 export function smirnov(n: number, e: number) {
   // argument: int n
-  if (typeof n !== 'number') {
-    throw new TypeError('n must be a number');
+  if (typeof n !== "number") {
+    throw new TypeError("n must be a number");
   }
   const carg_n = n | 0;
 
   // argument: double e
-  if (typeof e !== 'number') {
-    throw new TypeError('e must be a number');
+  if (typeof e !== "number") {
+    throw new TypeError("e must be a number");
   }
   const carg_e = e;
 
@@ -1955,13 +1983,13 @@ export function smirnov(n: number, e: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cprob/kolmogorov.c
 export function kolmogorov(y: number) {
   // argument: double y
-  if (typeof y !== 'number') {
-    throw new TypeError('y must be a number');
+  if (typeof y !== "number") {
+    throw new TypeError("y must be a number");
   }
   const carg_y = y;
 
@@ -1972,19 +2000,19 @@ export function kolmogorov(y: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cprob/kolmogorov.c
 export function smirnovi(n: number, p: number) {
   // argument: int n
-  if (typeof n !== 'number') {
-    throw new TypeError('n must be a number');
+  if (typeof n !== "number") {
+    throw new TypeError("n must be a number");
   }
   const carg_n = n | 0;
 
   // argument: double p
-  if (typeof p !== 'number') {
-    throw new TypeError('p must be a number');
+  if (typeof p !== "number") {
+    throw new TypeError("p must be a number");
   }
   const carg_p = p;
 
@@ -1995,13 +2023,13 @@ export function smirnovi(n: number, p: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cprob/kolmogorov.c
 export function kolmogi(p: number) {
   // argument: double p
-  if (typeof p !== 'number') {
-    throw new TypeError('p must be a number');
+  if (typeof p !== "number") {
+    throw new TypeError("p must be a number");
   }
   const carg_p = p;
 
@@ -2012,25 +2040,25 @@ export function kolmogi(p: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cprob/nbdtr.c
 export function nbdtri(k: number, n: number, p: number) {
   // argument: int k
-  if (typeof k !== 'number') {
-    throw new TypeError('k must be a number');
+  if (typeof k !== "number") {
+    throw new TypeError("k must be a number");
   }
   const carg_k = k | 0;
 
   // argument: int n
-  if (typeof n !== 'number') {
-    throw new TypeError('n must be a number');
+  if (typeof n !== "number") {
+    throw new TypeError("n must be a number");
   }
   const carg_n = n | 0;
 
   // argument: double p
-  if (typeof p !== 'number') {
-    throw new TypeError('p must be a number');
+  if (typeof p !== "number") {
+    throw new TypeError("p must be a number");
   }
   const carg_p = p;
 
@@ -2041,19 +2069,19 @@ export function nbdtri(k: number, n: number, p: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cprob/stdtr.c
 export function stdtri(k: number, p: number) {
   // argument: int k
-  if (typeof k !== 'number') {
-    throw new TypeError('k must be a number');
+  if (typeof k !== "number") {
+    throw new TypeError("k must be a number");
   }
   const carg_k = k | 0;
 
   // argument: double p
-  if (typeof p !== 'number') {
-    throw new TypeError('p must be a number');
+  if (typeof p !== "number") {
+    throw new TypeError("p must be a number");
   }
   const carg_p = p;
 
@@ -2064,25 +2092,25 @@ export function stdtri(k: number, p: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cprob/bdtr.c
 export function bdtr(k: number, n: number, p: number) {
   // argument: int k
-  if (typeof k !== 'number') {
-    throw new TypeError('k must be a number');
+  if (typeof k !== "number") {
+    throw new TypeError("k must be a number");
   }
   const carg_k = k | 0;
 
   // argument: int n
-  if (typeof n !== 'number') {
-    throw new TypeError('n must be a number');
+  if (typeof n !== "number") {
+    throw new TypeError("n must be a number");
   }
   const carg_n = n | 0;
 
   // argument: double p
-  if (typeof p !== 'number') {
-    throw new TypeError('p must be a number');
+  if (typeof p !== "number") {
+    throw new TypeError("p must be a number");
   }
   const carg_p = p;
 
@@ -2093,25 +2121,25 @@ export function bdtr(k: number, n: number, p: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cprob/bdtr.c
 export function bdtrc(k: number, n: number, p: number) {
   // argument: int k
-  if (typeof k !== 'number') {
-    throw new TypeError('k must be a number');
+  if (typeof k !== "number") {
+    throw new TypeError("k must be a number");
   }
   const carg_k = k | 0;
 
   // argument: int n
-  if (typeof n !== 'number') {
-    throw new TypeError('n must be a number');
+  if (typeof n !== "number") {
+    throw new TypeError("n must be a number");
   }
   const carg_n = n | 0;
 
   // argument: double p
-  if (typeof p !== 'number') {
-    throw new TypeError('p must be a number');
+  if (typeof p !== "number") {
+    throw new TypeError("p must be a number");
   }
   const carg_p = p;
 
@@ -2122,25 +2150,25 @@ export function bdtrc(k: number, n: number, p: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cprob/bdtr.c
 export function bdtri(k: number, n: number, y: number) {
   // argument: int k
-  if (typeof k !== 'number') {
-    throw new TypeError('k must be a number');
+  if (typeof k !== "number") {
+    throw new TypeError("k must be a number");
   }
   const carg_k = k | 0;
 
   // argument: int n
-  if (typeof n !== 'number') {
-    throw new TypeError('n must be a number');
+  if (typeof n !== "number") {
+    throw new TypeError("n must be a number");
   }
   const carg_n = n | 0;
 
   // argument: double y
-  if (typeof y !== 'number') {
-    throw new TypeError('y must be a number');
+  if (typeof y !== "number") {
+    throw new TypeError("y must be a number");
   }
   const carg_y = y;
 
@@ -2151,19 +2179,19 @@ export function bdtri(k: number, n: number, y: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cprob/chdtr.c
 export function chdtr(df: number, x: number) {
   // argument: double df
-  if (typeof df !== 'number') {
-    throw new TypeError('df must be a number');
+  if (typeof df !== "number") {
+    throw new TypeError("df must be a number");
   }
   const carg_df = df;
 
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -2174,19 +2202,19 @@ export function chdtr(df: number, x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cprob/chdtr.c
 export function chdtrc(df: number, x: number) {
   // argument: double df
-  if (typeof df !== 'number') {
-    throw new TypeError('df must be a number');
+  if (typeof df !== "number") {
+    throw new TypeError("df must be a number");
   }
   const carg_df = df;
 
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -2197,19 +2225,19 @@ export function chdtrc(df: number, x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cprob/chdtr.c
 export function chdtri(df: number, y: number) {
   // argument: double df
-  if (typeof df !== 'number') {
-    throw new TypeError('df must be a number');
+  if (typeof df !== "number") {
+    throw new TypeError("df must be a number");
   }
   const carg_df = df;
 
   // argument: double y
-  if (typeof y !== 'number') {
-    throw new TypeError('y must be a number');
+  if (typeof y !== "number") {
+    throw new TypeError("y must be a number");
   }
   const carg_y = y;
 
@@ -2220,25 +2248,25 @@ export function chdtri(df: number, y: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cprob/fdtr.c
 export function fdtr(ia: number, ib: number, x: number) {
   // argument: int ia
-  if (typeof ia !== 'number') {
-    throw new TypeError('ia must be a number');
+  if (typeof ia !== "number") {
+    throw new TypeError("ia must be a number");
   }
   const carg_ia = ia | 0;
 
   // argument: int ib
-  if (typeof ib !== 'number') {
-    throw new TypeError('ib must be a number');
+  if (typeof ib !== "number") {
+    throw new TypeError("ib must be a number");
   }
   const carg_ib = ib | 0;
 
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -2249,25 +2277,25 @@ export function fdtr(ia: number, ib: number, x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cprob/fdtr.c
 export function fdtrc(ia: number, ib: number, x: number) {
   // argument: int ia
-  if (typeof ia !== 'number') {
-    throw new TypeError('ia must be a number');
+  if (typeof ia !== "number") {
+    throw new TypeError("ia must be a number");
   }
   const carg_ia = ia | 0;
 
   // argument: int ib
-  if (typeof ib !== 'number') {
-    throw new TypeError('ib must be a number');
+  if (typeof ib !== "number") {
+    throw new TypeError("ib must be a number");
   }
   const carg_ib = ib | 0;
 
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -2278,25 +2306,25 @@ export function fdtrc(ia: number, ib: number, x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cprob/fdtr.c
 export function fdtri(ia: number, ib: number, y: number) {
   // argument: int ia
-  if (typeof ia !== 'number') {
-    throw new TypeError('ia must be a number');
+  if (typeof ia !== "number") {
+    throw new TypeError("ia must be a number");
   }
   const carg_ia = ia | 0;
 
   // argument: int ib
-  if (typeof ib !== 'number') {
-    throw new TypeError('ib must be a number');
+  if (typeof ib !== "number") {
+    throw new TypeError("ib must be a number");
   }
   const carg_ib = ib | 0;
 
   // argument: double y
-  if (typeof y !== 'number') {
-    throw new TypeError('y must be a number');
+  if (typeof y !== "number") {
+    throw new TypeError("y must be a number");
   }
   const carg_y = y;
 
@@ -2307,25 +2335,25 @@ export function fdtri(ia: number, ib: number, y: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cprob/gdtr.c
 export function gdtr(a: number, b: number, x: number) {
   // argument: double a
-  if (typeof a !== 'number') {
-    throw new TypeError('a must be a number');
+  if (typeof a !== "number") {
+    throw new TypeError("a must be a number");
   }
   const carg_a = a;
 
   // argument: double b
-  if (typeof b !== 'number') {
-    throw new TypeError('b must be a number');
+  if (typeof b !== "number") {
+    throw new TypeError("b must be a number");
   }
   const carg_b = b;
 
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -2336,25 +2364,25 @@ export function gdtr(a: number, b: number, x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cprob/gdtr.c
 export function gdtrc(a: number, b: number, x: number) {
   // argument: double a
-  if (typeof a !== 'number') {
-    throw new TypeError('a must be a number');
+  if (typeof a !== "number") {
+    throw new TypeError("a must be a number");
   }
   const carg_a = a;
 
   // argument: double b
-  if (typeof b !== 'number') {
-    throw new TypeError('b must be a number');
+  if (typeof b !== "number") {
+    throw new TypeError("b must be a number");
   }
   const carg_b = b;
 
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -2365,25 +2393,25 @@ export function gdtrc(a: number, b: number, x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cprob/nbdtr.c
 export function nbdtr(k: number, n: number, p: number) {
   // argument: int k
-  if (typeof k !== 'number') {
-    throw new TypeError('k must be a number');
+  if (typeof k !== "number") {
+    throw new TypeError("k must be a number");
   }
   const carg_k = k | 0;
 
   // argument: int n
-  if (typeof n !== 'number') {
-    throw new TypeError('n must be a number');
+  if (typeof n !== "number") {
+    throw new TypeError("n must be a number");
   }
   const carg_n = n | 0;
 
   // argument: double p
-  if (typeof p !== 'number') {
-    throw new TypeError('p must be a number');
+  if (typeof p !== "number") {
+    throw new TypeError("p must be a number");
   }
   const carg_p = p;
 
@@ -2394,25 +2422,25 @@ export function nbdtr(k: number, n: number, p: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cprob/nbdtr.c
 export function nbdtrc(k: number, n: number, p: number) {
   // argument: int k
-  if (typeof k !== 'number') {
-    throw new TypeError('k must be a number');
+  if (typeof k !== "number") {
+    throw new TypeError("k must be a number");
   }
   const carg_k = k | 0;
 
   // argument: int n
-  if (typeof n !== 'number') {
-    throw new TypeError('n must be a number');
+  if (typeof n !== "number") {
+    throw new TypeError("n must be a number");
   }
   const carg_n = n | 0;
 
   // argument: double p
-  if (typeof p !== 'number') {
-    throw new TypeError('p must be a number');
+  if (typeof p !== "number") {
+    throw new TypeError("p must be a number");
   }
   const carg_p = p;
 
@@ -2423,13 +2451,13 @@ export function nbdtrc(k: number, n: number, p: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cprob/ndtr.c
 export function ndtr(a: number) {
   // argument: double a
-  if (typeof a !== 'number') {
-    throw new TypeError('a must be a number');
+  if (typeof a !== "number") {
+    throw new TypeError("a must be a number");
   }
   const carg_a = a;
 
@@ -2440,13 +2468,13 @@ export function ndtr(a: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cprob/ndtri.c
 export function ndtri(y0: number) {
   // argument: double y0
-  if (typeof y0 !== 'number') {
-    throw new TypeError('y0 must be a number');
+  if (typeof y0 !== "number") {
+    throw new TypeError("y0 must be a number");
   }
   const carg_y0 = y0;
 
@@ -2457,19 +2485,19 @@ export function ndtri(y0: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cprob/pdtr.c
 export function pdtr(k: number, m: number) {
   // argument: int k
-  if (typeof k !== 'number') {
-    throw new TypeError('k must be a number');
+  if (typeof k !== "number") {
+    throw new TypeError("k must be a number");
   }
   const carg_k = k | 0;
 
   // argument: double m
-  if (typeof m !== 'number') {
-    throw new TypeError('m must be a number');
+  if (typeof m !== "number") {
+    throw new TypeError("m must be a number");
   }
   const carg_m = m;
 
@@ -2480,19 +2508,19 @@ export function pdtr(k: number, m: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cprob/pdtr.c
 export function pdtrc(k: number, m: number) {
   // argument: int k
-  if (typeof k !== 'number') {
-    throw new TypeError('k must be a number');
+  if (typeof k !== "number") {
+    throw new TypeError("k must be a number");
   }
   const carg_k = k | 0;
 
   // argument: double m
-  if (typeof m !== 'number') {
-    throw new TypeError('m must be a number');
+  if (typeof m !== "number") {
+    throw new TypeError("m must be a number");
   }
   const carg_m = m;
 
@@ -2503,19 +2531,19 @@ export function pdtrc(k: number, m: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cprob/pdtr.c
 export function pdtri(k: number, y: number) {
   // argument: int k
-  if (typeof k !== 'number') {
-    throw new TypeError('k must be a number');
+  if (typeof k !== "number") {
+    throw new TypeError("k must be a number");
   }
   const carg_k = k | 0;
 
   // argument: double y
-  if (typeof y !== 'number') {
-    throw new TypeError('y must be a number');
+  if (typeof y !== "number") {
+    throw new TypeError("y must be a number");
   }
   const carg_y = y;
 
@@ -2526,19 +2554,19 @@ export function pdtri(k: number, y: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/cprob/stdtr.c
 export function stdtr(k: number, t: number) {
   // argument: int k
-  if (typeof k !== 'number') {
-    throw new TypeError('k must be a number');
+  if (typeof k !== "number") {
+    throw new TypeError("k must be a number");
   }
   const carg_k = k | 0;
 
   // argument: double t
-  if (typeof t !== 'number') {
-    throw new TypeError('t must be a number');
+  if (typeof t !== "number") {
+    throw new TypeError("t must be a number");
   }
   const carg_t = t;
 
@@ -2549,19 +2577,19 @@ export function stdtr(k: number, t: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/misc/planck.c
 export function plancki(w: number, T: number) {
   // argument: double w
-  if (typeof w !== 'number') {
-    throw new TypeError('w must be a number');
+  if (typeof w !== "number") {
+    throw new TypeError("w must be a number");
   }
   const carg_w = w;
 
   // argument: double T
-  if (typeof T !== 'number') {
-    throw new TypeError('T must be a number');
+  if (typeof T !== "number") {
+    throw new TypeError("T must be a number");
   }
   const carg_T = T;
 
@@ -2572,19 +2600,19 @@ export function plancki(w: number, T: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/misc/planck.c
 export function planckc(w: number, T: number) {
   // argument: double w
-  if (typeof w !== 'number') {
-    throw new TypeError('w must be a number');
+  if (typeof w !== "number") {
+    throw new TypeError("w must be a number");
   }
   const carg_w = w;
 
   // argument: double T
-  if (typeof T !== 'number') {
-    throw new TypeError('T must be a number');
+  if (typeof T !== "number") {
+    throw new TypeError("T must be a number");
   }
   const carg_T = T;
 
@@ -2595,19 +2623,19 @@ export function planckc(w: number, T: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/misc/planck.c
 export function planckd(w: number, T: number) {
   // argument: double w
-  if (typeof w !== 'number') {
-    throw new TypeError('w must be a number');
+  if (typeof w !== "number") {
+    throw new TypeError("w must be a number");
   }
   const carg_w = w;
 
   // argument: double T
-  if (typeof T !== 'number') {
-    throw new TypeError('T must be a number');
+  if (typeof T !== "number") {
+    throw new TypeError("T must be a number");
   }
   const carg_T = T;
 
@@ -2618,13 +2646,13 @@ export function planckd(w: number, T: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/misc/planck.c
 export function planckw(T: number) {
   // argument: double T
-  if (typeof T !== 'number') {
-    throw new TypeError('T must be a number');
+  if (typeof T !== "number") {
+    throw new TypeError("T must be a number");
   }
   const carg_T = T;
 
@@ -2635,13 +2663,13 @@ export function planckw(T: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/misc/spence.c
 export function spence(x: number) {
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -2652,13 +2680,13 @@ export function spence(x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/misc/zetac.c
 export function zetac(x: number) {
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -2669,19 +2697,19 @@ export function zetac(x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/misc/zeta.c
 export function zeta(x: number, q: number) {
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
   // argument: double q
-  if (typeof q !== 'number') {
-    throw new TypeError('q must be a number');
+  if (typeof q !== "number") {
+    throw new TypeError("q must be a number");
   }
   const carg_q = q;
 
@@ -2692,19 +2720,19 @@ export function zeta(x: number, q: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/bessel/struve.c
 export function struve(v: number, x: number) {
   // argument: double v
-  if (typeof v !== 'number') {
-    throw new TypeError('v must be a number');
+  if (typeof v !== "number") {
+    throw new TypeError("v must be a number");
   }
   const carg_v = v;
 
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -2715,7 +2743,7 @@ export function struve(v: number, x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
 // from cephes/misc/simpsn.c
 export function simpsn(f: Float64Array, delta: number) {
@@ -2725,15 +2753,18 @@ export function simpsn(f: Float64Array, delta: number) {
   // argument: double[] f
   if (!(f instanceof Float64Array)) {
     cephes.misc.stackRestore(stacktop);
-    throw new TypeError('f must be either a Float64Array');
+    throw new TypeError("f must be either a Float64Array");
   }
   const carg_f = cephes.misc.stackAlloc(f.length << 3);
-  cephes.misc.writeArrayToMemory(new Uint8Array(f.buffer, f.byteOffset, f.byteLength), carg_f);
+  cephes.misc.writeArrayToMemory(
+    new Uint8Array(f.buffer, f.byteOffset, f.byteLength),
+    carg_f,
+  );
 
   // argument: double delta
-  if (typeof delta !== 'number') {
+  if (typeof delta !== "number") {
     cephes.misc.stackRestore(stacktop);
-    throw new TypeError('delta must be a number');
+    throw new TypeError("delta must be a number");
   }
   const carg_delta = delta;
 
@@ -2746,7 +2777,7 @@ export function simpsn(f: Float64Array, delta: number) {
   // Restore internal stacktop before returning
   cephes.misc.stackRestore(stacktop);
   return ret;
-};
+}
 
 // from cephes/misc/polevl.c
 export function p1evl(x: number, coef: Float64Array, N: number) {
@@ -2754,24 +2785,27 @@ export function p1evl(x: number, coef: Float64Array, N: number) {
   const stacktop = cephes.misc.stackSave();
 
   // argument: double x
-  if (typeof x !== 'number') {
+  if (typeof x !== "number") {
     cephes.misc.stackRestore(stacktop);
-    throw new TypeError('x must be a number');
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
   // argument: double[] coef
   if (!(coef instanceof Float64Array)) {
     cephes.misc.stackRestore(stacktop);
-    throw new TypeError('coef must be either a Float64Array');
+    throw new TypeError("coef must be either a Float64Array");
   }
   const carg_coef = cephes.misc.stackAlloc(coef.length << 3);
-  cephes.misc.writeArrayToMemory(new Uint8Array(coef.buffer, coef.byteOffset, coef.byteLength), carg_coef);
+  cephes.misc.writeArrayToMemory(
+    new Uint8Array(coef.buffer, coef.byteOffset, coef.byteLength),
+    carg_coef,
+  );
 
   // argument: int N
-  if (typeof N !== 'number') {
+  if (typeof N !== "number") {
     cephes.misc.stackRestore(stacktop);
-    throw new TypeError('N must be a number');
+    throw new TypeError("N must be a number");
   }
   const carg_N = N | 0;
 
@@ -2784,19 +2818,19 @@ export function p1evl(x: number, coef: Float64Array, N: number) {
   // Restore internal stacktop before returning
   cephes.misc.stackRestore(stacktop);
   return ret;
-};
+}
 
 // from cephes/misc/polylog.c
 export function polylog(n: number, x: number) {
   // argument: int n
-  if (typeof n !== 'number') {
-    throw new TypeError('n must be a number');
+  if (typeof n !== "number") {
+    throw new TypeError("n must be a number");
   }
   const carg_n = n | 0;
 
   // argument: double x
-  if (typeof x !== 'number') {
-    throw new TypeError('x must be a number');
+  if (typeof x !== "number") {
+    throw new TypeError("x must be a number");
   }
   const carg_x = x;
 
@@ -2807,6 +2841,136 @@ export function polylog(n: number, x: number) {
   const ret = fn_ret;
 
   return ret;
-};
+}
 
-export default {compiled,signbit,isnan,isfinite,sqrt,cbrt,polevl,chbevl,round,ceil,floor,frexp,ldexp,fabs,expx2,radian,sincos,cot,cotdg,log1p,expm1,cosm1,acos,acosh,asinh,atanh,asin,atan,atan2,cos,cosdg,exp,exp2,exp10,cosh,sinh,tanh,log,log2,log10,pow,powi,sin,sindg,tan,tandg,ei,expn,shichi,sici,lbeta,beta,fac,gamma,lgam,incbet,incbi,igam,igamc,igami,psi,rgamma,erf,erfc,dawsn,fresnl,airy,j0,j1,jn,jv,y0,y1,yn,yv,i0,i0e,i1,i1e,iv,k0,k0e,k1,k1e,kn,hyperg,hyp2f1,ellpe,ellie,ellpk,ellik,ellpj,btdtr,smirnov,kolmogorov,smirnovi,kolmogi,nbdtri,stdtri,bdtr,bdtrc,bdtri,chdtr,chdtrc,chdtri,fdtr,fdtrc,fdtri,gdtr,gdtrc,nbdtr,nbdtrc,ndtr,ndtri,pdtr,pdtrc,pdtri,stdtr,plancki,planckc,planckd,planckw,spence,zetac,zeta,struve,simpsn,p1evl,polylog}
+export default {
+  compiled,
+  signbit,
+  isnan,
+  isfinite,
+  sqrt,
+  cbrt,
+  polevl,
+  chbevl,
+  round,
+  ceil,
+  floor,
+  frexp,
+  ldexp,
+  fabs,
+  expx2,
+  radian,
+  sincos,
+  cot,
+  cotdg,
+  log1p,
+  expm1,
+  cosm1,
+  acos,
+  acosh,
+  asinh,
+  atanh,
+  asin,
+  atan,
+  atan2,
+  cos,
+  cosdg,
+  exp,
+  exp2,
+  exp10,
+  cosh,
+  sinh,
+  tanh,
+  log,
+  log2,
+  log10,
+  pow,
+  powi,
+  sin,
+  sindg,
+  tan,
+  tandg,
+  ei,
+  expn,
+  shichi,
+  sici,
+  lbeta,
+  beta,
+  fac,
+  gamma,
+  lgam,
+  incbet,
+  incbi,
+  igam,
+  igamc,
+  igami,
+  psi,
+  rgamma,
+  erf,
+  erfc,
+  dawsn,
+  fresnl,
+  airy,
+  j0,
+  j1,
+  jn,
+  jv,
+  y0,
+  y1,
+  yn,
+  yv,
+  i0,
+  i0e,
+  i1,
+  i1e,
+  iv,
+  k0,
+  k0e,
+  k1,
+  k1e,
+  kn,
+  hyperg,
+  hyp2f1,
+  ellpe,
+  ellie,
+  ellpk,
+  ellik,
+  ellpj,
+  btdtr,
+  smirnov,
+  kolmogorov,
+  smirnovi,
+  kolmogi,
+  nbdtri,
+  stdtri,
+  bdtr,
+  bdtrc,
+  bdtri,
+  chdtr,
+  chdtrc,
+  chdtri,
+  fdtr,
+  fdtrc,
+  fdtri,
+  gdtr,
+  gdtrc,
+  nbdtr,
+  nbdtrc,
+  ndtr,
+  ndtri,
+  pdtr,
+  pdtrc,
+  pdtri,
+  stdtr,
+  plancki,
+  planckc,
+  planckd,
+  planckw,
+  spence,
+  zetac,
+  zeta,
+  struve,
+  simpsn,
+  p1evl,
+  polylog,
+};

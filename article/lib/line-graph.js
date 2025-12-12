@@ -52,7 +52,7 @@ export default class LineGraph {
       .append("g")
       .attr(
         "transform",
-        "translate(" + (margin.left + yAxisWidth) + "," + margin.top + ")"
+        "translate(" + (margin.left + yAxisWidth) + "," + margin.top + ")",
       );
 
     // Create background
@@ -161,8 +161,8 @@ export default class LineGraph {
     this._legend.style("grid-template-columns", function () {
       const maxWidth = Math.max(
         ...Array.from(this.querySelectorAll("svg.legend-item")).map((elem) =>
-          Math.ceil(parseInt(elem.getAttribute("width")))
-        )
+          Math.ceil(parseInt(elem.getAttribute("width"))),
+        ),
       );
       return `repeat(auto-fit, minmax(${Math.ceil(maxWidth)}px, 1fr)`;
     });
