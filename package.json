@@ -19,6 +19,11 @@
     "test": "c8 node --import tsx --test 'test/!(*.puppeteer).test.{js,mjs,ts}'",
     "test:puppeteer": "c8 node --test 'test/*.puppeteer.test.{js,mjs}'"
   },
+  "files": [
+    "index.js",
+    "index.mjs",
+    "index.d.ts"
+  ],
   "devDependencies": {
     "@biomejs/biome": "^2.3.8",
     "@rollup/plugin-alias": "^6.0.0",
