@@ -1,36 +1,3 @@
-function getDefaultExportFromCjs (x) {
-	return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, 'default') ? x['default'] : x;
-}
-
-function getAugmentedNamespace(n) {
-  if (Object.prototype.hasOwnProperty.call(n, '__esModule')) return n;
-  var f = n.default;
-	if (typeof f == "function") {
-		var a = function a () {
-			var isInstance = false;
-      try {
-        isInstance = this instanceof a;
-      } catch {}
-			if (isInstance) {
-        return Reflect.construct(f, arguments, this.constructor);
-			}
-			return f.apply(this, arguments);
-		};
-		a.prototype = f.prototype;
-  } else a = {};
-  Object.defineProperty(a, '__esModule', {value: true});
-	Object.keys(n).forEach(function (k) {
-		var d = Object.getOwnPropertyDescriptor(n, k);
-		Object.defineProperty(a, k, d.get ? d : {
-			enumerable: true,
-			get: function () {
-				return n[k];
-			}
-		});
-	});
-	return a;
-}
-
 var global$1 = (typeof global !== "undefined" ? global :
   typeof self !== "undefined" ? self :
   typeof window !== "undefined" ? window : {});
@@ -269,17 +236,17 @@ var INSPECT_MAX_BYTES = 50;
  * We detect these buggy browsers and set `Buffer.TYPED_ARRAY_SUPPORT` to `false` so they
  * get the Object implementation, which is slower but behaves correctly.
  */
-Buffer$1.TYPED_ARRAY_SUPPORT = global$1.TYPED_ARRAY_SUPPORT !== undefined
+Buffer.TYPED_ARRAY_SUPPORT = global$1.TYPED_ARRAY_SUPPORT !== undefined
   ? global$1.TYPED_ARRAY_SUPPORT
   : true;
 
 /*
  * Export kMaxLength after typed array support is determined.
  */
-var _kMaxLength = kMaxLength();
+kMaxLength();
 
 function kMaxLength () {
-  return Buffer$1.TYPED_ARRAY_SUPPORT
+  return Buffer.TYPED_ARRAY_SUPPORT
     ? 0x7fffffff
     : 0x3fffffff
 }
@@ -288,14 +255,14 @@ function createBuffer (that, length) {
   if (kMaxLength() < length) {
     throw new RangeError('Invalid typed array length')
   }
-  if (Buffer$1.TYPED_ARRAY_SUPPORT) {
+  if (Buffer.TYPED_ARRAY_SUPPORT) {
     // Return an augmented `Uint8Array` instance, for best performance
     that = new Uint8Array(length);
-    that.__proto__ = Buffer$1.prototype;
+    that.__proto__ = Buffer.prototype;
   } else {
     // Fallback: Return an object instance of the Buffer class
     if (that === null) {
-      that = new Buffer$1(length);
+      that = new Buffer(length);
     }
     that.length = length;
   }
@@ -313,9 +280,9 @@ function createBuffer (that, length) {
  * The `Uint8Array` prototype remains unmodified.
  */
 
-function Buffer$1 (arg, encodingOrOffset, length) {
-  if (!Buffer$1.TYPED_ARRAY_SUPPORT && !(this instanceof Buffer$1)) {
-    return new Buffer$1(arg, encodingOrOffset, length)
+function Buffer (arg, encodingOrOffset, length) {
+  if (!Buffer.TYPED_ARRAY_SUPPORT && !(this instanceof Buffer)) {
+    return new Buffer(arg, encodingOrOffset, length)
   }
 
   // Common case.
@@ -330,11 +297,11 @@ function Buffer$1 (arg, encodingOrOffset, length) {
   return from(this, arg, encodingOrOffset, length)
 }
 
-Buffer$1.poolSize = 8192; // not used by this implementation
+Buffer.poolSize = 8192; // not used by this implementation
 
 // TODO: Legacy, not needed anymore. Remove in next major version.
-Buffer$1._augment = function (arr) {
-  arr.__proto__ = Buffer$1.prototype;
+Buffer._augment = function (arr) {
+  arr.__proto__ = Buffer.prototype;
   return arr
 };
 
@@ -362,13 +329,13 @@ function from (that, value, encodingOrOffset, length) {
  * Buffer.from(buffer)
  * Buffer.from(arrayBuffer[, byteOffset[, length]])
  **/
-Buffer$1.from = function (value, encodingOrOffset, length) {
+Buffer.from = function (value, encodingOrOffset, length) {
   return from(null, value, encodingOrOffset, length)
 };
 
-if (Buffer$1.TYPED_ARRAY_SUPPORT) {
-  Buffer$1.prototype.__proto__ = Uint8Array.prototype;
-  Buffer$1.__proto__ = Uint8Array;
+if (Buffer.TYPED_ARRAY_SUPPORT) {
+  Buffer.prototype.__proto__ = Uint8Array.prototype;
+  Buffer.__proto__ = Uint8Array;
 }
 
 function assertSize (size) {
@@ -399,14 +366,14 @@ function alloc (that, size, fill, encoding) {
  * Creates a new filled Buffer instance.
  * alloc(size[, fill[, encoding]])
  **/
-Buffer$1.alloc = function (size, fill, encoding) {
+Buffer.alloc = function (size, fill, encoding) {
   return alloc(null, size, fill, encoding)
 };
 
 function allocUnsafe (that, size) {
   assertSize(size);
   that = createBuffer(that, size < 0 ? 0 : checked(size) | 0);
-  if (!Buffer$1.TYPED_ARRAY_SUPPORT) {
+  if (!Buffer.TYPED_ARRAY_SUPPORT) {
     for (var i = 0; i < size; ++i) {
       that[i] = 0;
     }
@@ -417,13 +384,13 @@ function allocUnsafe (that, size) {
 /**
  * Equivalent to Buffer(num), by default creates a non-zero-filled Buffer instance.
  * */
-Buffer$1.allocUnsafe = function (size) {
+Buffer.allocUnsafe = function (size) {
   return allocUnsafe(null, size)
 };
 /**
  * Equivalent to SlowBuffer(num), by default creates a non-zero-filled Buffer instance.
  */
-Buffer$1.allocUnsafeSlow = function (size) {
+Buffer.allocUnsafeSlow = function (size) {
   return allocUnsafe(null, size)
 };
 
@@ -432,7 +399,7 @@ function fromString (that, string, encoding) {
     encoding = 'utf8';
   }
 
-  if (!Buffer$1.isEncoding(encoding)) {
+  if (!Buffer.isEncoding(encoding)) {
     throw new TypeError('"encoding" must be a valid string encoding')
   }
 
@@ -479,10 +446,10 @@ function fromArrayBuffer (that, array, byteOffset, length) {
     array = new Uint8Array(array, byteOffset, length);
   }
 
-  if (Buffer$1.TYPED_ARRAY_SUPPORT) {
+  if (Buffer.TYPED_ARRAY_SUPPORT) {
     // Return an augmented `Uint8Array` instance, for best performance
     that = array;
-    that.__proto__ = Buffer$1.prototype;
+    that.__proto__ = Buffer.prototype;
   } else {
     // Fallback: Return an object instance of the Buffer class
     that = fromArrayLike(that, array);
@@ -506,7 +473,7 @@ function fromObject (that, obj) {
   if (obj) {
     if ((typeof ArrayBuffer !== 'undefined' &&
         obj.buffer instanceof ArrayBuffer) || 'length' in obj) {
-      if (typeof obj.length !== 'number' || isnan(obj.length)) {
+      if (typeof obj.length !== 'number' || isnan$1(obj.length)) {
         return createBuffer(that, 0)
       }
       return fromArrayLike(that, obj)
@@ -529,19 +496,12 @@ function checked (length) {
   }
   return length | 0
 }
-
-function SlowBuffer (length) {
-  if (+length != length) { // eslint-disable-line eqeqeq
-    length = 0;
-  }
-  return Buffer$1.alloc(+length)
-}
-Buffer$1.isBuffer = isBuffer;
+Buffer.isBuffer = isBuffer;
 function internalIsBuffer (b) {
   return !!(b != null && b._isBuffer)
 }
 
-Buffer$1.compare = function compare (a, b) {
+Buffer.compare = function compare (a, b) {
   if (!internalIsBuffer(a) || !internalIsBuffer(b)) {
     throw new TypeError('Arguments must be Buffers')
   }
@@ -564,7 +524,7 @@ Buffer$1.compare = function compare (a, b) {
   return 0
 };
 
-Buffer$1.isEncoding = function isEncoding (encoding) {
+Buffer.isEncoding = function isEncoding (encoding) {
   switch (String(encoding).toLowerCase()) {
     case 'hex':
     case 'utf8':
@@ -583,13 +543,13 @@ Buffer$1.isEncoding = function isEncoding (encoding) {
   }
 };
 
-Buffer$1.concat = function concat (list, length) {
+Buffer.concat = function concat (list, length) {
   if (!isArray(list)) {
     throw new TypeError('"list" argument must be an Array of Buffers')
   }
 
   if (list.length === 0) {
-    return Buffer$1.alloc(0)
+    return Buffer.alloc(0)
   }
 
   var i;
@@ -600,7 +560,7 @@ Buffer$1.concat = function concat (list, length) {
     }
   }
 
-  var buffer = Buffer$1.allocUnsafe(length);
+  var buffer = Buffer.allocUnsafe(length);
   var pos = 0;
   for (i = 0; i < list.length; ++i) {
     var buf = list[i];
@@ -656,7 +616,7 @@ function byteLength (string, encoding) {
     }
   }
 }
-Buffer$1.byteLength = byteLength;
+Buffer.byteLength = byteLength;
 
 function slowToString (encoding, start, end) {
   var loweredCase = false;
@@ -730,7 +690,7 @@ function slowToString (encoding, start, end) {
 
 // The property is used by `Buffer.isBuffer` and `is-buffer` (in Safari 5-7) to detect
 // Buffer instances.
-Buffer$1.prototype._isBuffer = true;
+Buffer.prototype._isBuffer = true;
 
 function swap (b, n, m) {
   var i = b[n];
@@ -738,7 +698,7 @@ function swap (b, n, m) {
   b[m] = i;
 }
 
-Buffer$1.prototype.swap16 = function swap16 () {
+Buffer.prototype.swap16 = function swap16 () {
   var len = this.length;
   if (len % 2 !== 0) {
     throw new RangeError('Buffer size must be a multiple of 16-bits')
@@ -749,7 +709,7 @@ Buffer$1.prototype.swap16 = function swap16 () {
   return this
 };
 
-Buffer$1.prototype.swap32 = function swap32 () {
+Buffer.prototype.swap32 = function swap32 () {
   var len = this.length;
   if (len % 4 !== 0) {
     throw new RangeError('Buffer size must be a multiple of 32-bits')
@@ -761,7 +721,7 @@ Buffer$1.prototype.swap32 = function swap32 () {
   return this
 };
 
-Buffer$1.prototype.swap64 = function swap64 () {
+Buffer.prototype.swap64 = function swap64 () {
   var len = this.length;
   if (len % 8 !== 0) {
     throw new RangeError('Buffer size must be a multiple of 64-bits')
@@ -775,20 +735,20 @@ Buffer$1.prototype.swap64 = function swap64 () {
   return this
 };
 
-Buffer$1.prototype.toString = function toString () {
+Buffer.prototype.toString = function toString () {
   var length = this.length | 0;
   if (length === 0) return ''
   if (arguments.length === 0) return utf8Slice(this, 0, length)
   return slowToString.apply(this, arguments)
 };
 
-Buffer$1.prototype.equals = function equals (b) {
+Buffer.prototype.equals = function equals (b) {
   if (!internalIsBuffer(b)) throw new TypeError('Argument must be a Buffer')
   if (this === b) return true
-  return Buffer$1.compare(this, b) === 0
+  return Buffer.compare(this, b) === 0
 };
 
-Buffer$1.prototype.inspect = function inspect () {
+Buffer.prototype.inspect = function inspect () {
   var str = '';
   var max = INSPECT_MAX_BYTES;
   if (this.length > 0) {
@@ -798,7 +758,7 @@ Buffer$1.prototype.inspect = function inspect () {
   return '<Buffer ' + str + '>'
 };
 
-Buffer$1.prototype.compare = function compare (target, start, end, thisStart, thisEnd) {
+Buffer.prototype.compare = function compare (target, start, end, thisStart, thisEnd) {
   if (!internalIsBuffer(target)) {
     throw new TypeError('Argument must be a Buffer')
   }
@@ -897,7 +857,7 @@ function bidirectionalIndexOf (buffer, val, byteOffset, encoding, dir) {
 
   // Normalize val
   if (typeof val === 'string') {
-    val = Buffer$1.from(val, encoding);
+    val = Buffer.from(val, encoding);
   }
 
   // Finally, search either indexOf (if dir is true) or lastIndexOf
@@ -909,7 +869,7 @@ function bidirectionalIndexOf (buffer, val, byteOffset, encoding, dir) {
     return arrayIndexOf(buffer, val, byteOffset, encoding, dir)
   } else if (typeof val === 'number') {
     val = val & 0xFF; // Search for a byte value [0-255]
-    if (Buffer$1.TYPED_ARRAY_SUPPORT &&
+    if (Buffer.TYPED_ARRAY_SUPPORT &&
         typeof Uint8Array.prototype.indexOf === 'function') {
       if (dir) {
         return Uint8Array.prototype.indexOf.call(buffer, val, byteOffset)
@@ -979,15 +939,15 @@ function arrayIndexOf (arr, val, byteOffset, encoding, dir) {
   return -1
 }
 
-Buffer$1.prototype.includes = function includes (val, byteOffset, encoding) {
+Buffer.prototype.includes = function includes (val, byteOffset, encoding) {
   return this.indexOf(val, byteOffset, encoding) !== -1
 };
 
-Buffer$1.prototype.indexOf = function indexOf (val, byteOffset, encoding) {
+Buffer.prototype.indexOf = function indexOf (val, byteOffset, encoding) {
   return bidirectionalIndexOf(this, val, byteOffset, encoding, true)
 };
 
-Buffer$1.prototype.lastIndexOf = function lastIndexOf (val, byteOffset, encoding) {
+Buffer.prototype.lastIndexOf = function lastIndexOf (val, byteOffset, encoding) {
   return bidirectionalIndexOf(this, val, byteOffset, encoding, false)
 };
 
@@ -1038,7 +998,7 @@ function ucs2Write (buf, string, offset, length) {
   return blitBuffer(utf16leToBytes(string, buf.length - offset), buf, offset, length)
 }
 
-Buffer$1.prototype.write = function write (string, offset, length, encoding) {
+Buffer.prototype.write = function write (string, offset, length, encoding) {
   // Buffer#write(string)
   if (offset === undefined) {
     encoding = 'utf8';
@@ -1110,7 +1070,7 @@ Buffer$1.prototype.write = function write (string, offset, length, encoding) {
   }
 };
 
-Buffer$1.prototype.toJSON = function toJSON () {
+Buffer.prototype.toJSON = function toJSON () {
   return {
     type: 'Buffer',
     data: Array.prototype.slice.call(this._arr || this, 0)
@@ -1263,7 +1223,7 @@ function utf16leSlice (buf, start, end) {
   return res
 }
 
-Buffer$1.prototype.slice = function slice (start, end) {
+Buffer.prototype.slice = function slice (start, end) {
   var len = this.length;
   start = ~~start;
   end = end === undefined ? len : ~~end;
@@ -1285,12 +1245,12 @@ Buffer$1.prototype.slice = function slice (start, end) {
   if (end < start) end = start;
 
   var newBuf;
-  if (Buffer$1.TYPED_ARRAY_SUPPORT) {
+  if (Buffer.TYPED_ARRAY_SUPPORT) {
     newBuf = this.subarray(start, end);
-    newBuf.__proto__ = Buffer$1.prototype;
+    newBuf.__proto__ = Buffer.prototype;
   } else {
     var sliceLen = end - start;
-    newBuf = new Buffer$1(sliceLen, undefined);
+    newBuf = new Buffer(sliceLen, undefined);
     for (var i = 0; i < sliceLen; ++i) {
       newBuf[i] = this[i + start];
     }
@@ -1307,7 +1267,7 @@ function checkOffset (offset, ext, length) {
   if (offset + ext > length) throw new RangeError('Trying to access beyond buffer length')
 }
 
-Buffer$1.prototype.readUIntLE = function readUIntLE (offset, byteLength, noAssert) {
+Buffer.prototype.readUIntLE = function readUIntLE (offset, byteLength, noAssert) {
   offset = offset | 0;
   byteLength = byteLength | 0;
   if (!noAssert) checkOffset(offset, byteLength, this.length);
@@ -1322,7 +1282,7 @@ Buffer$1.prototype.readUIntLE = function readUIntLE (offset, byteLength, noAsser
   return val
 };
 
-Buffer$1.prototype.readUIntBE = function readUIntBE (offset, byteLength, noAssert) {
+Buffer.prototype.readUIntBE = function readUIntBE (offset, byteLength, noAssert) {
   offset = offset | 0;
   byteLength = byteLength | 0;
   if (!noAssert) {
@@ -1338,22 +1298,22 @@ Buffer$1.prototype.readUIntBE = function readUIntBE (offset, byteLength, noAsser
   return val
 };
 
-Buffer$1.prototype.readUInt8 = function readUInt8 (offset, noAssert) {
+Buffer.prototype.readUInt8 = function readUInt8 (offset, noAssert) {
   if (!noAssert) checkOffset(offset, 1, this.length);
   return this[offset]
 };
 
-Buffer$1.prototype.readUInt16LE = function readUInt16LE (offset, noAssert) {
+Buffer.prototype.readUInt16LE = function readUInt16LE (offset, noAssert) {
   if (!noAssert) checkOffset(offset, 2, this.length);
   return this[offset] | (this[offset + 1] << 8)
 };
 
-Buffer$1.prototype.readUInt16BE = function readUInt16BE (offset, noAssert) {
+Buffer.prototype.readUInt16BE = function readUInt16BE (offset, noAssert) {
   if (!noAssert) checkOffset(offset, 2, this.length);
   return (this[offset] << 8) | this[offset + 1]
 };
 
-Buffer$1.prototype.readUInt32LE = function readUInt32LE (offset, noAssert) {
+Buffer.prototype.readUInt32LE = function readUInt32LE (offset, noAssert) {
   if (!noAssert) checkOffset(offset, 4, this.length);
 
   return ((this[offset]) |
@@ -1362,7 +1322,7 @@ Buffer$1.prototype.readUInt32LE = function readUInt32LE (offset, noAssert) {
       (this[offset + 3] * 0x1000000)
 };
 
-Buffer$1.prototype.readUInt32BE = function readUInt32BE (offset, noAssert) {
+Buffer.prototype.readUInt32BE = function readUInt32BE (offset, noAssert) {
   if (!noAssert) checkOffset(offset, 4, this.length);
 
   return (this[offset] * 0x1000000) +
@@ -1371,7 +1331,7 @@ Buffer$1.prototype.readUInt32BE = function readUInt32BE (offset, noAssert) {
     this[offset + 3])
 };
 
-Buffer$1.prototype.readIntLE = function readIntLE (offset, byteLength, noAssert) {
+Buffer.prototype.readIntLE = function readIntLE (offset, byteLength, noAssert) {
   offset = offset | 0;
   byteLength = byteLength | 0;
   if (!noAssert) checkOffset(offset, byteLength, this.length);
@@ -1389,7 +1349,7 @@ Buffer$1.prototype.readIntLE = function readIntLE (offset, byteLength, noAssert)
   return val
 };
 
-Buffer$1.prototype.readIntBE = function readIntBE (offset, byteLength, noAssert) {
+Buffer.prototype.readIntBE = function readIntBE (offset, byteLength, noAssert) {
   offset = offset | 0;
   byteLength = byteLength | 0;
   if (!noAssert) checkOffset(offset, byteLength, this.length);
@@ -1407,25 +1367,25 @@ Buffer$1.prototype.readIntBE = function readIntBE (offset, byteLength, noAssert)
   return val
 };
 
-Buffer$1.prototype.readInt8 = function readInt8 (offset, noAssert) {
+Buffer.prototype.readInt8 = function readInt8 (offset, noAssert) {
   if (!noAssert) checkOffset(offset, 1, this.length);
   if (!(this[offset] & 0x80)) return (this[offset])
   return ((0xff - this[offset] + 1) * -1)
 };
 
-Buffer$1.prototype.readInt16LE = function readInt16LE (offset, noAssert) {
+Buffer.prototype.readInt16LE = function readInt16LE (offset, noAssert) {
   if (!noAssert) checkOffset(offset, 2, this.length);
   var val = this[offset] | (this[offset + 1] << 8);
   return (val & 0x8000) ? val | 0xFFFF0000 : val
 };
 
-Buffer$1.prototype.readInt16BE = function readInt16BE (offset, noAssert) {
+Buffer.prototype.readInt16BE = function readInt16BE (offset, noAssert) {
   if (!noAssert) checkOffset(offset, 2, this.length);
   var val = this[offset + 1] | (this[offset] << 8);
   return (val & 0x8000) ? val | 0xFFFF0000 : val
 };
 
-Buffer$1.prototype.readInt32LE = function readInt32LE (offset, noAssert) {
+Buffer.prototype.readInt32LE = function readInt32LE (offset, noAssert) {
   if (!noAssert) checkOffset(offset, 4, this.length);
 
   return (this[offset]) |
@@ -1434,7 +1394,7 @@ Buffer$1.prototype.readInt32LE = function readInt32LE (offset, noAssert) {
     (this[offset + 3] << 24)
 };
 
-Buffer$1.prototype.readInt32BE = function readInt32BE (offset, noAssert) {
+Buffer.prototype.readInt32BE = function readInt32BE (offset, noAssert) {
   if (!noAssert) checkOffset(offset, 4, this.length);
 
   return (this[offset] << 24) |
@@ -1443,22 +1403,22 @@ Buffer$1.prototype.readInt32BE = function readInt32BE (offset, noAssert) {
     (this[offset + 3])
 };
 
-Buffer$1.prototype.readFloatLE = function readFloatLE (offset, noAssert) {
+Buffer.prototype.readFloatLE = function readFloatLE (offset, noAssert) {
   if (!noAssert) checkOffset(offset, 4, this.length);
   return read(this, offset, true, 23, 4)
 };
 
-Buffer$1.prototype.readFloatBE = function readFloatBE (offset, noAssert) {
+Buffer.prototype.readFloatBE = function readFloatBE (offset, noAssert) {
   if (!noAssert) checkOffset(offset, 4, this.length);
   return read(this, offset, false, 23, 4)
 };
 
-Buffer$1.prototype.readDoubleLE = function readDoubleLE (offset, noAssert) {
+Buffer.prototype.readDoubleLE = function readDoubleLE (offset, noAssert) {
   if (!noAssert) checkOffset(offset, 8, this.length);
   return read(this, offset, true, 52, 8)
 };
 
-Buffer$1.prototype.readDoubleBE = function readDoubleBE (offset, noAssert) {
+Buffer.prototype.readDoubleBE = function readDoubleBE (offset, noAssert) {
   if (!noAssert) checkOffset(offset, 8, this.length);
   return read(this, offset, false, 52, 8)
 };
@@ -1469,7 +1429,7 @@ function checkInt (buf, value, offset, ext, max, min) {
   if (offset + ext > buf.length) throw new RangeError('Index out of range')
 }
 
-Buffer$1.prototype.writeUIntLE = function writeUIntLE (value, offset, byteLength, noAssert) {
+Buffer.prototype.writeUIntLE = function writeUIntLE (value, offset, byteLength, noAssert) {
   value = +value;
   offset = offset | 0;
   byteLength = byteLength | 0;
@@ -1488,7 +1448,7 @@ Buffer$1.prototype.writeUIntLE = function writeUIntLE (value, offset, byteLength
   return offset + byteLength
 };
 
-Buffer$1.prototype.writeUIntBE = function writeUIntBE (value, offset, byteLength, noAssert) {
+Buffer.prototype.writeUIntBE = function writeUIntBE (value, offset, byteLength, noAssert) {
   value = +value;
   offset = offset | 0;
   byteLength = byteLength | 0;
@@ -1507,11 +1467,11 @@ Buffer$1.prototype.writeUIntBE = function writeUIntBE (value, offset, byteLength
   return offset + byteLength
 };
 
-Buffer$1.prototype.writeUInt8 = function writeUInt8 (value, offset, noAssert) {
+Buffer.prototype.writeUInt8 = function writeUInt8 (value, offset, noAssert) {
   value = +value;
   offset = offset | 0;
   if (!noAssert) checkInt(this, value, offset, 1, 0xff, 0);
-  if (!Buffer$1.TYPED_ARRAY_SUPPORT) value = Math.floor(value);
+  if (!Buffer.TYPED_ARRAY_SUPPORT) value = Math.floor(value);
   this[offset] = (value & 0xff);
   return offset + 1
 };
@@ -1524,11 +1484,11 @@ function objectWriteUInt16 (buf, value, offset, littleEndian) {
   }
 }
 
-Buffer$1.prototype.writeUInt16LE = function writeUInt16LE (value, offset, noAssert) {
+Buffer.prototype.writeUInt16LE = function writeUInt16LE (value, offset, noAssert) {
   value = +value;
   offset = offset | 0;
   if (!noAssert) checkInt(this, value, offset, 2, 0xffff, 0);
-  if (Buffer$1.TYPED_ARRAY_SUPPORT) {
+  if (Buffer.TYPED_ARRAY_SUPPORT) {
     this[offset] = (value & 0xff);
     this[offset + 1] = (value >>> 8);
   } else {
@@ -1537,11 +1497,11 @@ Buffer$1.prototype.writeUInt16LE = function writeUInt16LE (value, offset, noAsse
   return offset + 2
 };
 
-Buffer$1.prototype.writeUInt16BE = function writeUInt16BE (value, offset, noAssert) {
+Buffer.prototype.writeUInt16BE = function writeUInt16BE (value, offset, noAssert) {
   value = +value;
   offset = offset | 0;
   if (!noAssert) checkInt(this, value, offset, 2, 0xffff, 0);
-  if (Buffer$1.TYPED_ARRAY_SUPPORT) {
+  if (Buffer.TYPED_ARRAY_SUPPORT) {
     this[offset] = (value >>> 8);
     this[offset + 1] = (value & 0xff);
   } else {
@@ -1557,11 +1517,11 @@ function objectWriteUInt32 (buf, value, offset, littleEndian) {
   }
 }
 
-Buffer$1.prototype.writeUInt32LE = function writeUInt32LE (value, offset, noAssert) {
+Buffer.prototype.writeUInt32LE = function writeUInt32LE (value, offset, noAssert) {
   value = +value;
   offset = offset | 0;
   if (!noAssert) checkInt(this, value, offset, 4, 0xffffffff, 0);
-  if (Buffer$1.TYPED_ARRAY_SUPPORT) {
+  if (Buffer.TYPED_ARRAY_SUPPORT) {
     this[offset + 3] = (value >>> 24);
     this[offset + 2] = (value >>> 16);
     this[offset + 1] = (value >>> 8);
@@ -1572,11 +1532,11 @@ Buffer$1.prototype.writeUInt32LE = function writeUInt32LE (value, offset, noAsse
   return offset + 4
 };
 
-Buffer$1.prototype.writeUInt32BE = function writeUInt32BE (value, offset, noAssert) {
+Buffer.prototype.writeUInt32BE = function writeUInt32BE (value, offset, noAssert) {
   value = +value;
   offset = offset | 0;
   if (!noAssert) checkInt(this, value, offset, 4, 0xffffffff, 0);
-  if (Buffer$1.TYPED_ARRAY_SUPPORT) {
+  if (Buffer.TYPED_ARRAY_SUPPORT) {
     this[offset] = (value >>> 24);
     this[offset + 1] = (value >>> 16);
     this[offset + 2] = (value >>> 8);
@@ -1587,7 +1547,7 @@ Buffer$1.prototype.writeUInt32BE = function writeUInt32BE (value, offset, noAsse
   return offset + 4
 };
 
-Buffer$1.prototype.writeIntLE = function writeIntLE (value, offset, byteLength, noAssert) {
+Buffer.prototype.writeIntLE = function writeIntLE (value, offset, byteLength, noAssert) {
   value = +value;
   offset = offset | 0;
   if (!noAssert) {
@@ -1610,7 +1570,7 @@ Buffer$1.prototype.writeIntLE = function writeIntLE (value, offset, byteLength, 
   return offset + byteLength
 };
 
-Buffer$1.prototype.writeIntBE = function writeIntBE (value, offset, byteLength, noAssert) {
+Buffer.prototype.writeIntBE = function writeIntBE (value, offset, byteLength, noAssert) {
   value = +value;
   offset = offset | 0;
   if (!noAssert) {
@@ -1633,21 +1593,21 @@ Buffer$1.prototype.writeIntBE = function writeIntBE (value, offset, byteLength, 
   return offset + byteLength
 };
 
-Buffer$1.prototype.writeInt8 = function writeInt8 (value, offset, noAssert) {
+Buffer.prototype.writeInt8 = function writeInt8 (value, offset, noAssert) {
   value = +value;
   offset = offset | 0;
   if (!noAssert) checkInt(this, value, offset, 1, 0x7f, -128);
-  if (!Buffer$1.TYPED_ARRAY_SUPPORT) value = Math.floor(value);
+  if (!Buffer.TYPED_ARRAY_SUPPORT) value = Math.floor(value);
   if (value < 0) value = 0xff + value + 1;
   this[offset] = (value & 0xff);
   return offset + 1
 };
 
-Buffer$1.prototype.writeInt16LE = function writeInt16LE (value, offset, noAssert) {
+Buffer.prototype.writeInt16LE = function writeInt16LE (value, offset, noAssert) {
   value = +value;
   offset = offset | 0;
   if (!noAssert) checkInt(this, value, offset, 2, 0x7fff, -32768);
-  if (Buffer$1.TYPED_ARRAY_SUPPORT) {
+  if (Buffer.TYPED_ARRAY_SUPPORT) {
     this[offset] = (value & 0xff);
     this[offset + 1] = (value >>> 8);
   } else {
@@ -1656,11 +1616,11 @@ Buffer$1.prototype.writeInt16LE = function writeInt16LE (value, offset, noAssert
   return offset + 2
 };
 
-Buffer$1.prototype.writeInt16BE = function writeInt16BE (value, offset, noAssert) {
+Buffer.prototype.writeInt16BE = function writeInt16BE (value, offset, noAssert) {
   value = +value;
   offset = offset | 0;
   if (!noAssert) checkInt(this, value, offset, 2, 0x7fff, -32768);
-  if (Buffer$1.TYPED_ARRAY_SUPPORT) {
+  if (Buffer.TYPED_ARRAY_SUPPORT) {
     this[offset] = (value >>> 8);
     this[offset + 1] = (value & 0xff);
   } else {
@@ -1669,11 +1629,11 @@ Buffer$1.prototype.writeInt16BE = function writeInt16BE (value, offset, noAssert
   return offset + 2
 };
 
-Buffer$1.prototype.writeInt32LE = function writeInt32LE (value, offset, noAssert) {
+Buffer.prototype.writeInt32LE = function writeInt32LE (value, offset, noAssert) {
   value = +value;
   offset = offset | 0;
   if (!noAssert) checkInt(this, value, offset, 4, 0x7fffffff, -2147483648);
-  if (Buffer$1.TYPED_ARRAY_SUPPORT) {
+  if (Buffer.TYPED_ARRAY_SUPPORT) {
     this[offset] = (value & 0xff);
     this[offset + 1] = (value >>> 8);
     this[offset + 2] = (value >>> 16);
@@ -1684,12 +1644,12 @@ Buffer$1.prototype.writeInt32LE = function writeInt32LE (value, offset, noAssert
   return offset + 4
 };
 
-Buffer$1.prototype.writeInt32BE = function writeInt32BE (value, offset, noAssert) {
+Buffer.prototype.writeInt32BE = function writeInt32BE (value, offset, noAssert) {
   value = +value;
   offset = offset | 0;
   if (!noAssert) checkInt(this, value, offset, 4, 0x7fffffff, -2147483648);
   if (value < 0) value = 0xffffffff + value + 1;
-  if (Buffer$1.TYPED_ARRAY_SUPPORT) {
+  if (Buffer.TYPED_ARRAY_SUPPORT) {
     this[offset] = (value >>> 24);
     this[offset + 1] = (value >>> 16);
     this[offset + 2] = (value >>> 8);
@@ -1713,11 +1673,11 @@ function writeFloat (buf, value, offset, littleEndian, noAssert) {
   return offset + 4
 }
 
-Buffer$1.prototype.writeFloatLE = function writeFloatLE (value, offset, noAssert) {
+Buffer.prototype.writeFloatLE = function writeFloatLE (value, offset, noAssert) {
   return writeFloat(this, value, offset, true, noAssert)
 };
 
-Buffer$1.prototype.writeFloatBE = function writeFloatBE (value, offset, noAssert) {
+Buffer.prototype.writeFloatBE = function writeFloatBE (value, offset, noAssert) {
   return writeFloat(this, value, offset, false, noAssert)
 };
 
@@ -1729,16 +1689,16 @@ function writeDouble (buf, value, offset, littleEndian, noAssert) {
   return offset + 8
 }
 
-Buffer$1.prototype.writeDoubleLE = function writeDoubleLE (value, offset, noAssert) {
+Buffer.prototype.writeDoubleLE = function writeDoubleLE (value, offset, noAssert) {
   return writeDouble(this, value, offset, true, noAssert)
 };
 
-Buffer$1.prototype.writeDoubleBE = function writeDoubleBE (value, offset, noAssert) {
+Buffer.prototype.writeDoubleBE = function writeDoubleBE (value, offset, noAssert) {
   return writeDouble(this, value, offset, false, noAssert)
 };
 
 // copy(targetBuffer, targetStart=0, sourceStart=0, sourceEnd=buffer.length)
-Buffer$1.prototype.copy = function copy (target, targetStart, start, end) {
+Buffer.prototype.copy = function copy (target, targetStart, start, end) {
   if (!start) start = 0;
   if (!end && end !== 0) end = this.length;
   if (targetStart >= target.length) targetStart = target.length;
@@ -1770,7 +1730,7 @@ Buffer$1.prototype.copy = function copy (target, targetStart, start, end) {
     for (i = len - 1; i >= 0; --i) {
       target[i + targetStart] = this[i + start];
     }
-  } else if (len < 1000 || !Buffer$1.TYPED_ARRAY_SUPPORT) {
+  } else if (len < 1000 || !Buffer.TYPED_ARRAY_SUPPORT) {
     // ascending copy from start
     for (i = 0; i < len; ++i) {
       target[i + targetStart] = this[i + start];
@@ -1790,7 +1750,7 @@ Buffer$1.prototype.copy = function copy (target, targetStart, start, end) {
 //    buffer.fill(number[, offset[, end]])
 //    buffer.fill(buffer[, offset[, end]])
 //    buffer.fill(string[, offset[, end]][, encoding])
-Buffer$1.prototype.fill = function fill (val, start, end, encoding) {
+Buffer.prototype.fill = function fill (val, start, end, encoding) {
   // Handle string cases:
   if (typeof val === 'string') {
     if (typeof start === 'string') {
@@ -1810,7 +1770,7 @@ Buffer$1.prototype.fill = function fill (val, start, end, encoding) {
     if (encoding !== undefined && typeof encoding !== 'string') {
       throw new TypeError('encoding must be a string')
     }
-    if (typeof encoding === 'string' && !Buffer$1.isEncoding(encoding)) {
+    if (typeof encoding === 'string' && !Buffer.isEncoding(encoding)) {
       throw new TypeError('Unknown encoding: ' + encoding)
     }
   } else if (typeof val === 'number') {
@@ -1839,7 +1799,7 @@ Buffer$1.prototype.fill = function fill (val, start, end, encoding) {
   } else {
     var bytes = internalIsBuffer(val)
       ? val
-      : utf8ToBytes(new Buffer$1(val, encoding).toString());
+      : utf8ToBytes(new Buffer(val, encoding).toString());
     var len = bytes.length;
     for (i = 0; i < end - start; ++i) {
       this[i + start] = bytes[i % len];
@@ -1994,7 +1954,7 @@ function blitBuffer (src, dst, offset, length) {
   return i
 }
 
-function isnan (val) {
+function isnan$1 (val) {
   return val !== val // eslint-disable-line no-self-compare
 }
 
@@ -2015,16 +1975,270 @@ function isSlowBuffer (obj) {
   return typeof obj.readFloatLE === 'function' && typeof obj.slice === 'function' && isFastBuffer(obj.slice(0, 0))
 }
 
-var bufferEs6 = /*#__PURE__*/Object.freeze({
-	__proto__: null,
-	Buffer: Buffer$1,
-	INSPECT_MAX_BYTES: INSPECT_MAX_BYTES,
-	SlowBuffer: SlowBuffer,
-	isBuffer: isBuffer,
-	kMaxLength: _kMaxLength
-});
-
-var require$$0$1 = /*@__PURE__*/getAugmentedNamespace(bufferEs6);
+class CephesCompiled {
+    compiled;
+    cmath;
+    // from cephes/cmath/isnan.c
+    cephes_signbit;
+    // from cephes/cmath/isnan.c
+    cephes_isnan;
+    // from cephes/cmath/isnan.c
+    cephes_isfinite;
+    // from cephes/cmath/sqrt.c
+    cephes_sqrt;
+    // from cephes/cmath/cbrt.c
+    cephes_cbrt;
+    misc;
+    // from cephes/misc/polevl.c
+    cephes_polevl;
+    // from cephes/misc/chbevl.c
+    cephes_chbevl;
+    // from cephes/cmath/round.c
+    cephes_round;
+    // from cephes/cmath/floor.c
+    cephes_ceil;
+    // from cephes/cmath/floor.c
+    cephes_floor;
+    // from cephes/cmath/floor.c
+    cephes_frexp;
+    // from cephes/cmath/floor.c
+    cephes_ldexp;
+    // from cephes/cmath/fabs.c
+    cephes_fabs;
+    cprob;
+    // from cephes/cprob/expx2.c
+    cephes_expx2;
+    // from cephes/cmath/sin.c
+    cephes_radian;
+    // from cephes/cmath/sincos.c
+    cephes_sincos;
+    // from cephes/cmath/tan.c
+    cephes_cot;
+    // from cephes/cmath/tandg.c
+    cephes_cotdg;
+    // from cephes/cprob/unity.c
+    cephes_log1p;
+    // from cephes/cprob/unity.c
+    cephes_expm1;
+    // from cephes/cprob/unity.c
+    cephes_cosm1;
+    // from cephes/cmath/asin.c
+    cephes_acos;
+    // from cephes/cmath/acosh.c
+    cephes_acosh;
+    // from cephes/cmath/asinh.c
+    cephes_asinh;
+    // from cephes/cmath/atanh.c
+    cephes_atanh;
+    // from cephes/cmath/asin.c
+    cephes_asin;
+    // from cephes/cmath/atan.c
+    cephes_atan;
+    // from cephes/cmath/atan.c
+    cephes_atan2;
+    // from cephes/cmath/sin.c
+    cephes_cos;
+    // from cephes/cmath/sindg.c
+    cephes_cosdg;
+    // from cephes/cmath/exp.c
+    cephes_exp;
+    // from cephes/cmath/exp2.c
+    cephes_exp2;
+    // from cephes/cmath/exp10.c
+    cephes_exp10;
+    // from cephes/cmath/cosh.c
+    cephes_cosh;
+    // from cephes/cmath/sinh.c
+    cephes_sinh;
+    // from cephes/cmath/tanh.c
+    cephes_tanh;
+    // from cephes/cmath/log.c
+    cephes_log;
+    // from cephes/cmath/log2.c
+    cephes_log2;
+    // from cephes/cmath/log10.c
+    cephes_log10;
+    // from cephes/cmath/pow.c
+    cephes_pow;
+    // from cephes/cmath/powi.c
+    cephes_powi;
+    // from cephes/cmath/sin.c
+    cephes_sin;
+    // from cephes/cmath/sindg.c
+    cephes_sindg;
+    // from cephes/cmath/tan.c
+    cephes_tan;
+    // from cephes/cmath/tandg.c
+    cephes_tandg;
+    // from cephes/misc/ei.c
+    cephes_ei;
+    // from cephes/misc/expn.c
+    cephes_expn;
+    // from cephes/misc/shichi.c
+    cephes_shichi;
+    // from cephes/misc/sici.c
+    cephes_sici;
+    // from cephes/misc/beta.c
+    cephes_lbeta;
+    // from cephes/misc/beta.c
+    cephes_beta;
+    // from cephes/misc/fac.c
+    cephes_fac;
+    // from cephes/cprob/gamma.c
+    cephes_gamma;
+    // from cephes/cprob/gamma.c
+    cephes_lgam;
+    // from cephes/cprob/incbet.c
+    cephes_incbet;
+    // from cephes/cprob/incbi.c
+    cephes_incbi;
+    // from cephes/cprob/igam.c
+    cephes_igam;
+    // from cephes/cprob/igam.c
+    cephes_igamc;
+    // from cephes/cprob/igami.c
+    cephes_igami;
+    // from cephes/misc/psi.c
+    cephes_psi;
+    // from cephes/misc/rgamma.c
+    cephes_rgamma;
+    // from cephes/cprob/ndtr.c
+    cephes_erf;
+    // from cephes/cprob/ndtr.c
+    cephes_erfc;
+    // from cephes/misc/dawsn.c
+    cephes_dawsn;
+    // from cephes/misc/fresnl.c
+    cephes_fresnl;
+    bessel;
+    // from cephes/bessel/airy.c
+    cephes_airy;
+    // from cephes/bessel/j0.c
+    cephes_j0;
+    // from cephes/bessel/j1.c
+    cephes_j1;
+    // from cephes/bessel/jn.c
+    cephes_jn;
+    // from cephes/bessel/jv.c
+    cephes_jv;
+    // from cephes/bessel/j0.c
+    cephes_y0;
+    // from cephes/bessel/j1.c
+    cephes_y1;
+    // from cephes/bessel/yn.c
+    cephes_yn;
+    // from cephes/bessel/struve.c
+    cephes_yv;
+    // from cephes/bessel/i0.c
+    cephes_i0;
+    // from cephes/bessel/i0.c
+    cephes_i0e;
+    // from cephes/bessel/i1.c
+    cephes_i1;
+    // from cephes/bessel/i1.c
+    cephes_i1e;
+    // from cephes/bessel/iv.c
+    cephes_iv;
+    // from cephes/bessel/k0.c
+    cephes_k0;
+    // from cephes/bessel/k0.c
+    cephes_k0e;
+    // from cephes/bessel/k1.c
+    cephes_k1;
+    // from cephes/bessel/k1.c
+    cephes_k1e;
+    // from cephes/bessel/kn.c
+    cephes_kn;
+    // from cephes/bessel/hyperg.c
+    cephes_hyperg;
+    // from cephes/bessel/hyp2f1.c
+    cephes_hyp2f1;
+    ellf;
+    // from cephes/ellf/ellpe.c
+    cephes_ellpe;
+    // from cephes/ellf/ellie.c
+    cephes_ellie;
+    // from cephes/ellf/ellpk.c
+    cephes_ellpk;
+    // from cephes/ellf/ellik.c
+    cephes_ellik;
+    // from cephes/ellf/ellpj.c
+    cephes_ellpj;
+    // from cephes/cprob/btdtr.c
+    cephes_btdtr;
+    // from cephes/cprob/kolmogorov.c
+    cephes_smirnov;
+    // from cephes/cprob/kolmogorov.c
+    cephes_kolmogorov;
+    // from cephes/cprob/kolmogorov.c
+    cephes_smirnovi;
+    // from cephes/cprob/kolmogorov.c
+    cephes_kolmogi;
+    // from cephes/cprob/nbdtr.c
+    cephes_nbdtri;
+    // from cephes/cprob/stdtr.c
+    cephes_stdtri;
+    // from cephes/cprob/bdtr.c
+    cephes_bdtr;
+    // from cephes/cprob/bdtr.c
+    cephes_bdtrc;
+    // from cephes/cprob/bdtr.c
+    cephes_bdtri;
+    // from cephes/cprob/chdtr.c
+    cephes_chdtr;
+    // from cephes/cprob/chdtr.c
+    cephes_chdtrc;
+    // from cephes/cprob/chdtr.c
+    cephes_chdtri;
+    // from cephes/cprob/fdtr.c
+    cephes_fdtr;
+    // from cephes/cprob/fdtr.c
+    cephes_fdtrc;
+    // from cephes/cprob/fdtr.c
+    cephes_fdtri;
+    // from cephes/cprob/gdtr.c
+    cephes_gdtr;
+    // from cephes/cprob/gdtr.c
+    cephes_gdtrc;
+    // from cephes/cprob/nbdtr.c
+    cephes_nbdtr;
+    // from cephes/cprob/nbdtr.c
+    cephes_nbdtrc;
+    // from cephes/cprob/ndtr.c
+    cephes_ndtr;
+    // from cephes/cprob/ndtri.c
+    cephes_ndtri;
+    // from cephes/cprob/pdtr.c
+    cephes_pdtr;
+    // from cephes/cprob/pdtr.c
+    cephes_pdtrc;
+    // from cephes/cprob/pdtr.c
+    cephes_pdtri;
+    // from cephes/cprob/stdtr.c
+    cephes_stdtr;
+    // from cephes/misc/planck.c
+    cephes_plancki;
+    // from cephes/misc/planck.c
+    cephes_planckc;
+    // from cephes/misc/planck.c
+    cephes_planckd;
+    // from cephes/misc/planck.c
+    cephes_planckw;
+    // from cephes/misc/spence.c
+    cephes_spence;
+    // from cephes/misc/zetac.c
+    cephes_zetac;
+    // from cephes/misc/zeta.c
+    cephes_zeta;
+    // from cephes/bessel/struve.c
+    cephes_struve;
+    // from cephes/misc/simpsn.c
+    cephes_simpsn;
+    // from cephes/misc/polevl.c
+    cephes_p1evl;
+    // from cephes/misc/polylog.c
+    cephes_polylog;
+}
 
 var cmath = {
 	buffer: "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",
@@ -2237,7 +2451,7 @@ var misc = {
 		""
 	]
 };
-var require$$0 = {
+var wasmMap = {
 	cmath: cmath,
 	cprob: cprob,
 	bessel: bessel,
@@ -2245,7 +2459,7 @@ var require$$0 = {
 	misc: misc
 };
 
-var require$$1 = {
+var errorMappings = {
 	"1": "argument domain error",
 	"2": "function singularity",
 	"3": "overflow range error",
@@ -2256,2864 +2470,2296 @@ var require$$1 = {
 	"34": "Unix range error code"
 };
 
-var cephesWrapper;
-var hasRequiredCephesWrapper;
-
-function requireCephesWrapper () {
-	if (hasRequiredCephesWrapper) return cephesWrapper;
-	hasRequiredCephesWrapper = 1;
-	const WASM_CODE = {};
-	const WASM_METHODS = {};
-	for (const [pkg, { buffer, methods }] of Object.entries(
-	  require$$0
-	)) {
-	  WASM_CODE[pkg] = Buffer.from(buffer, "base64");
-	  WASM_METHODS[pkg] = methods.filter((el) => el.length);
-	}
-
-	const errorMappings = require$$1;
-
-	class BaseCephesWrapper {
-	  #memory = {};
-	  #exported = false;
-	  constructor() {}
-	  _AsciiToString(pkg, ptr) {
-	    let str = "";
-	    while (1) {
-	      const ch = this.#memory[pkg][8][ptr++ >> 0];
-	      if (ch === 0) return str;
-	      str += String.fromCharCode(ch);
-	    }
-	  }
-
-	  getWasmImports(pkg) {
-	    const wasmImports = {
-	      mtherr: (name /* char* */, code /* int */) => {
-	        // from mtherr.c
-	        const codemsg = errorMappings[String(code)] || "unknown error";
-	        const fnname = this._AsciiToString(pkg, name);
-	        const message = 'cephes reports "' + codemsg + '" in ' + fnname;
-
-	        if (code === 1) {
-	          throw new RangeError(message);
-	        } else {
-	          throw new Error(message);
-	        }
-	      },
-	    };
-	    return {
-	      env: wasmImports,
-	      wasi_snapshot_preview1: wasmImports,
-	    };
-	  }
-
-	  _exportPrograms(program) {
-	    if (this.#exported) {
-	      console.warn("This wrapper has already been exported");
-	      return;
-	    }
-	    for (const [pkg, methods] of Object.entries(WASM_METHODS)) {
-	      const _memory = program[pkg].exports.memory;
-	      this.#memory[pkg] = {
-	        8: new Int8Array(_memory.buffer),
-	        16: new Int16Array(_memory.buffer),
-	        32: new Int32Array(_memory.buffer),
-	        F32: new Float32Array(_memory.buffer),
-	        F64: new Float64Array(_memory.buffer),
-	      };
-	      this[pkg] = {
-	        stackAlloc: program[pkg].exports._emscripten_stack_alloc,
-	        stackRestore: program[pkg].exports._emscripten_stack_restore,
-	        stackSave: program[pkg].exports.emscripten_stack_get_current,
-	        writeArrayToMemory: (array, buffer) => {
-	          this.#memory[pkg][8].set(array, buffer);
-	        },
-	        getValue: (ptr, type = "i18") => {
-	          if (type.charAt(type.length - 1) === "*") {
-	            type = "i32"; // pointers are 32-bit
-	          }
-	          const getValueMapping = {
-	            i1: () => this.#memory[pkg][1][ptr >> 0],
-	            i8: () => this.#memory[pkg][8][ptr >> 0],
-	            i16: () => this.#memory[pkg][16][ptr >> 1],
-	            i32: () => this.#memory[pkg][32][ptr >> 2],
-	            i64: () => this.#memory[pkg][32][ptr >> 2],
-	            float: () => this.#memory[pkg]["F32"][ptr >> 2],
-	            double: () => this.#memory[pkg]["F64"][ptr >> 3],
-	          };
-
-	          const fn = getValueMapping[type];
-
-	          if (!fn) {
-	            throw new Error("invalid type for getValue: " + type);
-	          }
-
-	          return fn();
-	        },
-	      };
-
-	      for (const method of methods) {
-	        this["cephes" + method] = program[pkg].exports[method.slice(1)];
-	      }
-	    }
-	    this.#exported = true;
-	  }
-	}
-
-	class CephesWrapper extends BaseCephesWrapper {
-	  constructor() {
-	    super();
-	    const programs = Object.fromEntries(
-	      Object.entries(WASM_CODE).map(([pkg, code]) => [
-	        pkg,
-	        new WebAssembly.Instance(
-	          new WebAssembly.Module(code),
-	          this.getWasmImports(pkg)
-	        ),
-	      ])
-	    );
-	    this._exportPrograms(programs);
-	  }
-	}
-
-	class AsyncCephesWrapper extends BaseCephesWrapper {
-	  constructor() {
-	    super();
-	    const compiled = async function () {
-	      const entries = await Promise.all(
-	        Object.entries(WASM_CODE).map(([pkg, code]) =>
-	          WebAssembly.instantiate(code, this.getWasmImports(pkg)).then(
-	            (result) => [pkg, result.instance]
-	          )
-	        )
-	      );
-	      const programs = Object.fromEntries(entries);
-	      this._exportPrograms(programs);
-	      this.compiled = Promise.resolve();
-	    };
-	    this.compiled = compiled.bind(this)();
-	  }
-	}
-
-	cephesWrapper = { CephesWrapper, AsyncCephesWrapper };
-	return cephesWrapper;
+const WASM_CODE = {};
+const WASM_METHODS = {};
+for (const [pkg, { buffer, methods }] of Object.entries(wasmMap)) {
+    WASM_CODE[pkg] = Buffer.from(buffer, "base64");
+    WASM_METHODS[pkg] = methods.filter((el) => el.length);
+}
+class BaseCephesWrapper extends CephesCompiled {
+    #memory = {};
+    #exported = false;
+    _AsciiToString(pkg, ptr) {
+        let str = "";
+        while (1) {
+            const ch = this.#memory[pkg][8][ptr++ >> 0];
+            if (ch === 0)
+                return str;
+            str += String.fromCharCode(ch);
+        }
+    }
+    getWasmImports(pkg) {
+        const wasmImports = {
+            mtherr: (name /* char* */, code /* int */) => {
+                // from mtherr.c
+                const codemsg = errorMappings[String(code)] || "unknown error";
+                const fnname = this._AsciiToString(pkg, name);
+                const message = 'cephes reports "' + codemsg + '" in ' + fnname;
+                if (code === 1) {
+                    throw new RangeError(message);
+                }
+                else {
+                    throw new Error(message);
+                }
+            },
+        };
+        return {
+            env: wasmImports,
+            wasi_snapshot_preview1: wasmImports,
+        };
+    }
+    _exportPrograms(program) {
+        if (this.#exported) {
+            console.warn("This wrapper has already been exported");
+            return;
+        }
+        for (const [pkg, methods] of Object.entries(WASM_METHODS)) {
+            const _memory = program[pkg].exports.memory;
+            this.#memory[pkg] = {
+                8: new Int8Array(_memory.buffer),
+                16: new Int16Array(_memory.buffer),
+                32: new Int32Array(_memory.buffer),
+                F32: new Float32Array(_memory.buffer),
+                F64: new Float64Array(_memory.buffer),
+            };
+            this[pkg] = {
+                stackAlloc: program[pkg].exports._emscripten_stack_alloc,
+                stackRestore: program[pkg].exports._emscripten_stack_restore,
+                stackSave: program[pkg].exports.emscripten_stack_get_current,
+                writeArrayToMemory: (array, buffer) => {
+                    this.#memory[pkg][8].set(array, buffer);
+                },
+                getValue: (ptr, type = "i18") => {
+                    if (type.charAt(type.length - 1) === "*") {
+                        type = "i32"; // pointers are 32-bit
+                    }
+                    const getValueMapping = {
+                        i8: () => this.#memory[pkg][8][ptr >> 0],
+                        i16: () => this.#memory[pkg][16][ptr >> 1],
+                        i32: () => this.#memory[pkg][32][ptr >> 2],
+                        i64: () => this.#memory[pkg][32][ptr >> 2],
+                        float: () => this.#memory[pkg]["F32"][ptr >> 2],
+                        double: () => this.#memory[pkg]["F64"][ptr >> 3],
+                    };
+                    const fn = getValueMapping[type];
+                    if (!fn) {
+                        throw new Error("invalid type for getValue: " + type);
+                    }
+                    return fn();
+                },
+            };
+            for (const method of methods) {
+                this[("cephes" + method)] = program[pkg].exports[method.slice(1)];
+            }
+        }
+        this.#exported = true;
+    }
+}
+class AsyncCephesWrapper extends BaseCephesWrapper {
+    constructor() {
+        super();
+        const thisCephes = this;
+        const compiled = async function () {
+            const entries = await Promise.all(Object.entries(WASM_CODE).map(([pkg, code]) => WebAssembly.instantiate(code, thisCephes.getWasmImports(pkg)).then((result) => [pkg, result.instance])));
+            const programs = Object.fromEntries(entries);
+            thisCephes._exportPrograms(programs);
+            thisCephes.compiled = Promise.resolve();
+        };
+        thisCephes.compiled = compiled.bind(this)();
+    }
 }
 
-/**
- * Code used to compile ESM version of the code. Will replace ./cephes.cjs in bundling.
- */
+var cephes = new AsyncCephesWrapper();
 
-var cephesBrowser;
-var hasRequiredCephesBrowser;
-
-function requireCephesBrowser () {
-	if (hasRequiredCephesBrowser) return cephesBrowser;
-	hasRequiredCephesBrowser = 1;
-	if (typeof window !== "undefined") {
-	  const { Buffer } = require$$0$1;
-
-	  window.Buffer = Buffer;
-	}
-
-	const { AsyncCephesWrapper } = requireCephesWrapper();
-
-	cephesBrowser = new AsyncCephesWrapper();
-	return cephesBrowser;
+// Export compiled promise, in Node.js this is just a dummy promise as the
+// WebAssembly program will be compiled synchronously. It takes about 20ms
+// as of Node.js v10.6.1.
+const compiled = cephes.compiled ?? Promise.resolve();
+// from cephes/cmath/isnan.c
+function signbit(x) {
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: int
+    const fn_ret = cephes.cephes_signbit(carg_x) | 0;
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
 }
-
-var nodeCephes;
-var hasRequiredNodeCephes;
-
-function requireNodeCephes () {
-	if (hasRequiredNodeCephes) return nodeCephes;
-	hasRequiredNodeCephes = 1;
-	const cephes = requireCephesBrowser();
-
-	// Export compiled promise, in Node.js this is just a dummy promise as the
-	// WebAssembly program will be compiled synchronously. It takes about 20ms
-	// as of Node.js v10.6.1.
-	const compiled = cephes.compiled ?? Promise.resolve();
-	// from cephes/cmath/isnan.c
-	function signbit(/* double */ x) {
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: int
-	  const fn_ret = cephes.cephes_signbit(carg_x) | 0;
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cmath/isnan.c
-	function isnan(/* double */ x) {
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: int
-	  const fn_ret = cephes.cephes_isnan(carg_x) | 0;
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cmath/isnan.c
-	function isfinite(/* double */ x) {
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: int
-	  const fn_ret = cephes.cephes_isfinite(carg_x) | 0;
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cmath/sqrt.c
-	function sqrt(/* double */ x) {
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_sqrt(carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cmath/cbrt.c
-	function cbrt(/* double */ x) {
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_cbrt(carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/misc/polevl.c
-	function polevl(/* double */ x, /* double[] */ coef, /* int */ N) {
-	  //Save the STACKTOP because the following code will do some stack allocs
-	  const stacktop = cephes.misc.stackSave();
-
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    cephes.misc.stackRestore(stacktop);
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // argument: double[] coef
-	  if (!(coef instanceof Float64Array)) {
-	    cephes.misc.stackRestore(stacktop);
-	    throw new TypeError('coef must be either a Float64Array');
-	  }
-	  const carg_coef = cephes.misc.stackAlloc(coef.length << 3);
-	  cephes.misc.writeArrayToMemory(new Uint8Array(coef.buffer, coef.byteOffset, coef.byteLength), carg_coef);
-
-	  // argument: int N
-	  if (typeof N !== 'number') {
-	    cephes.misc.stackRestore(stacktop);
-	    throw new TypeError('N must be a number');
-	  }
-	  const carg_N = N | 0;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_polevl(carg_x, carg_coef, carg_N);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  // Restore internal stacktop before returning
-	  cephes.misc.stackRestore(stacktop);
-	  return ret;
-	}
-	// from cephes/misc/chbevl.c
-	function chbevl(/* double */ x, /* double[] */ array, /* int */ n) {
-	  //Save the STACKTOP because the following code will do some stack allocs
-	  const stacktop = cephes.misc.stackSave();
-
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    cephes.misc.stackRestore(stacktop);
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // argument: double[] array
-	  if (!(array instanceof Float64Array)) {
-	    cephes.misc.stackRestore(stacktop);
-	    throw new TypeError('array must be either a Float64Array');
-	  }
-	  const carg_array = cephes.misc.stackAlloc(array.length << 3);
-	  cephes.misc.writeArrayToMemory(new Uint8Array(array.buffer, array.byteOffset, array.byteLength), carg_array);
-
-	  // argument: int n
-	  if (typeof n !== 'number') {
-	    cephes.misc.stackRestore(stacktop);
-	    throw new TypeError('n must be a number');
-	  }
-	  const carg_n = n | 0;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_chbevl(carg_x, carg_array, carg_n);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  // Restore internal stacktop before returning
-	  cephes.misc.stackRestore(stacktop);
-	  return ret;
-	}
-	// from cephes/cmath/round.c
-	function round(/* double */ x) {
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_round(carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cmath/floor.c
-	function ceil(/* double */ x) {
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_ceil(carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cmath/floor.c
-	function floor(/* double */ x) {
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_floor(carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cmath/floor.c
-	function frexp(/* double */ x) {
-	  //Save the STACKTOP because the following code will do some stack allocs
-	  const stacktop = cephes.cmath.stackSave();
-
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    cephes.cmath.stackRestore(stacktop);
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // argument: int* pw2
-	  const carg_pw2 = cephes.cmath.stackAlloc(4); // No need to zero-set it.
-
-	  // return: double
-	  const fn_ret = cephes.cephes_frexp(carg_x, carg_pw2);
-
-	  // There are pointers, so return the values of thoese too
-	  const ret = [fn_ret, {
-	    'pw2': cephes.cmath.getValue(carg_pw2, 'i32'),
-	  }];
-
-	  // Restore internal stacktop before returning
-	  cephes.cmath.stackRestore(stacktop);
-	  return ret;
-	}
-	// from cephes/cmath/floor.c
-	function ldexp(/* double */ x, /* int */ pw2) {
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // argument: int pw2
-	  if (typeof pw2 !== 'number') {
-	    throw new TypeError('pw2 must be a number');
-	  }
-	  const carg_pw2 = pw2 | 0;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_ldexp(carg_x, carg_pw2);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cmath/fabs.c
-	function fabs(/* double */ x) {
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_fabs(carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cprob/expx2.c
-	function expx2(/* double */ x, /* int */ sign) {
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // argument: int sign
-	  if (typeof sign !== 'number') {
-	    throw new TypeError('sign must be a number');
-	  }
-	  const carg_sign = sign | 0;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_expx2(carg_x, carg_sign);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cmath/sin.c
-	function radian(/* double */ d, /* double */ m, /* double */ s) {
-	  // argument: double d
-	  if (typeof d !== 'number') {
-	    throw new TypeError('d must be a number');
-	  }
-	  const carg_d = d;
-
-	  // argument: double m
-	  if (typeof m !== 'number') {
-	    throw new TypeError('m must be a number');
-	  }
-	  const carg_m = m;
-
-	  // argument: double s
-	  if (typeof s !== 'number') {
-	    throw new TypeError('s must be a number');
-	  }
-	  const carg_s = s;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_radian(carg_d, carg_m, carg_s);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cmath/sincos.c
-	function sincos(/* double */ x, /* int */ flg) {
-	  //Save the STACKTOP because the following code will do some stack allocs
-	  const stacktop = cephes.cmath.stackSave();
-
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    cephes.cmath.stackRestore(stacktop);
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // argument: double* s
-	  const carg_s = cephes.cmath.stackAlloc(8); // No need to zero-set it.
-
-	  // argument: double* c
-	  const carg_c = cephes.cmath.stackAlloc(8); // No need to zero-set it.
-
-	  // argument: int flg
-	  if (typeof flg !== 'number') {
-	    cephes.cmath.stackRestore(stacktop);
-	    throw new TypeError('flg must be a number');
-	  }
-	  const carg_flg = flg | 0;
-
-	  // return: int
-	  const fn_ret = cephes.cephes_sincos(carg_x, carg_s, carg_c, carg_flg) | 0;
-
-	  // There are pointers, so return the values of thoese too
-	  const ret = [fn_ret, {
-	    's': cephes.cmath.getValue(carg_s, 'double'),
-	    'c': cephes.cmath.getValue(carg_c, 'double'),
-	  }];
-
-	  // Restore internal stacktop before returning
-	  cephes.cmath.stackRestore(stacktop);
-	  return ret;
-	}
-	// from cephes/cmath/tan.c
-	function cot(/* double */ x) {
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_cot(carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cmath/tandg.c
-	function cotdg(/* double */ x) {
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_cotdg(carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cprob/unity.c
-	function log1p(/* double */ x) {
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_log1p(carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cprob/unity.c
-	function expm1(/* double */ x) {
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_expm1(carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cprob/unity.c
-	function cosm1(/* double */ x) {
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_cosm1(carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cmath/asin.c
-	function acos(/* double */ x) {
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_acos(carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cmath/acosh.c
-	function acosh(/* double */ x) {
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_acosh(carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cmath/asinh.c
-	function asinh(/* double */ xx) {
-	  // argument: double xx
-	  if (typeof xx !== 'number') {
-	    throw new TypeError('xx must be a number');
-	  }
-	  const carg_xx = xx;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_asinh(carg_xx);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cmath/atanh.c
-	function atanh(/* double */ x) {
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_atanh(carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cmath/asin.c
-	function asin(/* double */ x) {
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_asin(carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cmath/atan.c
-	function atan(/* double */ x) {
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_atan(carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cmath/atan.c
-	function atan2(/* double */ y, /* double */ x) {
-	  // argument: double y
-	  if (typeof y !== 'number') {
-	    throw new TypeError('y must be a number');
-	  }
-	  const carg_y = y;
-
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_atan2(carg_y, carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cmath/sin.c
-	function cos(/* double */ x) {
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_cos(carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cmath/sindg.c
-	function cosdg(/* double */ x) {
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_cosdg(carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cmath/exp.c
-	function exp(/* double */ x) {
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_exp(carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cmath/exp2.c
-	function exp2(/* double */ x) {
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_exp2(carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cmath/exp10.c
-	function exp10(/* double */ x) {
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_exp10(carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cmath/cosh.c
-	function cosh(/* double */ x) {
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_cosh(carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cmath/sinh.c
-	function sinh(/* double */ x) {
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_sinh(carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cmath/tanh.c
-	function tanh(/* double */ x) {
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_tanh(carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cmath/log.c
-	function log(/* double */ x) {
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_log(carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cmath/log2.c
-	function log2(/* double */ x) {
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_log2(carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cmath/log10.c
-	function log10(/* double */ x) {
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_log10(carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cmath/pow.c
-	function pow(/* double */ x, /* double */ y) {
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // argument: double y
-	  if (typeof y !== 'number') {
-	    throw new TypeError('y must be a number');
-	  }
-	  const carg_y = y;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_pow(carg_x, carg_y);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cmath/powi.c
-	function powi(/* double */ x, /* int */ nn) {
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // argument: int nn
-	  if (typeof nn !== 'number') {
-	    throw new TypeError('nn must be a number');
-	  }
-	  const carg_nn = nn | 0;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_powi(carg_x, carg_nn);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cmath/sin.c
-	function sin(/* double */ x) {
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_sin(carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cmath/sindg.c
-	function sindg(/* double */ x) {
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_sindg(carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cmath/tan.c
-	function tan(/* double */ x) {
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_tan(carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cmath/tandg.c
-	function tandg(/* double */ x) {
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_tandg(carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/misc/ei.c
-	function ei(/* double */ x) {
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_ei(carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/misc/expn.c
-	function expn(/* int */ n, /* double */ x) {
-	  // argument: int n
-	  if (typeof n !== 'number') {
-	    throw new TypeError('n must be a number');
-	  }
-	  const carg_n = n | 0;
-
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_expn(carg_n, carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/misc/shichi.c
-	function shichi(/* double */ x) {
-	  //Save the STACKTOP because the following code will do some stack allocs
-	  const stacktop = cephes.misc.stackSave();
-
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    cephes.misc.stackRestore(stacktop);
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // argument: double* si
-	  const carg_si = cephes.misc.stackAlloc(8); // No need to zero-set it.
-
-	  // argument: double* ci
-	  const carg_ci = cephes.misc.stackAlloc(8); // No need to zero-set it.
-
-	  // return: int
-	  const fn_ret = cephes.cephes_shichi(carg_x, carg_si, carg_ci) | 0;
-
-	  // There are pointers, so return the values of thoese too
-	  const ret = [fn_ret, {
-	    'si': cephes.misc.getValue(carg_si, 'double'),
-	    'ci': cephes.misc.getValue(carg_ci, 'double'),
-	  }];
-
-	  // Restore internal stacktop before returning
-	  cephes.misc.stackRestore(stacktop);
-	  return ret;
-	}
-	// from cephes/misc/sici.c
-	function sici(/* double */ x) {
-	  //Save the STACKTOP because the following code will do some stack allocs
-	  const stacktop = cephes.misc.stackSave();
-
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    cephes.misc.stackRestore(stacktop);
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // argument: double* si
-	  const carg_si = cephes.misc.stackAlloc(8); // No need to zero-set it.
-
-	  // argument: double* ci
-	  const carg_ci = cephes.misc.stackAlloc(8); // No need to zero-set it.
-
-	  // return: int
-	  const fn_ret = cephes.cephes_sici(carg_x, carg_si, carg_ci) | 0;
-
-	  // There are pointers, so return the values of thoese too
-	  const ret = [fn_ret, {
-	    'si': cephes.misc.getValue(carg_si, 'double'),
-	    'ci': cephes.misc.getValue(carg_ci, 'double'),
-	  }];
-
-	  // Restore internal stacktop before returning
-	  cephes.misc.stackRestore(stacktop);
-	  return ret;
-	}
-	// from cephes/misc/beta.c
-	function lbeta(/* double */ a, /* double */ b) {
-	  // argument: double a
-	  if (typeof a !== 'number') {
-	    throw new TypeError('a must be a number');
-	  }
-	  const carg_a = a;
-
-	  // argument: double b
-	  if (typeof b !== 'number') {
-	    throw new TypeError('b must be a number');
-	  }
-	  const carg_b = b;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_lbeta(carg_a, carg_b);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/misc/beta.c
-	function beta(/* double */ a, /* double */ b) {
-	  // argument: double a
-	  if (typeof a !== 'number') {
-	    throw new TypeError('a must be a number');
-	  }
-	  const carg_a = a;
-
-	  // argument: double b
-	  if (typeof b !== 'number') {
-	    throw new TypeError('b must be a number');
-	  }
-	  const carg_b = b;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_beta(carg_a, carg_b);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/misc/fac.c
-	function fac(/* int */ i) {
-	  // argument: int i
-	  if (typeof i !== 'number') {
-	    throw new TypeError('i must be a number');
-	  }
-	  const carg_i = i | 0;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_fac(carg_i);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cprob/gamma.c
-	function gamma(/* double */ x) {
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_gamma(carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cprob/gamma.c
-	function lgam(/* double */ x) {
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_lgam(carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cprob/incbet.c
-	function incbet(/* double */ aa, /* double */ bb, /* double */ xx) {
-	  // argument: double aa
-	  if (typeof aa !== 'number') {
-	    throw new TypeError('aa must be a number');
-	  }
-	  const carg_aa = aa;
-
-	  // argument: double bb
-	  if (typeof bb !== 'number') {
-	    throw new TypeError('bb must be a number');
-	  }
-	  const carg_bb = bb;
-
-	  // argument: double xx
-	  if (typeof xx !== 'number') {
-	    throw new TypeError('xx must be a number');
-	  }
-	  const carg_xx = xx;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_incbet(carg_aa, carg_bb, carg_xx);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cprob/incbi.c
-	function incbi(/* double */ aa, /* double */ bb, /* double */ yy0) {
-	  // argument: double aa
-	  if (typeof aa !== 'number') {
-	    throw new TypeError('aa must be a number');
-	  }
-	  const carg_aa = aa;
-
-	  // argument: double bb
-	  if (typeof bb !== 'number') {
-	    throw new TypeError('bb must be a number');
-	  }
-	  const carg_bb = bb;
-
-	  // argument: double yy0
-	  if (typeof yy0 !== 'number') {
-	    throw new TypeError('yy0 must be a number');
-	  }
-	  const carg_yy0 = yy0;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_incbi(carg_aa, carg_bb, carg_yy0);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cprob/igam.c
-	function igam(/* double */ a, /* double */ x) {
-	  // argument: double a
-	  if (typeof a !== 'number') {
-	    throw new TypeError('a must be a number');
-	  }
-	  const carg_a = a;
-
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_igam(carg_a, carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cprob/igam.c
-	function igamc(/* double */ a, /* double */ x) {
-	  // argument: double a
-	  if (typeof a !== 'number') {
-	    throw new TypeError('a must be a number');
-	  }
-	  const carg_a = a;
-
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_igamc(carg_a, carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cprob/igami.c
-	function igami(/* double */ a, /* double */ y0) {
-	  // argument: double a
-	  if (typeof a !== 'number') {
-	    throw new TypeError('a must be a number');
-	  }
-	  const carg_a = a;
-
-	  // argument: double y0
-	  if (typeof y0 !== 'number') {
-	    throw new TypeError('y0 must be a number');
-	  }
-	  const carg_y0 = y0;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_igami(carg_a, carg_y0);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/misc/psi.c
-	function psi(/* double */ x) {
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_psi(carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/misc/rgamma.c
-	function rgamma(/* double */ x) {
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_rgamma(carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cprob/ndtr.c
-	function erf(/* double */ x) {
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_erf(carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cprob/ndtr.c
-	function erfc(/* double */ a) {
-	  // argument: double a
-	  if (typeof a !== 'number') {
-	    throw new TypeError('a must be a number');
-	  }
-	  const carg_a = a;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_erfc(carg_a);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/misc/dawsn.c
-	function dawsn(/* double */ xx) {
-	  // argument: double xx
-	  if (typeof xx !== 'number') {
-	    throw new TypeError('xx must be a number');
-	  }
-	  const carg_xx = xx;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_dawsn(carg_xx);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/misc/fresnl.c
-	function fresnl(/* double */ xxa) {
-	  //Save the STACKTOP because the following code will do some stack allocs
-	  const stacktop = cephes.misc.stackSave();
-
-	  // argument: double xxa
-	  if (typeof xxa !== 'number') {
-	    cephes.misc.stackRestore(stacktop);
-	    throw new TypeError('xxa must be a number');
-	  }
-	  const carg_xxa = xxa;
-
-	  // argument: double* ssa
-	  const carg_ssa = cephes.misc.stackAlloc(8); // No need to zero-set it.
-
-	  // argument: double* cca
-	  const carg_cca = cephes.misc.stackAlloc(8); // No need to zero-set it.
-
-	  // return: int
-	  const fn_ret = cephes.cephes_fresnl(carg_xxa, carg_ssa, carg_cca) | 0;
-
-	  // There are pointers, so return the values of thoese too
-	  const ret = [fn_ret, {
-	    'ssa': cephes.misc.getValue(carg_ssa, 'double'),
-	    'cca': cephes.misc.getValue(carg_cca, 'double'),
-	  }];
-
-	  // Restore internal stacktop before returning
-	  cephes.misc.stackRestore(stacktop);
-	  return ret;
-	}
-	// from cephes/bessel/airy.c
-	function airy(/* double */ x) {
-	  //Save the STACKTOP because the following code will do some stack allocs
-	  const stacktop = cephes.bessel.stackSave();
-
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    cephes.bessel.stackRestore(stacktop);
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // argument: double* ai
-	  const carg_ai = cephes.bessel.stackAlloc(8); // No need to zero-set it.
-
-	  // argument: double* aip
-	  const carg_aip = cephes.bessel.stackAlloc(8); // No need to zero-set it.
-
-	  // argument: double* bi
-	  const carg_bi = cephes.bessel.stackAlloc(8); // No need to zero-set it.
-
-	  // argument: double* bip
-	  const carg_bip = cephes.bessel.stackAlloc(8); // No need to zero-set it.
-
-	  // return: int
-	  const fn_ret = cephes.cephes_airy(carg_x, carg_ai, carg_aip, carg_bi, carg_bip) | 0;
-
-	  // There are pointers, so return the values of thoese too
-	  const ret = [fn_ret, {
-	    'ai': cephes.bessel.getValue(carg_ai, 'double'),
-	    'aip': cephes.bessel.getValue(carg_aip, 'double'),
-	    'bi': cephes.bessel.getValue(carg_bi, 'double'),
-	    'bip': cephes.bessel.getValue(carg_bip, 'double'),
-	  }];
-
-	  // Restore internal stacktop before returning
-	  cephes.bessel.stackRestore(stacktop);
-	  return ret;
-	}
-	// from cephes/bessel/j0.c
-	function j0(/* double */ x) {
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_j0(carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/bessel/j1.c
-	function j1(/* double */ x) {
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_j1(carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/bessel/jn.c
-	function jn(/* int */ n, /* double */ x) {
-	  // argument: int n
-	  if (typeof n !== 'number') {
-	    throw new TypeError('n must be a number');
-	  }
-	  const carg_n = n | 0;
-
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_jn(carg_n, carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/bessel/jv.c
-	function jv(/* double */ n, /* double */ x) {
-	  // argument: double n
-	  if (typeof n !== 'number') {
-	    throw new TypeError('n must be a number');
-	  }
-	  const carg_n = n;
-
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_jv(carg_n, carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/bessel/j0.c
-	function y0(/* double */ x) {
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_y0(carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/bessel/j1.c
-	function y1(/* double */ x) {
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_y1(carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/bessel/yn.c
-	function yn(/* int */ n, /* double */ x) {
-	  // argument: int n
-	  if (typeof n !== 'number') {
-	    throw new TypeError('n must be a number');
-	  }
-	  const carg_n = n | 0;
-
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_yn(carg_n, carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/bessel/struve.c
-	function yv(/* double */ v, /* double */ x) {
-	  // argument: double v
-	  if (typeof v !== 'number') {
-	    throw new TypeError('v must be a number');
-	  }
-	  const carg_v = v;
-
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_yv(carg_v, carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/bessel/i0.c
-	function i0(/* double */ x) {
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_i0(carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/bessel/i0.c
-	function i0e(/* double */ x) {
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_i0e(carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/bessel/i1.c
-	function i1(/* double */ x) {
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_i1(carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/bessel/i1.c
-	function i1e(/* double */ x) {
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_i1e(carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/bessel/iv.c
-	function iv(/* double */ v, /* double */ x) {
-	  // argument: double v
-	  if (typeof v !== 'number') {
-	    throw new TypeError('v must be a number');
-	  }
-	  const carg_v = v;
-
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_iv(carg_v, carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/bessel/k0.c
-	function k0(/* double */ x) {
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_k0(carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/bessel/k0.c
-	function k0e(/* double */ x) {
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_k0e(carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/bessel/k1.c
-	function k1(/* double */ x) {
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_k1(carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/bessel/k1.c
-	function k1e(/* double */ x) {
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_k1e(carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/bessel/kn.c
-	function kn(/* int */ nn, /* double */ x) {
-	  // argument: int nn
-	  if (typeof nn !== 'number') {
-	    throw new TypeError('nn must be a number');
-	  }
-	  const carg_nn = nn | 0;
-
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_kn(carg_nn, carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/bessel/hyperg.c
-	function hyperg(/* double */ a, /* double */ b, /* double */ x) {
-	  // argument: double a
-	  if (typeof a !== 'number') {
-	    throw new TypeError('a must be a number');
-	  }
-	  const carg_a = a;
-
-	  // argument: double b
-	  if (typeof b !== 'number') {
-	    throw new TypeError('b must be a number');
-	  }
-	  const carg_b = b;
-
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_hyperg(carg_a, carg_b, carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/bessel/hyp2f1.c
-	function hyp2f1(/* double */ a, /* double */ b, /* double */ c, /* double */ x) {
-	  // argument: double a
-	  if (typeof a !== 'number') {
-	    throw new TypeError('a must be a number');
-	  }
-	  const carg_a = a;
-
-	  // argument: double b
-	  if (typeof b !== 'number') {
-	    throw new TypeError('b must be a number');
-	  }
-	  const carg_b = b;
-
-	  // argument: double c
-	  if (typeof c !== 'number') {
-	    throw new TypeError('c must be a number');
-	  }
-	  const carg_c = c;
-
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_hyp2f1(carg_a, carg_b, carg_c, carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/ellf/ellpe.c
-	function ellpe(/* double */ x) {
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_ellpe(carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/ellf/ellie.c
-	function ellie(/* double */ phi, /* double */ m) {
-	  // argument: double phi
-	  if (typeof phi !== 'number') {
-	    throw new TypeError('phi must be a number');
-	  }
-	  const carg_phi = phi;
-
-	  // argument: double m
-	  if (typeof m !== 'number') {
-	    throw new TypeError('m must be a number');
-	  }
-	  const carg_m = m;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_ellie(carg_phi, carg_m);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/ellf/ellpk.c
-	function ellpk(/* double */ x) {
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_ellpk(carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/ellf/ellik.c
-	function ellik(/* double */ phi, /* double */ m) {
-	  // argument: double phi
-	  if (typeof phi !== 'number') {
-	    throw new TypeError('phi must be a number');
-	  }
-	  const carg_phi = phi;
-
-	  // argument: double m
-	  if (typeof m !== 'number') {
-	    throw new TypeError('m must be a number');
-	  }
-	  const carg_m = m;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_ellik(carg_phi, carg_m);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/ellf/ellpj.c
-	function ellpj(/* double */ u, /* double */ m) {
-	  //Save the STACKTOP because the following code will do some stack allocs
-	  const stacktop = cephes.ellf.stackSave();
-
-	  // argument: double u
-	  if (typeof u !== 'number') {
-	    cephes.ellf.stackRestore(stacktop);
-	    throw new TypeError('u must be a number');
-	  }
-	  const carg_u = u;
-
-	  // argument: double m
-	  if (typeof m !== 'number') {
-	    cephes.ellf.stackRestore(stacktop);
-	    throw new TypeError('m must be a number');
-	  }
-	  const carg_m = m;
-
-	  // argument: double* sn
-	  const carg_sn = cephes.ellf.stackAlloc(8); // No need to zero-set it.
-
-	  // argument: double* cn
-	  const carg_cn = cephes.ellf.stackAlloc(8); // No need to zero-set it.
-
-	  // argument: double* dn
-	  const carg_dn = cephes.ellf.stackAlloc(8); // No need to zero-set it.
-
-	  // argument: double* ph
-	  const carg_ph = cephes.ellf.stackAlloc(8); // No need to zero-set it.
-
-	  // return: int
-	  const fn_ret = cephes.cephes_ellpj(carg_u, carg_m, carg_sn, carg_cn, carg_dn, carg_ph) | 0;
-
-	  // There are pointers, so return the values of thoese too
-	  const ret = [fn_ret, {
-	    'sn': cephes.ellf.getValue(carg_sn, 'double'),
-	    'cn': cephes.ellf.getValue(carg_cn, 'double'),
-	    'dn': cephes.ellf.getValue(carg_dn, 'double'),
-	    'ph': cephes.ellf.getValue(carg_ph, 'double'),
-	  }];
-
-	  // Restore internal stacktop before returning
-	  cephes.ellf.stackRestore(stacktop);
-	  return ret;
-	}
-	// from cephes/cprob/btdtr.c
-	function btdtr(/* double */ a, /* double */ b, /* double */ x) {
-	  // argument: double a
-	  if (typeof a !== 'number') {
-	    throw new TypeError('a must be a number');
-	  }
-	  const carg_a = a;
-
-	  // argument: double b
-	  if (typeof b !== 'number') {
-	    throw new TypeError('b must be a number');
-	  }
-	  const carg_b = b;
-
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_btdtr(carg_a, carg_b, carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cprob/kolmogorov.c
-	function smirnov(/* int */ n, /* double */ e) {
-	  // argument: int n
-	  if (typeof n !== 'number') {
-	    throw new TypeError('n must be a number');
-	  }
-	  const carg_n = n | 0;
-
-	  // argument: double e
-	  if (typeof e !== 'number') {
-	    throw new TypeError('e must be a number');
-	  }
-	  const carg_e = e;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_smirnov(carg_n, carg_e);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cprob/kolmogorov.c
-	function kolmogorov(/* double */ y) {
-	  // argument: double y
-	  if (typeof y !== 'number') {
-	    throw new TypeError('y must be a number');
-	  }
-	  const carg_y = y;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_kolmogorov(carg_y);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cprob/kolmogorov.c
-	function smirnovi(/* int */ n, /* double */ p) {
-	  // argument: int n
-	  if (typeof n !== 'number') {
-	    throw new TypeError('n must be a number');
-	  }
-	  const carg_n = n | 0;
-
-	  // argument: double p
-	  if (typeof p !== 'number') {
-	    throw new TypeError('p must be a number');
-	  }
-	  const carg_p = p;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_smirnovi(carg_n, carg_p);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cprob/kolmogorov.c
-	function kolmogi(/* double */ p) {
-	  // argument: double p
-	  if (typeof p !== 'number') {
-	    throw new TypeError('p must be a number');
-	  }
-	  const carg_p = p;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_kolmogi(carg_p);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cprob/nbdtr.c
-	function nbdtri(/* int */ k, /* int */ n, /* double */ p) {
-	  // argument: int k
-	  if (typeof k !== 'number') {
-	    throw new TypeError('k must be a number');
-	  }
-	  const carg_k = k | 0;
-
-	  // argument: int n
-	  if (typeof n !== 'number') {
-	    throw new TypeError('n must be a number');
-	  }
-	  const carg_n = n | 0;
-
-	  // argument: double p
-	  if (typeof p !== 'number') {
-	    throw new TypeError('p must be a number');
-	  }
-	  const carg_p = p;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_nbdtri(carg_k, carg_n, carg_p);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cprob/stdtr.c
-	function stdtri(/* int */ k, /* double */ p) {
-	  // argument: int k
-	  if (typeof k !== 'number') {
-	    throw new TypeError('k must be a number');
-	  }
-	  const carg_k = k | 0;
-
-	  // argument: double p
-	  if (typeof p !== 'number') {
-	    throw new TypeError('p must be a number');
-	  }
-	  const carg_p = p;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_stdtri(carg_k, carg_p);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cprob/bdtr.c
-	function bdtr(/* int */ k, /* int */ n, /* double */ p) {
-	  // argument: int k
-	  if (typeof k !== 'number') {
-	    throw new TypeError('k must be a number');
-	  }
-	  const carg_k = k | 0;
-
-	  // argument: int n
-	  if (typeof n !== 'number') {
-	    throw new TypeError('n must be a number');
-	  }
-	  const carg_n = n | 0;
-
-	  // argument: double p
-	  if (typeof p !== 'number') {
-	    throw new TypeError('p must be a number');
-	  }
-	  const carg_p = p;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_bdtr(carg_k, carg_n, carg_p);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cprob/bdtr.c
-	function bdtrc(/* int */ k, /* int */ n, /* double */ p) {
-	  // argument: int k
-	  if (typeof k !== 'number') {
-	    throw new TypeError('k must be a number');
-	  }
-	  const carg_k = k | 0;
-
-	  // argument: int n
-	  if (typeof n !== 'number') {
-	    throw new TypeError('n must be a number');
-	  }
-	  const carg_n = n | 0;
-
-	  // argument: double p
-	  if (typeof p !== 'number') {
-	    throw new TypeError('p must be a number');
-	  }
-	  const carg_p = p;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_bdtrc(carg_k, carg_n, carg_p);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cprob/bdtr.c
-	function bdtri(/* int */ k, /* int */ n, /* double */ y) {
-	  // argument: int k
-	  if (typeof k !== 'number') {
-	    throw new TypeError('k must be a number');
-	  }
-	  const carg_k = k | 0;
-
-	  // argument: int n
-	  if (typeof n !== 'number') {
-	    throw new TypeError('n must be a number');
-	  }
-	  const carg_n = n | 0;
-
-	  // argument: double y
-	  if (typeof y !== 'number') {
-	    throw new TypeError('y must be a number');
-	  }
-	  const carg_y = y;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_bdtri(carg_k, carg_n, carg_y);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cprob/chdtr.c
-	function chdtr(/* double */ df, /* double */ x) {
-	  // argument: double df
-	  if (typeof df !== 'number') {
-	    throw new TypeError('df must be a number');
-	  }
-	  const carg_df = df;
-
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_chdtr(carg_df, carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cprob/chdtr.c
-	function chdtrc(/* double */ df, /* double */ x) {
-	  // argument: double df
-	  if (typeof df !== 'number') {
-	    throw new TypeError('df must be a number');
-	  }
-	  const carg_df = df;
-
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_chdtrc(carg_df, carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cprob/chdtr.c
-	function chdtri(/* double */ df, /* double */ y) {
-	  // argument: double df
-	  if (typeof df !== 'number') {
-	    throw new TypeError('df must be a number');
-	  }
-	  const carg_df = df;
-
-	  // argument: double y
-	  if (typeof y !== 'number') {
-	    throw new TypeError('y must be a number');
-	  }
-	  const carg_y = y;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_chdtri(carg_df, carg_y);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cprob/fdtr.c
-	function fdtr(/* int */ ia, /* int */ ib, /* double */ x) {
-	  // argument: int ia
-	  if (typeof ia !== 'number') {
-	    throw new TypeError('ia must be a number');
-	  }
-	  const carg_ia = ia | 0;
-
-	  // argument: int ib
-	  if (typeof ib !== 'number') {
-	    throw new TypeError('ib must be a number');
-	  }
-	  const carg_ib = ib | 0;
-
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_fdtr(carg_ia, carg_ib, carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cprob/fdtr.c
-	function fdtrc(/* int */ ia, /* int */ ib, /* double */ x) {
-	  // argument: int ia
-	  if (typeof ia !== 'number') {
-	    throw new TypeError('ia must be a number');
-	  }
-	  const carg_ia = ia | 0;
-
-	  // argument: int ib
-	  if (typeof ib !== 'number') {
-	    throw new TypeError('ib must be a number');
-	  }
-	  const carg_ib = ib | 0;
-
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_fdtrc(carg_ia, carg_ib, carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cprob/fdtr.c
-	function fdtri(/* int */ ia, /* int */ ib, /* double */ y) {
-	  // argument: int ia
-	  if (typeof ia !== 'number') {
-	    throw new TypeError('ia must be a number');
-	  }
-	  const carg_ia = ia | 0;
-
-	  // argument: int ib
-	  if (typeof ib !== 'number') {
-	    throw new TypeError('ib must be a number');
-	  }
-	  const carg_ib = ib | 0;
-
-	  // argument: double y
-	  if (typeof y !== 'number') {
-	    throw new TypeError('y must be a number');
-	  }
-	  const carg_y = y;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_fdtri(carg_ia, carg_ib, carg_y);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cprob/gdtr.c
-	function gdtr(/* double */ a, /* double */ b, /* double */ x) {
-	  // argument: double a
-	  if (typeof a !== 'number') {
-	    throw new TypeError('a must be a number');
-	  }
-	  const carg_a = a;
-
-	  // argument: double b
-	  if (typeof b !== 'number') {
-	    throw new TypeError('b must be a number');
-	  }
-	  const carg_b = b;
-
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_gdtr(carg_a, carg_b, carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cprob/gdtr.c
-	function gdtrc(/* double */ a, /* double */ b, /* double */ x) {
-	  // argument: double a
-	  if (typeof a !== 'number') {
-	    throw new TypeError('a must be a number');
-	  }
-	  const carg_a = a;
-
-	  // argument: double b
-	  if (typeof b !== 'number') {
-	    throw new TypeError('b must be a number');
-	  }
-	  const carg_b = b;
-
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_gdtrc(carg_a, carg_b, carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cprob/nbdtr.c
-	function nbdtr(/* int */ k, /* int */ n, /* double */ p) {
-	  // argument: int k
-	  if (typeof k !== 'number') {
-	    throw new TypeError('k must be a number');
-	  }
-	  const carg_k = k | 0;
-
-	  // argument: int n
-	  if (typeof n !== 'number') {
-	    throw new TypeError('n must be a number');
-	  }
-	  const carg_n = n | 0;
-
-	  // argument: double p
-	  if (typeof p !== 'number') {
-	    throw new TypeError('p must be a number');
-	  }
-	  const carg_p = p;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_nbdtr(carg_k, carg_n, carg_p);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cprob/nbdtr.c
-	function nbdtrc(/* int */ k, /* int */ n, /* double */ p) {
-	  // argument: int k
-	  if (typeof k !== 'number') {
-	    throw new TypeError('k must be a number');
-	  }
-	  const carg_k = k | 0;
-
-	  // argument: int n
-	  if (typeof n !== 'number') {
-	    throw new TypeError('n must be a number');
-	  }
-	  const carg_n = n | 0;
-
-	  // argument: double p
-	  if (typeof p !== 'number') {
-	    throw new TypeError('p must be a number');
-	  }
-	  const carg_p = p;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_nbdtrc(carg_k, carg_n, carg_p);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cprob/ndtr.c
-	function ndtr(/* double */ a) {
-	  // argument: double a
-	  if (typeof a !== 'number') {
-	    throw new TypeError('a must be a number');
-	  }
-	  const carg_a = a;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_ndtr(carg_a);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cprob/ndtri.c
-	function ndtri(/* double */ y0) {
-	  // argument: double y0
-	  if (typeof y0 !== 'number') {
-	    throw new TypeError('y0 must be a number');
-	  }
-	  const carg_y0 = y0;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_ndtri(carg_y0);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cprob/pdtr.c
-	function pdtr(/* int */ k, /* double */ m) {
-	  // argument: int k
-	  if (typeof k !== 'number') {
-	    throw new TypeError('k must be a number');
-	  }
-	  const carg_k = k | 0;
-
-	  // argument: double m
-	  if (typeof m !== 'number') {
-	    throw new TypeError('m must be a number');
-	  }
-	  const carg_m = m;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_pdtr(carg_k, carg_m);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cprob/pdtr.c
-	function pdtrc(/* int */ k, /* double */ m) {
-	  // argument: int k
-	  if (typeof k !== 'number') {
-	    throw new TypeError('k must be a number');
-	  }
-	  const carg_k = k | 0;
-
-	  // argument: double m
-	  if (typeof m !== 'number') {
-	    throw new TypeError('m must be a number');
-	  }
-	  const carg_m = m;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_pdtrc(carg_k, carg_m);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cprob/pdtr.c
-	function pdtri(/* int */ k, /* double */ y) {
-	  // argument: int k
-	  if (typeof k !== 'number') {
-	    throw new TypeError('k must be a number');
-	  }
-	  const carg_k = k | 0;
-
-	  // argument: double y
-	  if (typeof y !== 'number') {
-	    throw new TypeError('y must be a number');
-	  }
-	  const carg_y = y;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_pdtri(carg_k, carg_y);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/cprob/stdtr.c
-	function stdtr(/* int */ k, /* double */ t) {
-	  // argument: int k
-	  if (typeof k !== 'number') {
-	    throw new TypeError('k must be a number');
-	  }
-	  const carg_k = k | 0;
-
-	  // argument: double t
-	  if (typeof t !== 'number') {
-	    throw new TypeError('t must be a number');
-	  }
-	  const carg_t = t;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_stdtr(carg_k, carg_t);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/misc/planck.c
-	function plancki(/* double */ w, /* double */ T) {
-	  // argument: double w
-	  if (typeof w !== 'number') {
-	    throw new TypeError('w must be a number');
-	  }
-	  const carg_w = w;
-
-	  // argument: double T
-	  if (typeof T !== 'number') {
-	    throw new TypeError('T must be a number');
-	  }
-	  const carg_T = T;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_plancki(carg_w, carg_T);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/misc/planck.c
-	function planckc(/* double */ w, /* double */ T) {
-	  // argument: double w
-	  if (typeof w !== 'number') {
-	    throw new TypeError('w must be a number');
-	  }
-	  const carg_w = w;
-
-	  // argument: double T
-	  if (typeof T !== 'number') {
-	    throw new TypeError('T must be a number');
-	  }
-	  const carg_T = T;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_planckc(carg_w, carg_T);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/misc/planck.c
-	function planckd(/* double */ w, /* double */ T) {
-	  // argument: double w
-	  if (typeof w !== 'number') {
-	    throw new TypeError('w must be a number');
-	  }
-	  const carg_w = w;
-
-	  // argument: double T
-	  if (typeof T !== 'number') {
-	    throw new TypeError('T must be a number');
-	  }
-	  const carg_T = T;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_planckd(carg_w, carg_T);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/misc/planck.c
-	function planckw(/* double */ T) {
-	  // argument: double T
-	  if (typeof T !== 'number') {
-	    throw new TypeError('T must be a number');
-	  }
-	  const carg_T = T;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_planckw(carg_T);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/misc/spence.c
-	function spence(/* double */ x) {
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_spence(carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/misc/zetac.c
-	function zetac(/* double */ x) {
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_zetac(carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/misc/zeta.c
-	function zeta(/* double */ x, /* double */ q) {
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // argument: double q
-	  if (typeof q !== 'number') {
-	    throw new TypeError('q must be a number');
-	  }
-	  const carg_q = q;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_zeta(carg_x, carg_q);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/bessel/struve.c
-	function struve(/* double */ v, /* double */ x) {
-	  // argument: double v
-	  if (typeof v !== 'number') {
-	    throw new TypeError('v must be a number');
-	  }
-	  const carg_v = v;
-
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_struve(carg_v, carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	// from cephes/misc/simpsn.c
-	function simpsn(/* double[] */ f, /* double */ delta) {
-	  //Save the STACKTOP because the following code will do some stack allocs
-	  const stacktop = cephes.misc.stackSave();
-
-	  // argument: double[] f
-	  if (!(f instanceof Float64Array)) {
-	    cephes.misc.stackRestore(stacktop);
-	    throw new TypeError('f must be either a Float64Array');
-	  }
-	  const carg_f = cephes.misc.stackAlloc(f.length << 3);
-	  cephes.misc.writeArrayToMemory(new Uint8Array(f.buffer, f.byteOffset, f.byteLength), carg_f);
-
-	  // argument: double delta
-	  if (typeof delta !== 'number') {
-	    cephes.misc.stackRestore(stacktop);
-	    throw new TypeError('delta must be a number');
-	  }
-	  const carg_delta = delta;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_simpsn(carg_f, carg_delta);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  // Restore internal stacktop before returning
-	  cephes.misc.stackRestore(stacktop);
-	  return ret;
-	}
-	// from cephes/misc/polevl.c
-	function p1evl(/* double */ x, /* double[] */ coef, /* int */ N) {
-	  //Save the STACKTOP because the following code will do some stack allocs
-	  const stacktop = cephes.misc.stackSave();
-
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    cephes.misc.stackRestore(stacktop);
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // argument: double[] coef
-	  if (!(coef instanceof Float64Array)) {
-	    cephes.misc.stackRestore(stacktop);
-	    throw new TypeError('coef must be either a Float64Array');
-	  }
-	  const carg_coef = cephes.misc.stackAlloc(coef.length << 3);
-	  cephes.misc.writeArrayToMemory(new Uint8Array(coef.buffer, coef.byteOffset, coef.byteLength), carg_coef);
-
-	  // argument: int N
-	  if (typeof N !== 'number') {
-	    cephes.misc.stackRestore(stacktop);
-	    throw new TypeError('N must be a number');
-	  }
-	  const carg_N = N | 0;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_p1evl(carg_x, carg_coef, carg_N);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  // Restore internal stacktop before returning
-	  cephes.misc.stackRestore(stacktop);
-	  return ret;
-	}
-	// from cephes/misc/polylog.c
-	function polylog(/* int */ n, /* double */ x) {
-	  // argument: int n
-	  if (typeof n !== 'number') {
-	    throw new TypeError('n must be a number');
-	  }
-	  const carg_n = n | 0;
-
-	  // argument: double x
-	  if (typeof x !== 'number') {
-	    throw new TypeError('x must be a number');
-	  }
-	  const carg_x = x;
-
-	  // return: double
-	  const fn_ret = cephes.cephes_polylog(carg_n, carg_x);
-
-	  // No pointers, so just return fn_ret
-	  const ret = fn_ret;
-
-	  return ret;
-	}
-	nodeCephes = {compiled,signbit,isnan,isfinite,sqrt,cbrt,polevl,chbevl,round,ceil,floor,frexp,ldexp,fabs,expx2,radian,sincos,cot,cotdg,log1p,expm1,cosm1,acos,acosh,asinh,atanh,asin,atan,atan2,cos,cosdg,exp,exp2,exp10,cosh,sinh,tanh,log,log2,log10,pow,powi,sin,sindg,tan,tandg,ei,expn,shichi,sici,lbeta,beta,fac,gamma,lgam,incbet,incbi,igam,igamc,igami,psi,rgamma,erf,erfc,dawsn,fresnl,airy,j0,j1,jn,jv,y0,y1,yn,yv,i0,i0e,i1,i1e,iv,k0,k0e,k1,k1e,kn,hyperg,hyp2f1,ellpe,ellie,ellpk,ellik,ellpj,btdtr,smirnov,kolmogorov,smirnovi,kolmogi,nbdtri,stdtri,bdtr,bdtrc,bdtri,chdtr,chdtrc,chdtri,fdtr,fdtrc,fdtri,gdtr,gdtrc,nbdtr,nbdtrc,ndtr,ndtri,pdtr,pdtrc,pdtri,stdtr,plancki,planckc,planckd,planckw,spence,zetac,zeta,struve,simpsn,p1evl,polylog};
-	return nodeCephes;
+// from cephes/cmath/isnan.c
+function isnan(x) {
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: int
+    const fn_ret = cephes.cephes_isnan(carg_x) | 0;
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
 }
+// from cephes/cmath/isnan.c
+function isfinite(x) {
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: int
+    const fn_ret = cephes.cephes_isfinite(carg_x) | 0;
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cmath/sqrt.c
+function sqrt(x) {
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_sqrt(carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cmath/cbrt.c
+function cbrt(x) {
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_cbrt(carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/misc/polevl.c
+function polevl(x, coef, N) {
+    //Save the STACKTOP because the following code will do some stack allocs
+    const stacktop = cephes.misc.stackSave();
+    // argument: double x
+    if (typeof x !== 'number') {
+        cephes.misc.stackRestore(stacktop);
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // argument: double[] coef
+    if (!(coef instanceof Float64Array)) {
+        cephes.misc.stackRestore(stacktop);
+        throw new TypeError('coef must be either a Float64Array');
+    }
+    const carg_coef = cephes.misc.stackAlloc(coef.length << 3);
+    cephes.misc.writeArrayToMemory(new Uint8Array(coef.buffer, coef.byteOffset, coef.byteLength), carg_coef);
+    // argument: int N
+    if (typeof N !== 'number') {
+        cephes.misc.stackRestore(stacktop);
+        throw new TypeError('N must be a number');
+    }
+    const carg_N = N | 0;
+    // return: double
+    const fn_ret = cephes.cephes_polevl(carg_x, carg_coef, carg_N);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    // Restore internal stacktop before returning
+    cephes.misc.stackRestore(stacktop);
+    return ret;
+}
+// from cephes/misc/chbevl.c
+function chbevl(x, array, n) {
+    //Save the STACKTOP because the following code will do some stack allocs
+    const stacktop = cephes.misc.stackSave();
+    // argument: double x
+    if (typeof x !== 'number') {
+        cephes.misc.stackRestore(stacktop);
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // argument: double[] array
+    if (!(array instanceof Float64Array)) {
+        cephes.misc.stackRestore(stacktop);
+        throw new TypeError('array must be either a Float64Array');
+    }
+    const carg_array = cephes.misc.stackAlloc(array.length << 3);
+    cephes.misc.writeArrayToMemory(new Uint8Array(array.buffer, array.byteOffset, array.byteLength), carg_array);
+    // argument: int n
+    if (typeof n !== 'number') {
+        cephes.misc.stackRestore(stacktop);
+        throw new TypeError('n must be a number');
+    }
+    const carg_n = n | 0;
+    // return: double
+    const fn_ret = cephes.cephes_chbevl(carg_x, carg_array, carg_n);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    // Restore internal stacktop before returning
+    cephes.misc.stackRestore(stacktop);
+    return ret;
+}
+// from cephes/cmath/round.c
+function round(x) {
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_round(carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cmath/floor.c
+function ceil(x) {
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_ceil(carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cmath/floor.c
+function floor(x) {
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_floor(carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cmath/floor.c
+function frexp(x) {
+    //Save the STACKTOP because the following code will do some stack allocs
+    const stacktop = cephes.cmath.stackSave();
+    // argument: double x
+    if (typeof x !== 'number') {
+        cephes.cmath.stackRestore(stacktop);
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // argument: int* pw2
+    const carg_pw2 = cephes.cmath.stackAlloc(4); // No need to zero-set it.
+    // return: double
+    const fn_ret = cephes.cephes_frexp(carg_x, carg_pw2);
+    // There are pointers, so return the values of thoese too
+    const ret = [fn_ret, {
+            'pw2': cephes.cmath.getValue(carg_pw2, 'i32'),
+        }];
+    // Restore internal stacktop before returning
+    cephes.cmath.stackRestore(stacktop);
+    return ret;
+}
+// from cephes/cmath/floor.c
+function ldexp(x, pw2) {
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // argument: int pw2
+    if (typeof pw2 !== 'number') {
+        throw new TypeError('pw2 must be a number');
+    }
+    const carg_pw2 = pw2 | 0;
+    // return: double
+    const fn_ret = cephes.cephes_ldexp(carg_x, carg_pw2);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cmath/fabs.c
+function fabs(x) {
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_fabs(carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cprob/expx2.c
+function expx2(x, sign) {
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // argument: int sign
+    if (typeof sign !== 'number') {
+        throw new TypeError('sign must be a number');
+    }
+    const carg_sign = sign | 0;
+    // return: double
+    const fn_ret = cephes.cephes_expx2(carg_x, carg_sign);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cmath/sin.c
+function radian(d, m, s) {
+    // argument: double d
+    if (typeof d !== 'number') {
+        throw new TypeError('d must be a number');
+    }
+    const carg_d = d;
+    // argument: double m
+    if (typeof m !== 'number') {
+        throw new TypeError('m must be a number');
+    }
+    const carg_m = m;
+    // argument: double s
+    if (typeof s !== 'number') {
+        throw new TypeError('s must be a number');
+    }
+    const carg_s = s;
+    // return: double
+    const fn_ret = cephes.cephes_radian(carg_d, carg_m, carg_s);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cmath/sincos.c
+function sincos(x, flg) {
+    //Save the STACKTOP because the following code will do some stack allocs
+    const stacktop = cephes.cmath.stackSave();
+    // argument: double x
+    if (typeof x !== 'number') {
+        cephes.cmath.stackRestore(stacktop);
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // argument: double* s
+    const carg_s = cephes.cmath.stackAlloc(8); // No need to zero-set it.
+    // argument: double* c
+    const carg_c = cephes.cmath.stackAlloc(8); // No need to zero-set it.
+    // argument: int flg
+    if (typeof flg !== 'number') {
+        cephes.cmath.stackRestore(stacktop);
+        throw new TypeError('flg must be a number');
+    }
+    const carg_flg = flg | 0;
+    // return: int
+    const fn_ret = cephes.cephes_sincos(carg_x, carg_s, carg_c, carg_flg) | 0;
+    // There are pointers, so return the values of thoese too
+    const ret = [fn_ret, {
+            's': cephes.cmath.getValue(carg_s, 'double'),
+            'c': cephes.cmath.getValue(carg_c, 'double'),
+        }];
+    // Restore internal stacktop before returning
+    cephes.cmath.stackRestore(stacktop);
+    return ret;
+}
+// from cephes/cmath/tan.c
+function cot(x) {
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_cot(carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cmath/tandg.c
+function cotdg(x) {
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_cotdg(carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cprob/unity.c
+function log1p(x) {
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_log1p(carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cprob/unity.c
+function expm1(x) {
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_expm1(carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cprob/unity.c
+function cosm1(x) {
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_cosm1(carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cmath/asin.c
+function acos(x) {
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_acos(carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cmath/acosh.c
+function acosh(x) {
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_acosh(carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cmath/asinh.c
+function asinh(xx) {
+    // argument: double xx
+    if (typeof xx !== 'number') {
+        throw new TypeError('xx must be a number');
+    }
+    const carg_xx = xx;
+    // return: double
+    const fn_ret = cephes.cephes_asinh(carg_xx);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cmath/atanh.c
+function atanh(x) {
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_atanh(carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cmath/asin.c
+function asin(x) {
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_asin(carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cmath/atan.c
+function atan(x) {
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_atan(carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cmath/atan.c
+function atan2(y, x) {
+    // argument: double y
+    if (typeof y !== 'number') {
+        throw new TypeError('y must be a number');
+    }
+    const carg_y = y;
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_atan2(carg_y, carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cmath/sin.c
+function cos(x) {
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_cos(carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cmath/sindg.c
+function cosdg(x) {
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_cosdg(carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cmath/exp.c
+function exp(x) {
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_exp(carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cmath/exp2.c
+function exp2(x) {
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_exp2(carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cmath/exp10.c
+function exp10(x) {
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_exp10(carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cmath/cosh.c
+function cosh(x) {
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_cosh(carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cmath/sinh.c
+function sinh(x) {
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_sinh(carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cmath/tanh.c
+function tanh(x) {
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_tanh(carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cmath/log.c
+function log(x) {
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_log(carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cmath/log2.c
+function log2(x) {
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_log2(carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cmath/log10.c
+function log10(x) {
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_log10(carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cmath/pow.c
+function pow(x, y) {
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // argument: double y
+    if (typeof y !== 'number') {
+        throw new TypeError('y must be a number');
+    }
+    const carg_y = y;
+    // return: double
+    const fn_ret = cephes.cephes_pow(carg_x, carg_y);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cmath/powi.c
+function powi(x, nn) {
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // argument: int nn
+    if (typeof nn !== 'number') {
+        throw new TypeError('nn must be a number');
+    }
+    const carg_nn = nn | 0;
+    // return: double
+    const fn_ret = cephes.cephes_powi(carg_x, carg_nn);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cmath/sin.c
+function sin(x) {
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_sin(carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cmath/sindg.c
+function sindg(x) {
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_sindg(carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cmath/tan.c
+function tan(x) {
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_tan(carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cmath/tandg.c
+function tandg(x) {
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_tandg(carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/misc/ei.c
+function ei(x) {
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_ei(carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/misc/expn.c
+function expn(n, x) {
+    // argument: int n
+    if (typeof n !== 'number') {
+        throw new TypeError('n must be a number');
+    }
+    const carg_n = n | 0;
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_expn(carg_n, carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/misc/shichi.c
+function shichi(x) {
+    //Save the STACKTOP because the following code will do some stack allocs
+    const stacktop = cephes.misc.stackSave();
+    // argument: double x
+    if (typeof x !== 'number') {
+        cephes.misc.stackRestore(stacktop);
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // argument: double* si
+    const carg_si = cephes.misc.stackAlloc(8); // No need to zero-set it.
+    // argument: double* ci
+    const carg_ci = cephes.misc.stackAlloc(8); // No need to zero-set it.
+    // return: int
+    const fn_ret = cephes.cephes_shichi(carg_x, carg_si, carg_ci) | 0;
+    // There are pointers, so return the values of thoese too
+    const ret = [fn_ret, {
+            'si': cephes.misc.getValue(carg_si, 'double'),
+            'ci': cephes.misc.getValue(carg_ci, 'double'),
+        }];
+    // Restore internal stacktop before returning
+    cephes.misc.stackRestore(stacktop);
+    return ret;
+}
+// from cephes/misc/sici.c
+function sici(x) {
+    //Save the STACKTOP because the following code will do some stack allocs
+    const stacktop = cephes.misc.stackSave();
+    // argument: double x
+    if (typeof x !== 'number') {
+        cephes.misc.stackRestore(stacktop);
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // argument: double* si
+    const carg_si = cephes.misc.stackAlloc(8); // No need to zero-set it.
+    // argument: double* ci
+    const carg_ci = cephes.misc.stackAlloc(8); // No need to zero-set it.
+    // return: int
+    const fn_ret = cephes.cephes_sici(carg_x, carg_si, carg_ci) | 0;
+    // There are pointers, so return the values of thoese too
+    const ret = [fn_ret, {
+            'si': cephes.misc.getValue(carg_si, 'double'),
+            'ci': cephes.misc.getValue(carg_ci, 'double'),
+        }];
+    // Restore internal stacktop before returning
+    cephes.misc.stackRestore(stacktop);
+    return ret;
+}
+// from cephes/misc/beta.c
+function lbeta(a, b) {
+    // argument: double a
+    if (typeof a !== 'number') {
+        throw new TypeError('a must be a number');
+    }
+    const carg_a = a;
+    // argument: double b
+    if (typeof b !== 'number') {
+        throw new TypeError('b must be a number');
+    }
+    const carg_b = b;
+    // return: double
+    const fn_ret = cephes.cephes_lbeta(carg_a, carg_b);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/misc/beta.c
+function beta(a, b) {
+    // argument: double a
+    if (typeof a !== 'number') {
+        throw new TypeError('a must be a number');
+    }
+    const carg_a = a;
+    // argument: double b
+    if (typeof b !== 'number') {
+        throw new TypeError('b must be a number');
+    }
+    const carg_b = b;
+    // return: double
+    const fn_ret = cephes.cephes_beta(carg_a, carg_b);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/misc/fac.c
+function fac(i) {
+    // argument: int i
+    if (typeof i !== 'number') {
+        throw new TypeError('i must be a number');
+    }
+    const carg_i = i | 0;
+    // return: double
+    const fn_ret = cephes.cephes_fac(carg_i);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cprob/gamma.c
+function gamma(x) {
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_gamma(carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cprob/gamma.c
+function lgam(x) {
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_lgam(carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cprob/incbet.c
+function incbet(aa, bb, xx) {
+    // argument: double aa
+    if (typeof aa !== 'number') {
+        throw new TypeError('aa must be a number');
+    }
+    const carg_aa = aa;
+    // argument: double bb
+    if (typeof bb !== 'number') {
+        throw new TypeError('bb must be a number');
+    }
+    const carg_bb = bb;
+    // argument: double xx
+    if (typeof xx !== 'number') {
+        throw new TypeError('xx must be a number');
+    }
+    const carg_xx = xx;
+    // return: double
+    const fn_ret = cephes.cephes_incbet(carg_aa, carg_bb, carg_xx);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cprob/incbi.c
+function incbi(aa, bb, yy0) {
+    // argument: double aa
+    if (typeof aa !== 'number') {
+        throw new TypeError('aa must be a number');
+    }
+    const carg_aa = aa;
+    // argument: double bb
+    if (typeof bb !== 'number') {
+        throw new TypeError('bb must be a number');
+    }
+    const carg_bb = bb;
+    // argument: double yy0
+    if (typeof yy0 !== 'number') {
+        throw new TypeError('yy0 must be a number');
+    }
+    const carg_yy0 = yy0;
+    // return: double
+    const fn_ret = cephes.cephes_incbi(carg_aa, carg_bb, carg_yy0);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cprob/igam.c
+function igam(a, x) {
+    // argument: double a
+    if (typeof a !== 'number') {
+        throw new TypeError('a must be a number');
+    }
+    const carg_a = a;
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_igam(carg_a, carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cprob/igam.c
+function igamc(a, x) {
+    // argument: double a
+    if (typeof a !== 'number') {
+        throw new TypeError('a must be a number');
+    }
+    const carg_a = a;
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_igamc(carg_a, carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cprob/igami.c
+function igami(a, y0) {
+    // argument: double a
+    if (typeof a !== 'number') {
+        throw new TypeError('a must be a number');
+    }
+    const carg_a = a;
+    // argument: double y0
+    if (typeof y0 !== 'number') {
+        throw new TypeError('y0 must be a number');
+    }
+    const carg_y0 = y0;
+    // return: double
+    const fn_ret = cephes.cephes_igami(carg_a, carg_y0);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/misc/psi.c
+function psi(x) {
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_psi(carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/misc/rgamma.c
+function rgamma(x) {
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_rgamma(carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cprob/ndtr.c
+function erf(x) {
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_erf(carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cprob/ndtr.c
+function erfc(a) {
+    // argument: double a
+    if (typeof a !== 'number') {
+        throw new TypeError('a must be a number');
+    }
+    const carg_a = a;
+    // return: double
+    const fn_ret = cephes.cephes_erfc(carg_a);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/misc/dawsn.c
+function dawsn(xx) {
+    // argument: double xx
+    if (typeof xx !== 'number') {
+        throw new TypeError('xx must be a number');
+    }
+    const carg_xx = xx;
+    // return: double
+    const fn_ret = cephes.cephes_dawsn(carg_xx);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/misc/fresnl.c
+function fresnl(xxa) {
+    //Save the STACKTOP because the following code will do some stack allocs
+    const stacktop = cephes.misc.stackSave();
+    // argument: double xxa
+    if (typeof xxa !== 'number') {
+        cephes.misc.stackRestore(stacktop);
+        throw new TypeError('xxa must be a number');
+    }
+    const carg_xxa = xxa;
+    // argument: double* ssa
+    const carg_ssa = cephes.misc.stackAlloc(8); // No need to zero-set it.
+    // argument: double* cca
+    const carg_cca = cephes.misc.stackAlloc(8); // No need to zero-set it.
+    // return: int
+    const fn_ret = cephes.cephes_fresnl(carg_xxa, carg_ssa, carg_cca) | 0;
+    // There are pointers, so return the values of thoese too
+    const ret = [fn_ret, {
+            'ssa': cephes.misc.getValue(carg_ssa, 'double'),
+            'cca': cephes.misc.getValue(carg_cca, 'double'),
+        }];
+    // Restore internal stacktop before returning
+    cephes.misc.stackRestore(stacktop);
+    return ret;
+}
+// from cephes/bessel/airy.c
+function airy(x) {
+    //Save the STACKTOP because the following code will do some stack allocs
+    const stacktop = cephes.bessel.stackSave();
+    // argument: double x
+    if (typeof x !== 'number') {
+        cephes.bessel.stackRestore(stacktop);
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // argument: double* ai
+    const carg_ai = cephes.bessel.stackAlloc(8); // No need to zero-set it.
+    // argument: double* aip
+    const carg_aip = cephes.bessel.stackAlloc(8); // No need to zero-set it.
+    // argument: double* bi
+    const carg_bi = cephes.bessel.stackAlloc(8); // No need to zero-set it.
+    // argument: double* bip
+    const carg_bip = cephes.bessel.stackAlloc(8); // No need to zero-set it.
+    // return: int
+    const fn_ret = cephes.cephes_airy(carg_x, carg_ai, carg_aip, carg_bi, carg_bip) | 0;
+    // There are pointers, so return the values of thoese too
+    const ret = [fn_ret, {
+            'ai': cephes.bessel.getValue(carg_ai, 'double'),
+            'aip': cephes.bessel.getValue(carg_aip, 'double'),
+            'bi': cephes.bessel.getValue(carg_bi, 'double'),
+            'bip': cephes.bessel.getValue(carg_bip, 'double'),
+        }];
+    // Restore internal stacktop before returning
+    cephes.bessel.stackRestore(stacktop);
+    return ret;
+}
+// from cephes/bessel/j0.c
+function j0(x) {
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_j0(carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/bessel/j1.c
+function j1(x) {
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_j1(carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/bessel/jn.c
+function jn(n, x) {
+    // argument: int n
+    if (typeof n !== 'number') {
+        throw new TypeError('n must be a number');
+    }
+    const carg_n = n | 0;
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_jn(carg_n, carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/bessel/jv.c
+function jv(n, x) {
+    // argument: double n
+    if (typeof n !== 'number') {
+        throw new TypeError('n must be a number');
+    }
+    const carg_n = n;
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_jv(carg_n, carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/bessel/j0.c
+function y0(x) {
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_y0(carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/bessel/j1.c
+function y1(x) {
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_y1(carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/bessel/yn.c
+function yn(n, x) {
+    // argument: int n
+    if (typeof n !== 'number') {
+        throw new TypeError('n must be a number');
+    }
+    const carg_n = n | 0;
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_yn(carg_n, carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/bessel/struve.c
+function yv(v, x) {
+    // argument: double v
+    if (typeof v !== 'number') {
+        throw new TypeError('v must be a number');
+    }
+    const carg_v = v;
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_yv(carg_v, carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/bessel/i0.c
+function i0(x) {
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_i0(carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/bessel/i0.c
+function i0e(x) {
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_i0e(carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/bessel/i1.c
+function i1(x) {
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_i1(carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/bessel/i1.c
+function i1e(x) {
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_i1e(carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/bessel/iv.c
+function iv(v, x) {
+    // argument: double v
+    if (typeof v !== 'number') {
+        throw new TypeError('v must be a number');
+    }
+    const carg_v = v;
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_iv(carg_v, carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/bessel/k0.c
+function k0(x) {
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_k0(carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/bessel/k0.c
+function k0e(x) {
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_k0e(carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/bessel/k1.c
+function k1(x) {
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_k1(carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/bessel/k1.c
+function k1e(x) {
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_k1e(carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/bessel/kn.c
+function kn(nn, x) {
+    // argument: int nn
+    if (typeof nn !== 'number') {
+        throw new TypeError('nn must be a number');
+    }
+    const carg_nn = nn | 0;
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_kn(carg_nn, carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/bessel/hyperg.c
+function hyperg(a, b, x) {
+    // argument: double a
+    if (typeof a !== 'number') {
+        throw new TypeError('a must be a number');
+    }
+    const carg_a = a;
+    // argument: double b
+    if (typeof b !== 'number') {
+        throw new TypeError('b must be a number');
+    }
+    const carg_b = b;
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_hyperg(carg_a, carg_b, carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/bessel/hyp2f1.c
+function hyp2f1(a, b, c, x) {
+    // argument: double a
+    if (typeof a !== 'number') {
+        throw new TypeError('a must be a number');
+    }
+    const carg_a = a;
+    // argument: double b
+    if (typeof b !== 'number') {
+        throw new TypeError('b must be a number');
+    }
+    const carg_b = b;
+    // argument: double c
+    if (typeof c !== 'number') {
+        throw new TypeError('c must be a number');
+    }
+    const carg_c = c;
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_hyp2f1(carg_a, carg_b, carg_c, carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/ellf/ellpe.c
+function ellpe(x) {
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_ellpe(carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/ellf/ellie.c
+function ellie(phi, m) {
+    // argument: double phi
+    if (typeof phi !== 'number') {
+        throw new TypeError('phi must be a number');
+    }
+    const carg_phi = phi;
+    // argument: double m
+    if (typeof m !== 'number') {
+        throw new TypeError('m must be a number');
+    }
+    const carg_m = m;
+    // return: double
+    const fn_ret = cephes.cephes_ellie(carg_phi, carg_m);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/ellf/ellpk.c
+function ellpk(x) {
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_ellpk(carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/ellf/ellik.c
+function ellik(phi, m) {
+    // argument: double phi
+    if (typeof phi !== 'number') {
+        throw new TypeError('phi must be a number');
+    }
+    const carg_phi = phi;
+    // argument: double m
+    if (typeof m !== 'number') {
+        throw new TypeError('m must be a number');
+    }
+    const carg_m = m;
+    // return: double
+    const fn_ret = cephes.cephes_ellik(carg_phi, carg_m);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/ellf/ellpj.c
+function ellpj(u, m) {
+    //Save the STACKTOP because the following code will do some stack allocs
+    const stacktop = cephes.ellf.stackSave();
+    // argument: double u
+    if (typeof u !== 'number') {
+        cephes.ellf.stackRestore(stacktop);
+        throw new TypeError('u must be a number');
+    }
+    const carg_u = u;
+    // argument: double m
+    if (typeof m !== 'number') {
+        cephes.ellf.stackRestore(stacktop);
+        throw new TypeError('m must be a number');
+    }
+    const carg_m = m;
+    // argument: double* sn
+    const carg_sn = cephes.ellf.stackAlloc(8); // No need to zero-set it.
+    // argument: double* cn
+    const carg_cn = cephes.ellf.stackAlloc(8); // No need to zero-set it.
+    // argument: double* dn
+    const carg_dn = cephes.ellf.stackAlloc(8); // No need to zero-set it.
+    // argument: double* ph
+    const carg_ph = cephes.ellf.stackAlloc(8); // No need to zero-set it.
+    // return: int
+    const fn_ret = cephes.cephes_ellpj(carg_u, carg_m, carg_sn, carg_cn, carg_dn, carg_ph) | 0;
+    // There are pointers, so return the values of thoese too
+    const ret = [fn_ret, {
+            'sn': cephes.ellf.getValue(carg_sn, 'double'),
+            'cn': cephes.ellf.getValue(carg_cn, 'double'),
+            'dn': cephes.ellf.getValue(carg_dn, 'double'),
+            'ph': cephes.ellf.getValue(carg_ph, 'double'),
+        }];
+    // Restore internal stacktop before returning
+    cephes.ellf.stackRestore(stacktop);
+    return ret;
+}
+// from cephes/cprob/btdtr.c
+function btdtr(a, b, x) {
+    // argument: double a
+    if (typeof a !== 'number') {
+        throw new TypeError('a must be a number');
+    }
+    const carg_a = a;
+    // argument: double b
+    if (typeof b !== 'number') {
+        throw new TypeError('b must be a number');
+    }
+    const carg_b = b;
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_btdtr(carg_a, carg_b, carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cprob/kolmogorov.c
+function smirnov(n, e) {
+    // argument: int n
+    if (typeof n !== 'number') {
+        throw new TypeError('n must be a number');
+    }
+    const carg_n = n | 0;
+    // argument: double e
+    if (typeof e !== 'number') {
+        throw new TypeError('e must be a number');
+    }
+    const carg_e = e;
+    // return: double
+    const fn_ret = cephes.cephes_smirnov(carg_n, carg_e);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cprob/kolmogorov.c
+function kolmogorov(y) {
+    // argument: double y
+    if (typeof y !== 'number') {
+        throw new TypeError('y must be a number');
+    }
+    const carg_y = y;
+    // return: double
+    const fn_ret = cephes.cephes_kolmogorov(carg_y);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cprob/kolmogorov.c
+function smirnovi(n, p) {
+    // argument: int n
+    if (typeof n !== 'number') {
+        throw new TypeError('n must be a number');
+    }
+    const carg_n = n | 0;
+    // argument: double p
+    if (typeof p !== 'number') {
+        throw new TypeError('p must be a number');
+    }
+    const carg_p = p;
+    // return: double
+    const fn_ret = cephes.cephes_smirnovi(carg_n, carg_p);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cprob/kolmogorov.c
+function kolmogi(p) {
+    // argument: double p
+    if (typeof p !== 'number') {
+        throw new TypeError('p must be a number');
+    }
+    const carg_p = p;
+    // return: double
+    const fn_ret = cephes.cephes_kolmogi(carg_p);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cprob/nbdtr.c
+function nbdtri(k, n, p) {
+    // argument: int k
+    if (typeof k !== 'number') {
+        throw new TypeError('k must be a number');
+    }
+    const carg_k = k | 0;
+    // argument: int n
+    if (typeof n !== 'number') {
+        throw new TypeError('n must be a number');
+    }
+    const carg_n = n | 0;
+    // argument: double p
+    if (typeof p !== 'number') {
+        throw new TypeError('p must be a number');
+    }
+    const carg_p = p;
+    // return: double
+    const fn_ret = cephes.cephes_nbdtri(carg_k, carg_n, carg_p);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cprob/stdtr.c
+function stdtri(k, p) {
+    // argument: int k
+    if (typeof k !== 'number') {
+        throw new TypeError('k must be a number');
+    }
+    const carg_k = k | 0;
+    // argument: double p
+    if (typeof p !== 'number') {
+        throw new TypeError('p must be a number');
+    }
+    const carg_p = p;
+    // return: double
+    const fn_ret = cephes.cephes_stdtri(carg_k, carg_p);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cprob/bdtr.c
+function bdtr(k, n, p) {
+    // argument: int k
+    if (typeof k !== 'number') {
+        throw new TypeError('k must be a number');
+    }
+    const carg_k = k | 0;
+    // argument: int n
+    if (typeof n !== 'number') {
+        throw new TypeError('n must be a number');
+    }
+    const carg_n = n | 0;
+    // argument: double p
+    if (typeof p !== 'number') {
+        throw new TypeError('p must be a number');
+    }
+    const carg_p = p;
+    // return: double
+    const fn_ret = cephes.cephes_bdtr(carg_k, carg_n, carg_p);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cprob/bdtr.c
+function bdtrc(k, n, p) {
+    // argument: int k
+    if (typeof k !== 'number') {
+        throw new TypeError('k must be a number');
+    }
+    const carg_k = k | 0;
+    // argument: int n
+    if (typeof n !== 'number') {
+        throw new TypeError('n must be a number');
+    }
+    const carg_n = n | 0;
+    // argument: double p
+    if (typeof p !== 'number') {
+        throw new TypeError('p must be a number');
+    }
+    const carg_p = p;
+    // return: double
+    const fn_ret = cephes.cephes_bdtrc(carg_k, carg_n, carg_p);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cprob/bdtr.c
+function bdtri(k, n, y) {
+    // argument: int k
+    if (typeof k !== 'number') {
+        throw new TypeError('k must be a number');
+    }
+    const carg_k = k | 0;
+    // argument: int n
+    if (typeof n !== 'number') {
+        throw new TypeError('n must be a number');
+    }
+    const carg_n = n | 0;
+    // argument: double y
+    if (typeof y !== 'number') {
+        throw new TypeError('y must be a number');
+    }
+    const carg_y = y;
+    // return: double
+    const fn_ret = cephes.cephes_bdtri(carg_k, carg_n, carg_y);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cprob/chdtr.c
+function chdtr(df, x) {
+    // argument: double df
+    if (typeof df !== 'number') {
+        throw new TypeError('df must be a number');
+    }
+    const carg_df = df;
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_chdtr(carg_df, carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cprob/chdtr.c
+function chdtrc(df, x) {
+    // argument: double df
+    if (typeof df !== 'number') {
+        throw new TypeError('df must be a number');
+    }
+    const carg_df = df;
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_chdtrc(carg_df, carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cprob/chdtr.c
+function chdtri(df, y) {
+    // argument: double df
+    if (typeof df !== 'number') {
+        throw new TypeError('df must be a number');
+    }
+    const carg_df = df;
+    // argument: double y
+    if (typeof y !== 'number') {
+        throw new TypeError('y must be a number');
+    }
+    const carg_y = y;
+    // return: double
+    const fn_ret = cephes.cephes_chdtri(carg_df, carg_y);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cprob/fdtr.c
+function fdtr(ia, ib, x) {
+    // argument: int ia
+    if (typeof ia !== 'number') {
+        throw new TypeError('ia must be a number');
+    }
+    const carg_ia = ia | 0;
+    // argument: int ib
+    if (typeof ib !== 'number') {
+        throw new TypeError('ib must be a number');
+    }
+    const carg_ib = ib | 0;
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_fdtr(carg_ia, carg_ib, carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cprob/fdtr.c
+function fdtrc(ia, ib, x) {
+    // argument: int ia
+    if (typeof ia !== 'number') {
+        throw new TypeError('ia must be a number');
+    }
+    const carg_ia = ia | 0;
+    // argument: int ib
+    if (typeof ib !== 'number') {
+        throw new TypeError('ib must be a number');
+    }
+    const carg_ib = ib | 0;
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_fdtrc(carg_ia, carg_ib, carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cprob/fdtr.c
+function fdtri(ia, ib, y) {
+    // argument: int ia
+    if (typeof ia !== 'number') {
+        throw new TypeError('ia must be a number');
+    }
+    const carg_ia = ia | 0;
+    // argument: int ib
+    if (typeof ib !== 'number') {
+        throw new TypeError('ib must be a number');
+    }
+    const carg_ib = ib | 0;
+    // argument: double y
+    if (typeof y !== 'number') {
+        throw new TypeError('y must be a number');
+    }
+    const carg_y = y;
+    // return: double
+    const fn_ret = cephes.cephes_fdtri(carg_ia, carg_ib, carg_y);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cprob/gdtr.c
+function gdtr(a, b, x) {
+    // argument: double a
+    if (typeof a !== 'number') {
+        throw new TypeError('a must be a number');
+    }
+    const carg_a = a;
+    // argument: double b
+    if (typeof b !== 'number') {
+        throw new TypeError('b must be a number');
+    }
+    const carg_b = b;
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_gdtr(carg_a, carg_b, carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cprob/gdtr.c
+function gdtrc(a, b, x) {
+    // argument: double a
+    if (typeof a !== 'number') {
+        throw new TypeError('a must be a number');
+    }
+    const carg_a = a;
+    // argument: double b
+    if (typeof b !== 'number') {
+        throw new TypeError('b must be a number');
+    }
+    const carg_b = b;
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_gdtrc(carg_a, carg_b, carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cprob/nbdtr.c
+function nbdtr(k, n, p) {
+    // argument: int k
+    if (typeof k !== 'number') {
+        throw new TypeError('k must be a number');
+    }
+    const carg_k = k | 0;
+    // argument: int n
+    if (typeof n !== 'number') {
+        throw new TypeError('n must be a number');
+    }
+    const carg_n = n | 0;
+    // argument: double p
+    if (typeof p !== 'number') {
+        throw new TypeError('p must be a number');
+    }
+    const carg_p = p;
+    // return: double
+    const fn_ret = cephes.cephes_nbdtr(carg_k, carg_n, carg_p);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cprob/nbdtr.c
+function nbdtrc(k, n, p) {
+    // argument: int k
+    if (typeof k !== 'number') {
+        throw new TypeError('k must be a number');
+    }
+    const carg_k = k | 0;
+    // argument: int n
+    if (typeof n !== 'number') {
+        throw new TypeError('n must be a number');
+    }
+    const carg_n = n | 0;
+    // argument: double p
+    if (typeof p !== 'number') {
+        throw new TypeError('p must be a number');
+    }
+    const carg_p = p;
+    // return: double
+    const fn_ret = cephes.cephes_nbdtrc(carg_k, carg_n, carg_p);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cprob/ndtr.c
+function ndtr(a) {
+    // argument: double a
+    if (typeof a !== 'number') {
+        throw new TypeError('a must be a number');
+    }
+    const carg_a = a;
+    // return: double
+    const fn_ret = cephes.cephes_ndtr(carg_a);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cprob/ndtri.c
+function ndtri(y0) {
+    // argument: double y0
+    if (typeof y0 !== 'number') {
+        throw new TypeError('y0 must be a number');
+    }
+    const carg_y0 = y0;
+    // return: double
+    const fn_ret = cephes.cephes_ndtri(carg_y0);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cprob/pdtr.c
+function pdtr(k, m) {
+    // argument: int k
+    if (typeof k !== 'number') {
+        throw new TypeError('k must be a number');
+    }
+    const carg_k = k | 0;
+    // argument: double m
+    if (typeof m !== 'number') {
+        throw new TypeError('m must be a number');
+    }
+    const carg_m = m;
+    // return: double
+    const fn_ret = cephes.cephes_pdtr(carg_k, carg_m);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cprob/pdtr.c
+function pdtrc(k, m) {
+    // argument: int k
+    if (typeof k !== 'number') {
+        throw new TypeError('k must be a number');
+    }
+    const carg_k = k | 0;
+    // argument: double m
+    if (typeof m !== 'number') {
+        throw new TypeError('m must be a number');
+    }
+    const carg_m = m;
+    // return: double
+    const fn_ret = cephes.cephes_pdtrc(carg_k, carg_m);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cprob/pdtr.c
+function pdtri(k, y) {
+    // argument: int k
+    if (typeof k !== 'number') {
+        throw new TypeError('k must be a number');
+    }
+    const carg_k = k | 0;
+    // argument: double y
+    if (typeof y !== 'number') {
+        throw new TypeError('y must be a number');
+    }
+    const carg_y = y;
+    // return: double
+    const fn_ret = cephes.cephes_pdtri(carg_k, carg_y);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/cprob/stdtr.c
+function stdtr(k, t) {
+    // argument: int k
+    if (typeof k !== 'number') {
+        throw new TypeError('k must be a number');
+    }
+    const carg_k = k | 0;
+    // argument: double t
+    if (typeof t !== 'number') {
+        throw new TypeError('t must be a number');
+    }
+    const carg_t = t;
+    // return: double
+    const fn_ret = cephes.cephes_stdtr(carg_k, carg_t);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/misc/planck.c
+function plancki(w, T) {
+    // argument: double w
+    if (typeof w !== 'number') {
+        throw new TypeError('w must be a number');
+    }
+    const carg_w = w;
+    // argument: double T
+    if (typeof T !== 'number') {
+        throw new TypeError('T must be a number');
+    }
+    const carg_T = T;
+    // return: double
+    const fn_ret = cephes.cephes_plancki(carg_w, carg_T);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/misc/planck.c
+function planckc(w, T) {
+    // argument: double w
+    if (typeof w !== 'number') {
+        throw new TypeError('w must be a number');
+    }
+    const carg_w = w;
+    // argument: double T
+    if (typeof T !== 'number') {
+        throw new TypeError('T must be a number');
+    }
+    const carg_T = T;
+    // return: double
+    const fn_ret = cephes.cephes_planckc(carg_w, carg_T);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/misc/planck.c
+function planckd(w, T) {
+    // argument: double w
+    if (typeof w !== 'number') {
+        throw new TypeError('w must be a number');
+    }
+    const carg_w = w;
+    // argument: double T
+    if (typeof T !== 'number') {
+        throw new TypeError('T must be a number');
+    }
+    const carg_T = T;
+    // return: double
+    const fn_ret = cephes.cephes_planckd(carg_w, carg_T);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/misc/planck.c
+function planckw(T) {
+    // argument: double T
+    if (typeof T !== 'number') {
+        throw new TypeError('T must be a number');
+    }
+    const carg_T = T;
+    // return: double
+    const fn_ret = cephes.cephes_planckw(carg_T);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/misc/spence.c
+function spence(x) {
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_spence(carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/misc/zetac.c
+function zetac(x) {
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_zetac(carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/misc/zeta.c
+function zeta(x, q) {
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // argument: double q
+    if (typeof q !== 'number') {
+        throw new TypeError('q must be a number');
+    }
+    const carg_q = q;
+    // return: double
+    const fn_ret = cephes.cephes_zeta(carg_x, carg_q);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/bessel/struve.c
+function struve(v, x) {
+    // argument: double v
+    if (typeof v !== 'number') {
+        throw new TypeError('v must be a number');
+    }
+    const carg_v = v;
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_struve(carg_v, carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+// from cephes/misc/simpsn.c
+function simpsn(f, delta) {
+    //Save the STACKTOP because the following code will do some stack allocs
+    const stacktop = cephes.misc.stackSave();
+    // argument: double[] f
+    if (!(f instanceof Float64Array)) {
+        cephes.misc.stackRestore(stacktop);
+        throw new TypeError('f must be either a Float64Array');
+    }
+    const carg_f = cephes.misc.stackAlloc(f.length << 3);
+    cephes.misc.writeArrayToMemory(new Uint8Array(f.buffer, f.byteOffset, f.byteLength), carg_f);
+    // argument: double delta
+    if (typeof delta !== 'number') {
+        cephes.misc.stackRestore(stacktop);
+        throw new TypeError('delta must be a number');
+    }
+    const carg_delta = delta;
+    // return: double
+    const fn_ret = cephes.cephes_simpsn(carg_f, carg_delta);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    // Restore internal stacktop before returning
+    cephes.misc.stackRestore(stacktop);
+    return ret;
+}
+// from cephes/misc/polevl.c
+function p1evl(x, coef, N) {
+    //Save the STACKTOP because the following code will do some stack allocs
+    const stacktop = cephes.misc.stackSave();
+    // argument: double x
+    if (typeof x !== 'number') {
+        cephes.misc.stackRestore(stacktop);
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // argument: double[] coef
+    if (!(coef instanceof Float64Array)) {
+        cephes.misc.stackRestore(stacktop);
+        throw new TypeError('coef must be either a Float64Array');
+    }
+    const carg_coef = cephes.misc.stackAlloc(coef.length << 3);
+    cephes.misc.writeArrayToMemory(new Uint8Array(coef.buffer, coef.byteOffset, coef.byteLength), carg_coef);
+    // argument: int N
+    if (typeof N !== 'number') {
+        cephes.misc.stackRestore(stacktop);
+        throw new TypeError('N must be a number');
+    }
+    const carg_N = N | 0;
+    // return: double
+    const fn_ret = cephes.cephes_p1evl(carg_x, carg_coef, carg_N);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    // Restore internal stacktop before returning
+    cephes.misc.stackRestore(stacktop);
+    return ret;
+}
+// from cephes/misc/polylog.c
+function polylog(n, x) {
+    // argument: int n
+    if (typeof n !== 'number') {
+        throw new TypeError('n must be a number');
+    }
+    const carg_n = n | 0;
+    // argument: double x
+    if (typeof x !== 'number') {
+        throw new TypeError('x must be a number');
+    }
+    const carg_x = x;
+    // return: double
+    const fn_ret = cephes.cephes_polylog(carg_n, carg_x);
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+    return ret;
+}
+var index = { compiled, signbit, isnan, isfinite, sqrt, cbrt, polevl, chbevl, round, ceil, floor, frexp, ldexp, fabs, expx2, radian, sincos, cot, cotdg, log1p, expm1, cosm1, acos, acosh, asinh, atanh, asin, atan, atan2, cos, cosdg, exp, exp2, exp10, cosh, sinh, tanh, log, log2, log10, pow, powi, sin, sindg, tan, tandg, ei, expn, shichi, sici, lbeta, beta, fac, gamma, lgam, incbet, incbi, igam, igamc, igami, psi, rgamma, erf, erfc, dawsn, fresnl, airy, j0, j1, jn, jv, y0, y1, yn, yv, i0, i0e, i1, i1e, iv, k0, k0e, k1, k1e, kn, hyperg, hyp2f1, ellpe, ellie, ellpk, ellik, ellpj, btdtr, smirnov, kolmogorov, smirnovi, kolmogi, nbdtri, stdtri, bdtr, bdtrc, bdtri, chdtr, chdtrc, chdtri, fdtr, fdtrc, fdtri, gdtr, gdtrc, nbdtr, nbdtrc, ndtr, ndtri, pdtr, pdtrc, pdtri, stdtr, plancki, planckc, planckd, planckw, spence, zetac, zeta, struve, simpsn, p1evl, polylog };
 
-var nodeCephesExports = requireNodeCephes();
-var index = /*@__PURE__*/getDefaultExportFromCjs(nodeCephesExports);
-
-export { index as default };
+export { acos, acosh, airy, asin, asinh, atan, atan2, atanh, bdtr, bdtrc, bdtri, beta, btdtr, cbrt, ceil, chbevl, chdtr, chdtrc, chdtri, compiled, cos, cosdg, cosh, cosm1, cot, cotdg, dawsn, index as default, ei, ellie, ellik, ellpe, ellpj, ellpk, erf, erfc, exp, exp10, exp2, expm1, expn, expx2, fabs, fac, fdtr, fdtrc, fdtri, floor, fresnl, frexp, gamma, gdtr, gdtrc, hyp2f1, hyperg, i0, i0e, i1, i1e, igam, igamc, igami, incbet, incbi, isfinite, isnan, iv, j0, j1, jn, jv, k0, k0e, k1, k1e, kn, kolmogi, kolmogorov, lbeta, ldexp, lgam, log, log10, log1p, log2, nbdtr, nbdtrc, nbdtri, ndtr, ndtri, p1evl, pdtr, pdtrc, pdtri, planckc, planckd, plancki, planckw, polevl, polylog, pow, powi, psi, radian, rgamma, round, shichi, sici, signbit, simpsn, sin, sincos, sindg, sinh, smirnov, smirnovi, spence, sqrt, stdtr, stdtri, struve, tan, tandg, tanh, y0, y1, yn, yv, zeta, zetac };

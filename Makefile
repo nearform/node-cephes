@@ -12,13 +12,13 @@ LFLAGS:=-O2
 
 .PHONY: download build test
 
-build: index.js index.mjs compile-packages cephes.wasm.base64.json README.md
+build: compile-packages src/cephes.wasm.base64.json src/index.ts src/cephes-compiled.ts npm-build README.md
 
 clean:
 	rm -f $(JS_OBJS)
 	rm -f $(C_OBJS)
-	rm -f cephes.wasm cephes.wast
-	rm -f index.mjs index.js
+	rm -f src/cephes.wasm.base64.json cephes.wasm.base64.json *.wasm src/index.ts src/cephes-compiled.ts
+	rm -f index.mjs index.js index.d.ts
 
 test: test/expected.json test/actual.test.js
 	npm test
@@ -92,19 +92,22 @@ compile-packages:
 	@make --silent _compile-package pkg=ellf additional_sources="$(CEPHESDIR)/cmath/isnan.c"
 	@make --silent _compile-package pkg=misc additional_sources="$(CEPHESDIR)/cprob/gamma.c $(CEPHESDIR)/cmath/isnan.c  $(CEPHESDIR)/cmath/powi.c"
 
-cephes.wasm.base64.json: $(WASMS)
+src/cephes.wasm.base64.json: $(WASMS)
 	@node -p "JSON.stringify(Object.fromEntries(['cmath', 'cprob','bessel','ellf', 'misc'].map(pkg => [pkg, {buffer: fs.readFileSync('cephes-'+pkg+'.wasm', 'base64'),methods:fs.readFileSync('cephes-'+pkg+'.txt', 'utf-8').split('\n')}])))" > $@
 	rm -f cephes-*.wasm
 	rm -f cephes-*.txt
-	
-index.js: $(CPROTOFILES) $(GENERATEFILES)
-	cproto -I $(CEPHESDIR) $(CEPHESDIR)/*/*.c | node $(BUILDDIR)/generate-interface.js > index.js
-	
-index.mjs:
-	npx rollup -c 
 
 README.md: $(CEPHESDIR)/cephes.txt $(CPROTOFILES) $(GENERATEFILES)
-	cat $(BUILDDIR)/readme-header.md > README.md
-	cproto -I $(CEPHESDIR) $(CEPHESDIR)/*/*.c | node $(BUILDDIR)/generate-readme-toc.js >> README.md
-	cproto -I $(CEPHESDIR) $(CEPHESDIR)/*/*.c | node $(BUILDDIR)/generate-readme-jsdoc.js >> README.md
-	cat $(BUILDDIR)/readme-footer.md >> README.md
+	cat $(BUILDDIR)/readme-header.md > $@
+	cproto -I $(CEPHESDIR) $(CEPHESDIR)/*/*.c | node $(BUILDDIR)/generate-readme-toc.js >> $@
+	cproto -I $(CEPHESDIR) $(CEPHESDIR)/*/*.c | node $(BUILDDIR)/generate-readme-jsdoc.js >> $@
+	cat $(BUILDDIR)/readme-footer.md >> $@
+
+src/index.ts: $(CPROTOFILES) $(GENERATEFILES)
+	cproto -I $(CEPHESDIR) $(CEPHESDIR)/*/*.c | node $(BUILDDIR)/generate-ts-interface.js > $@
+
+src/cephes-compiled.ts: $(CPROTOFILES) $(GENERATEFILES)
+	cproto -I $(CEPHESDIR) $(CEPHESDIR)/*/*.c | node $(BUILDDIR)/generate-cephes-compiled-interface.js > $@
+
+npm-build:
+	npm run prepare
