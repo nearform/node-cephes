@@ -23,18 +23,18 @@ it("extra function", function () {
 it("array function", function () {
   almostEqual(
     cephes.polevl(1.1, new Float64Array([2.2, 3.3, 4.4].reverse()), 2),
-    2.2 + 3.3 * 1.1 + 4.4 * 1.1 * 1.1
+    2.2 + 3.3 * 1.1 + 4.4 * 1.1 * 1.1,
   );
 });
 
 it("throw error", function () {
   assert.throws(
     () => cephes.zeta(0, 1),
-    new RangeError('cephes reports "argument domain error" in zeta')
+    new RangeError('cephes reports "argument domain error" in zeta'),
   );
   assert.throws(
     () => cephes.zeta(1.2, -1),
-    new Error('cephes reports "function singularity" in zeta')
+    new Error('cephes reports "function singularity" in zeta'),
   );
 });
 
@@ -73,6 +73,6 @@ it("compiled is a promise", async function () {
 it("calculates ellie(1.0731208831306067, 0.9128794812874865) correctly", async function () {
   almostEqual(
     cephes.ellie(1.0731208831306067, 0.9128794812874865),
-    0.8994413957643846
+    0.8994413957643846,
   );
 });
