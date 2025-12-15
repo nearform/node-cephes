@@ -1,9 +1,9 @@
-const { it } = require("node:test");
-const assert = require("node:assert");
+import { it } from "node:test";
+import assert from "node:assert";
 
-const cephes = require("../index.js");
-const asyncCephes = require("../dist/cephes-browser.js").default;
-const almostEqual = require("./almost-equal.js");
+import cephes from "../index.js";
+import asyncCephes from "../src/cephes-browser.ts";
+import almostEqual from "./almost-equal.js";
 
 it("plain function", function () {
   almostEqual(cephes.exp2(3.4), Math.pow(2, 3.4));

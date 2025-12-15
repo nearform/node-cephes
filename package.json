@@ -16,7 +16,7 @@
     "prepare": "npm run clean && npm run build && npm run lint",
     "serve:article": "(cd article && npx rollup -c) && npx http-server article",
     "pretest": "npm run build",
-    "test": "c8 node --test 'test/!(*.puppeteer).test.{js,mjs}'",
+    "test": "c8 node --import tsx --test 'test/!(*.puppeteer).test.{js,mjs,ts}'",
     "test:puppeteer": "c8 node --test 'test/*.puppeteer.test.{js,mjs}'"
   },
   "devDependencies": {
@@ -42,11 +42,11 @@
     "rollup-plugin-node-polyfills": "^0.2.1",
     "serve-handler": "^6.1.6",
     "split2": "^3.0.0",
+    "tsx": "^4.21.0",
     "typescript": "^5.9.3",
     "xorshift": "^1.1.1"
   },
   "license": "BSD-3-Clause",
-  "dependencies": {},
   "exports": {
     "import": "./index.mjs",
     "require": "./index.js"
