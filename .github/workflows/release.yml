@@ -26,6 +26,7 @@ jobs:
     steps:
       - uses: nearform-actions/optic-release-automation-action@v4
         with:
+          build-command: npm install
           semver: ${{ github.event.inputs.semver }}
           commit-message: 'chore: release {version}'
           publish-mode: oidc
