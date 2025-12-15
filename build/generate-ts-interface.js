@@ -57,15 +57,30 @@ const argGenerators = {
     code += `  cephes.${packageName}.writeArrayToMemory(new Uint8Array(${name}.buffer, ${name}.byteOffset, ${name}.byteLength), carg_${name});\n`;
     return code;
   },
+  Complex: function (packageName, name, needStack) {
+    let code = "";
+    code += `  // argument: Complex ${name}\n`;
+    code += `  if (!isComplex(${name})) {\n`;
+    if (needStack)
+      code += `    cephes.${packageName}.stackRestore(stacktop);\n`;
+    code += `    throw new TypeError('${name} must be a Complex');\n`;
+    code += `  }\n`;
+    code += `  const carg_${name} = cephes.${packageName}.stackAlloc(16);\n`;
+    code += `  const ${name}Buffer = new Float64Array([${name}.real, ${name}.imag]);\n`;
+    code += `  cephes.${packageName}.writeArrayToMemory(new Uint8Array(${name}Buffer.buffer, ${name}Buffer.byteOffset, ${name}Buffer.byteLength), carg_${name});\n`;
+    return code;
+  },
 };
 
 const header = `
 import cephes from './cephes.js';
+import {isComplex, type Complex, create as createComplex} from "./complex.js"
 
 // Export compiled promise, in Node.js this is just a dummy promise as the
 // WebAssembly program will be compiled synchronously. It takes about 20ms
 // as of Node.js v10.6.1.
 export const compiled = cephes.compiled ?? Promise.resolve()
+export { createComplex };
 `;
 
 class InterfaceGenerator extends stream.Transform {
@@ -85,8 +100,10 @@ class InterfaceGenerator extends stream.Transform {
     } = data;
 
     // Check if the stack will be needed because of isPointer or isArray
-    const needStack = functionArgs.some((arg) => arg.isArray || arg.isPointer);
-
+    const needStack = functionArgs.some(
+      (arg) => arg.isArray || arg.isPointer || arg.type === "Complex",
+    );
+    const usesComplex = functionArgs.some((arg) => arg.type === "Complex");
     // Check if there is extra data returned
     const extraReturn = functionArgs.some((arg) => arg.isPointer);
 
@@ -140,7 +157,9 @@ class InterfaceGenerator extends stream.Transform {
     //
     code += `  // return: ${returnType}\n`;
     // function call
-    code += `  const fn_ret = cephes.cephes_${functionName}(`;
+    code += `  ${
+      returnType !== "void" ? "const fn_ret = " : ""
+    }cephes.cephes_${functionName}(`;
     // function arguments
     for (const { name } of functionArgs) {
       code += `carg_${name}, `;
@@ -162,6 +181,11 @@ class InterfaceGenerator extends stream.Transform {
         code += `    '${name}': cephes.${packageName}.getValue(carg_${name}, '${type2llvm[type]}'),\n`;
       }
       code += "  }] as const;\n";
+    } else if (usesComplex) {
+      for (const { name, type } of functionArgs) {
+        if (!Boolean(type === "Complex")) continue;
+        code += `  [${name}.real, ${name}.imag] = cephes.${packageName}.getValue(carg_${name}, 'Complex');\n`;
+      }
     } else {
       code += "  // No pointers, so just return fn_ret\n";
       code += "  const ret = fn_ret;\n";
@@ -175,14 +199,23 @@ class InterfaceGenerator extends stream.Transform {
       code += "  // Restore internal stacktop before returning\n";
       code += `  cephes.${packageName}.stackRestore(stacktop);\n`;
     }
-    code += "  return ret;\n";
+    if (returnType !== "void") {
+      code += "  return ret;\n";
+    } else if (usesComplex) {
+      code += `  return ${functionArgs.findLast(({ fullType }) => fullType === "Complex").name};\n`;
+    }
+
     code += "};\n";
     code += "\n";
     this.#functions.push(functionName);
     done(null, code);
   }
   _flush(callback) {
-    this.push("export default {compiled," + this.#functions.join(",") + "}");
+    this.push(
+      "export default {compiled, createComplex, " +
+        this.#functions.join(",") +
+        "}",
+    );
     callback();
   }
 }

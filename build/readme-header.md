@@ -80,5 +80,22 @@ one less or one more. Check the specific function documentation to be sure.
 
 ```js
 const arrayInput = new Float64Array([2.2, 3.3, 4.4]);
-const value = ephes.polevl(1.1, arrayInput, arrayInput.length - 1);
+const value = cephes.polevl(1.1, arrayInput, arrayInput.length - 1);
+```
+
+#### 4. Functions that use Complex numbers
+
+Some functions use complex numbers. We have a convenience method in cephes (`createComplex`), which takes a real and imaginary part. Note most of the complex functions store the value in one of the arguments. For convenience, the last argument is returned by the function.
+
+Here is an example with `csin`.
+
+```js
+// Create the resulting complex
+const w = cephes.createComplex();
+// Run the function
+cephes.csin(cephes.createComplex(0.5, 0.5), w);
+
+// Output update of value to console
+console.log(w.toString()); // Expect 0.5406126857131534 + 0.4573041531842493i
+
 ```
