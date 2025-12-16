@@ -12,7 +12,7 @@ LFLAGS:=-O2
 ADDITIONAL_FLAGS:=-UHAVE_LONG_DOUBLE -DSTDC_HEADERS=0 -DUNK=1 -DIBMC=1 -DANSIPROT=1
 DISABLE_WARNING_FLAGS:=-Wno-deprecated-non-prototype -Wno-incompatible-library-redeclaration -Wno-unused-command-line-argument -Wno-macro-redefined
 
-.PHONY: clean download build test-suite test
+.PHONY: clean download build test-suite test help
 
 PACKAGE_CALLS = \
     "pkg=cmath" \
@@ -148,3 +148,7 @@ test-suite: $(CPROTOFILES) $(GENERATEFILES) # Create all tests
 npm-build: # Build the package (index.js, index.mjs, index.d.ts)
 	@echo "Building npm package..."
 	@npm run prepare
+
+help:
+	@echo "Available targets:"
+	@awk 'BEGIN {FS=":.*# "} /^[a-zA-Z0-9][a-zA-Z0-9_-]*:.*# / && $$1 !~ /^_/ {printf "  %-20s %s\n", $$1, $$2}' $(MAKEFILE_LIST)
