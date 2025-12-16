@@ -9,6 +9,7 @@ export default {
   output: {
     file: "bundle.mjs",
     format: "es",
+    exports: "named",
   },
   plugins: [
     nodePolyfills(),

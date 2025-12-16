@@ -22,6 +22,7 @@ export default [
     output: {
       file: "index.js",
       format: "commonjs",
+      exports: "named",
     },
     plugins: [
       commonjs(),
@@ -38,6 +39,7 @@ export default [
     output: {
       file: "index.mjs",
       format: "es",
+      exports: "named",
     },
     plugins: [
       commonjs(),
