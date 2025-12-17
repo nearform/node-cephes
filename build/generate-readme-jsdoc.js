@@ -40,7 +40,9 @@ class JSDocCGenerator extends stream.Transform {
     //
 
     // function name
-    if (extraReturn) {
+    if (returnType === "void") {
+      code += `#### cephes.${functionName}(`;
+    } else if (extraReturn) {
       code += `#### [${returnType}, extra] = cephes.${functionName}(`;
     } else {
       code += `#### ${returnType} = cephes.${functionName}(`;
@@ -75,11 +77,14 @@ class JSDocCGenerator extends stream.Transform {
 
     // Example
     code += "```js\n";
-    if (extraReturn) {
-      code += "const [ret, extra] = ";
-    } else {
-      code += "const ret = ";
+    if (returnType !== "void") {
+      if (extraReturn) {
+        code += "const [ret, extra] = ";
+      } else {
+        code += "const ret = ";
+      }
     }
+
     code += `cephes.${functionName}(`;
     // function arguments
     for (const { type, isPointer, isArray, fullType, name } of functionArgs) {

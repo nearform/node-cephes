@@ -917,68 +917,68 @@ console.log(w.toString()); // Expect 0.5406126857131534 + 0.4573041531842493i
 const ret = cephes.signbit(x);
 ```
 
-#### void = cephes.csinh(z: Complex, w: Complex)
+#### cephes.csinh(z: Complex, w: Complex)
 
 `csinh` is the "Complex hyperbolic sine". You can read the full documentation at http://www.netlib.org/cephes/doubldoc.html#csinh.
 
 ```js
-const ret = cephes.csinh(z, w);
+cephes.csinh(z, w);
 ```
 
-#### void = cephes.casinh(z: Complex, w: Complex)
+#### cephes.casinh(z: Complex, w: Complex)
 
 `casinh` is the "Complex inverse hyperbolic sine". You can read the full documentation at http://www.netlib.org/cephes/doubldoc.html#casinh.
 
 ```js
-const ret = cephes.casinh(z, w);
+cephes.casinh(z, w);
 ```
 
-#### void = cephes.ccosh(z: Complex, w: Complex)
+#### cephes.ccosh(z: Complex, w: Complex)
 
 `ccosh` is the "Complex hyperbolic cosine". You can read the full documentation at http://www.netlib.org/cephes/doubldoc.html#ccosh.
 
 ```js
-const ret = cephes.ccosh(z, w);
+cephes.ccosh(z, w);
 ```
 
-#### void = cephes.cacosh(z: Complex, w: Complex)
+#### cephes.cacosh(z: Complex, w: Complex)
 
 `cacosh` is the "Complex inverse hyperbolic cosine". You can read the full documentation at http://www.netlib.org/cephes/doubldoc.html#cacosh.
 
 ```js
-const ret = cephes.cacosh(z, w);
+cephes.cacosh(z, w);
 ```
 
-#### void = cephes.ctanh(z: Complex, w: Complex)
+#### cephes.ctanh(z: Complex, w: Complex)
 
 `ctanh` is the "Complex hyperbolic tangent". You can read the full documentation at http://www.netlib.org/cephes/doubldoc.html#ctanh.
 
 ```js
-const ret = cephes.ctanh(z, w);
+cephes.ctanh(z, w);
 ```
 
-#### void = cephes.catanh(z: Complex, w: Complex)
+#### cephes.catanh(z: Complex, w: Complex)
 
 `catanh` is the "Complex inverse hyperbolic tangent". You can read the full documentation at http://www.netlib.org/cephes/doubldoc.html#catanh.
 
 ```js
-const ret = cephes.catanh(z, w);
+cephes.catanh(z, w);
 ```
 
-#### void = cephes.cpow(a: Complex, z: Complex, w: Complex)
+#### cephes.cpow(a: Complex, z: Complex, w: Complex)
 
 `cpow` is the "Complex power function". You can read the full documentation at http://www.netlib.org/cephes/doubldoc.html#cpow.
 
 ```js
-const ret = cephes.cpow(a, z, w);
+cephes.cpow(a, z, w);
 ```
 
-#### void = cephes.cneg(a: Complex)
+#### cephes.cneg(a: Complex)
 
 `cneg` is the "Complex negative". You can read the full documentation at http://www.netlib.org/cephes/doubldoc.html#cneg.
 
 ```js
-const ret = cephes.cneg(a);
+cephes.cneg(a);
 ```
 
 #### int = cephes.isnan(x: double)
@@ -2069,118 +2069,118 @@ const ret = cephes.simpsn(new Float64Array(f), delta);
 
 ### Complex Arithmetic
 
-#### void = cephes.cadd(a: Complex, b: Complex, c: Complex)
+#### cephes.cadd(a: Complex, b: Complex, c: Complex)
 
 `cadd` is the "Complex addition". You can read the full documentation at http://www.netlib.org/cephes/doubldoc.html#cadd.
 
 ```js
-const ret = cephes.cadd(a, b, c);
+cephes.cadd(a, b, c);
 ```
 
-#### void = cephes.csub(a: Complex, b: Complex, c: Complex)
+#### cephes.csub(a: Complex, b: Complex, c: Complex)
 
 `csub` is the "Subtraction". You can read the full documentation at http://www.netlib.org/cephes/doubldoc.html#csub.
 
 ```js
-const ret = cephes.csub(a, b, c);
+cephes.csub(a, b, c);
 ```
 
-#### void = cephes.cmul(a: Complex, b: Complex, c: Complex)
+#### cephes.cmul(a: Complex, b: Complex, c: Complex)
 
 `cmul` is the "Multiplication". You can read the full documentation at http://www.netlib.org/cephes/doubldoc.html#cmul.
 
 ```js
-const ret = cephes.cmul(a, b, c);
+cephes.cmul(a, b, c);
 ```
 
-#### void = cephes.cdiv(a: Complex, b: Complex, c: Complex)
+#### cephes.cdiv(a: Complex, b: Complex, c: Complex)
 
 `cdiv` is the "Division". You can read the full documentation at http://www.netlib.org/cephes/doubldoc.html#cdiv.
 
 ```js
-const ret = cephes.cdiv(a, b, c);
+cephes.cdiv(a, b, c);
 ```
 
-#### void = cephes.csqrt(z: Complex, w: Complex)
+#### cephes.csqrt(z: Complex, w: Complex)
 
 `csqrt` is the "Square root". You can read the full documentation at http://www.netlib.org/cephes/doubldoc.html#csqrt.
 
 ```js
-const ret = cephes.csqrt(z, w);
+cephes.csqrt(z, w);
 ```
 
 ### Complex Exponential and Trigonometric
 
-#### void = cephes.cexp(z: Complex, w: Complex)
+#### cephes.cexp(z: Complex, w: Complex)
 
 `cexp` is the "Exponential". You can read the full documentation at http://www.netlib.org/cephes/doubldoc.html#cexp.
 
 ```js
-const ret = cephes.cexp(z, w);
+cephes.cexp(z, w);
 ```
 
-#### void = cephes.clog(z: Complex, w: Complex)
+#### cephes.clog(z: Complex, w: Complex)
 
 `clog` is the "Logarithm". You can read the full documentation at http://www.netlib.org/cephes/doubldoc.html#clog.
 
 ```js
-const ret = cephes.clog(z, w);
+cephes.clog(z, w);
 ```
 
-#### void = cephes.ccos(z: Complex, w: Complex)
+#### cephes.ccos(z: Complex, w: Complex)
 
 `ccos` is the "Cosine". You can read the full documentation at http://www.netlib.org/cephes/doubldoc.html#ccos.
 
 ```js
-const ret = cephes.ccos(z, w);
+cephes.ccos(z, w);
 ```
 
-#### void = cephes.cacos(z: Complex, w: Complex)
+#### cephes.cacos(z: Complex, w: Complex)
 
 `cacos` is the "Arc cosine". You can read the full documentation at http://www.netlib.org/cephes/doubldoc.html#cacos.
 
 ```js
-const ret = cephes.cacos(z, w);
+cephes.cacos(z, w);
 ```
 
-#### void = cephes.csin(z: Complex, w: Complex)
+#### cephes.csin(z: Complex, w: Complex)
 
 `csin` is the "Sine". You can read the full documentation at http://www.netlib.org/cephes/doubldoc.html#csin.
 
 ```js
-const ret = cephes.csin(z, w);
+cephes.csin(z, w);
 ```
 
-#### void = cephes.casin(z: Complex, w: Complex)
+#### cephes.casin(z: Complex, w: Complex)
 
 `casin` is the "Arc sine". You can read the full documentation at http://www.netlib.org/cephes/doubldoc.html#casin.
 
 ```js
-const ret = cephes.casin(z, w);
+cephes.casin(z, w);
 ```
 
-#### void = cephes.ctan(z: Complex, w: Complex)
+#### cephes.ctan(z: Complex, w: Complex)
 
 `ctan` is the "Tangent". You can read the full documentation at http://www.netlib.org/cephes/doubldoc.html#ctan.
 
 ```js
-const ret = cephes.ctan(z, w);
+cephes.ctan(z, w);
 ```
 
-#### void = cephes.catan(z: Complex, w: Complex)
+#### cephes.catan(z: Complex, w: Complex)
 
 `catan` is the "Arc tangent". You can read the full documentation at http://www.netlib.org/cephes/doubldoc.html#catan.
 
 ```js
-const ret = cephes.catan(z, w);
+cephes.catan(z, w);
 ```
 
-#### void = cephes.ccot(z: Complex, w: Complex)
+#### cephes.ccot(z: Complex, w: Complex)
 
 `ccot` is the "Cotangent". You can read the full documentation at http://www.netlib.org/cephes/doubldoc.html#ccot.
 
 ```js
-const ret = cephes.ccot(z, w);
+cephes.ccot(z, w);
 ```
 
 ### Polynomials and Power Series
