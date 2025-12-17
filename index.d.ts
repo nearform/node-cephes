@@ -3,6 +3,7 @@ type Complex = {
 };
 declare const create: (real?: number, imag?: number) => Complex;
 
+type Int = number;
 declare const compiled: Promise<void>;
 
 declare function signbit(x: number): number;
@@ -18,8 +19,8 @@ declare function isnan(x: number): number;
 declare function isfinite(x: number): number;
 declare function sqrt(x: number): number;
 declare function cbrt(x: number): number;
-declare function polevl(x: number, coef: Float64Array, N: number): number;
-declare function chbevl(x: number, array: Float64Array, n: number): number;
+declare function polevl(x: number, coef: Float64Array, N: Int): number;
+declare function chbevl(x: number, array: Float64Array, n: Int): number;
 declare function round(x: number): number;
 declare function ceil(x: number): number;
 declare function floor(x: number): number;
@@ -29,13 +30,13 @@ declare function frexp(x: number): readonly [
     readonly pw2: number;
   },
 ];
-declare function ldexp(x: number, pw2: number): number;
+declare function ldexp(x: number, pw2: Int): number;
 declare function fabs(x: number): number;
-declare function expx2(x: number, sign: number): number;
+declare function expx2(x: number, sign: Int): number;
 declare function radian(d: number, m: number, s: number): number;
 declare function sincos(
   x: number,
-  flg: number,
+  flg: Int,
 ): readonly [
   number,
   {
@@ -67,13 +68,13 @@ declare function log(x: number): number;
 declare function log2(x: number): number;
 declare function log10(x: number): number;
 declare function pow(x: number, y: number): number;
-declare function powi(x: number, nn: number): number;
+declare function powi(x: number, nn: Int): number;
 declare function sin(x: number): number;
 declare function sindg(x: number): number;
 declare function tan(x: number): number;
 declare function tandg(x: number): number;
 declare function ei(x: number): number;
-declare function expn(n: number, x: number): number;
+declare function expn(n: Int, x: number): number;
 declare function shichi(x: number): readonly [
   number,
   {
@@ -90,7 +91,7 @@ declare function sici(x: number): readonly [
 ];
 declare function lbeta(a: number, b: number): number;
 declare function beta(a: number, b: number): number;
-declare function fac(i: number): number;
+declare function fac(i: Int): number;
 declare function gamma(x: number): number;
 declare function lgam(x: number): number;
 declare function incbet(aa: number, bb: number, xx: number): number;
@@ -121,11 +122,11 @@ declare function airy(x: number): readonly [
 ];
 declare function j0(x: number): number;
 declare function j1(x: number): number;
-declare function jn(n: number, x: number): number;
+declare function jn(n: Int, x: number): number;
 declare function jv(n: number, x: number): number;
 declare function y0(x: number): number;
 declare function y1(x: number): number;
-declare function yn(n: number, x: number): number;
+declare function yn(n: Int, x: number): number;
 declare function yv(v: number, x: number): number;
 declare function i0(x: number): number;
 declare function i0e(x: number): number;
@@ -136,7 +137,7 @@ declare function k0(x: number): number;
 declare function k0e(x: number): number;
 declare function k1(x: number): number;
 declare function k1e(x: number): number;
-declare function kn(nn: number, x: number): number;
+declare function kn(nn: Int, x: number): number;
 declare function hyperg(a: number, b: number, x: number): number;
 declare function hyp2f1(a: number, b: number, c: number, x: number): number;
 declare function ellpe(x: number): number;
@@ -156,31 +157,31 @@ declare function ellpj(
   },
 ];
 declare function btdtr(a: number, b: number, x: number): number;
-declare function smirnov(n: number, e: number): number;
+declare function smirnov(n: Int, e: number): number;
 declare function kolmogorov(y: number): number;
-declare function smirnovi(n: number, p: number): number;
+declare function smirnovi(n: Int, p: number): number;
 declare function kolmogi(p: number): number;
-declare function nbdtri(k: number, n: number, p: number): number;
-declare function stdtri(k: number, p: number): number;
-declare function bdtr(k: number, n: number, p: number): number;
-declare function bdtrc(k: number, n: number, p: number): number;
-declare function bdtri(k: number, n: number, y: number): number;
+declare function nbdtri(k: Int, n: Int, p: number): number;
+declare function stdtri(k: Int, p: number): number;
+declare function bdtr(k: Int, n: Int, p: number): number;
+declare function bdtrc(k: Int, n: Int, p: number): number;
+declare function bdtri(k: Int, n: Int, y: number): number;
 declare function chdtr(df: number, x: number): number;
 declare function chdtrc(df: number, x: number): number;
 declare function chdtri(df: number, y: number): number;
-declare function fdtr(ia: number, ib: number, x: number): number;
-declare function fdtrc(ia: number, ib: number, x: number): number;
-declare function fdtri(ia: number, ib: number, y: number): number;
+declare function fdtr(ia: Int, ib: Int, x: number): number;
+declare function fdtrc(ia: Int, ib: Int, x: number): number;
+declare function fdtri(ia: Int, ib: Int, y: number): number;
 declare function gdtr(a: number, b: number, x: number): number;
 declare function gdtrc(a: number, b: number, x: number): number;
-declare function nbdtr(k: number, n: number, p: number): number;
-declare function nbdtrc(k: number, n: number, p: number): number;
+declare function nbdtr(k: Int, n: Int, p: number): number;
+declare function nbdtrc(k: Int, n: Int, p: number): number;
 declare function ndtr(a: number): number;
 declare function ndtri(y0: number): number;
-declare function pdtr(k: number, m: number): number;
-declare function pdtrc(k: number, m: number): number;
-declare function pdtri(k: number, y: number): number;
-declare function stdtr(k: number, t: number): number;
+declare function pdtr(k: Int, m: number): number;
+declare function pdtrc(k: Int, m: number): number;
+declare function pdtri(k: Int, y: number): number;
+declare function stdtr(k: Int, t: number): number;
 declare function plancki(w: number, T: number): number;
 declare function planckc(w: number, T: number): number;
 declare function planckd(w: number, T: number): number;
@@ -204,8 +205,8 @@ declare function casin(z: Complex, w: Complex): Complex;
 declare function ctan(z: Complex, w: Complex): Complex;
 declare function catan(z: Complex, w: Complex): Complex;
 declare function ccot(z: Complex, w: Complex): Complex;
-declare function p1evl(x: number, coef: Float64Array, N: number): number;
-declare function polylog(n: number, x: number): number;
+declare function p1evl(x: number, coef: Float64Array, N: Int): number;
+declare function polylog(n: Int, x: number): number;
 declare const _default: {
   compiled: Promise<void>;
   createComplex: (real?: number, imag?: number) => Complex;
