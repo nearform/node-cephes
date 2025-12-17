@@ -1,43 +1,39 @@
-import { type Complex, create as createComplex } from "./complex.js";
-export declare const compiled: Promise<void>;
-export { createComplex };
-export declare function signbit(x: number): number;
-export declare function csinh(z: Complex, w: Complex): Complex;
-export declare function casinh(z: Complex, w: Complex): Complex;
-export declare function ccosh(z: Complex, w: Complex): Complex;
-export declare function cacosh(z: Complex, w: Complex): Complex;
-export declare function ctanh(z: Complex, w: Complex): Complex;
-export declare function catanh(z: Complex, w: Complex): Complex;
-export declare function cpow(a: Complex, z: Complex, w: Complex): Complex;
-export declare function cneg(a: Complex): Complex;
-export declare function isnan(x: number): number;
-export declare function isfinite(x: number): number;
-export declare function sqrt(x: number): number;
-export declare function cbrt(x: number): number;
-export declare function polevl(
-  x: number,
-  coef: Float64Array,
-  N: number,
-): number;
-export declare function chbevl(
-  x: number,
-  array: Float64Array,
-  n: number,
-): number;
-export declare function round(x: number): number;
-export declare function ceil(x: number): number;
-export declare function floor(x: number): number;
-export declare function frexp(x: number): readonly [
+type Complex = {
+  [part in "real" | "imag"]: number;
+};
+declare const create: (real?: number, imag?: number) => Complex;
+
+declare const compiled: Promise<void>;
+
+declare function signbit(x: number): number;
+declare function csinh(z: Complex, w: Complex): Complex;
+declare function casinh(z: Complex, w: Complex): Complex;
+declare function ccosh(z: Complex, w: Complex): Complex;
+declare function cacosh(z: Complex, w: Complex): Complex;
+declare function ctanh(z: Complex, w: Complex): Complex;
+declare function catanh(z: Complex, w: Complex): Complex;
+declare function cpow(a: Complex, z: Complex, w: Complex): Complex;
+declare function cneg(a: Complex): Complex;
+declare function isnan(x: number): number;
+declare function isfinite(x: number): number;
+declare function sqrt(x: number): number;
+declare function cbrt(x: number): number;
+declare function polevl(x: number, coef: Float64Array, N: number): number;
+declare function chbevl(x: number, array: Float64Array, n: number): number;
+declare function round(x: number): number;
+declare function ceil(x: number): number;
+declare function floor(x: number): number;
+declare function frexp(x: number): readonly [
   number,
   {
     readonly pw2: number;
   },
 ];
-export declare function ldexp(x: number, pw2: number): number;
-export declare function fabs(x: number): number;
-export declare function expx2(x: number, sign: number): number;
-export declare function radian(d: number, m: number, s: number): number;
-export declare function sincos(
+declare function ldexp(x: number, pw2: number): number;
+declare function fabs(x: number): number;
+declare function expx2(x: number, sign: number): number;
+declare function radian(d: number, m: number, s: number): number;
+declare function sincos(
   x: number,
   flg: number,
 ): readonly [
@@ -47,74 +43,74 @@ export declare function sincos(
     readonly c: number;
   },
 ];
-export declare function cot(x: number): number;
-export declare function cotdg(x: number): number;
-export declare function log1p(x: number): number;
-export declare function expm1(x: number): number;
-export declare function cosm1(x: number): number;
-export declare function acos(x: number): number;
-export declare function acosh(x: number): number;
-export declare function asinh(xx: number): number;
-export declare function atanh(x: number): number;
-export declare function asin(x: number): number;
-export declare function atan(x: number): number;
-export declare function atan2(y: number, x: number): number;
-export declare function cos(x: number): number;
-export declare function cosdg(x: number): number;
-export declare function exp(x: number): number;
-export declare function exp2(x: number): number;
-export declare function exp10(x: number): number;
-export declare function cosh(x: number): number;
-export declare function sinh(x: number): number;
-export declare function tanh(x: number): number;
-export declare function log(x: number): number;
-export declare function log2(x: number): number;
-export declare function log10(x: number): number;
-export declare function pow(x: number, y: number): number;
-export declare function powi(x: number, nn: number): number;
-export declare function sin(x: number): number;
-export declare function sindg(x: number): number;
-export declare function tan(x: number): number;
-export declare function tandg(x: number): number;
-export declare function ei(x: number): number;
-export declare function expn(n: number, x: number): number;
-export declare function shichi(x: number): readonly [
+declare function cot(x: number): number;
+declare function cotdg(x: number): number;
+declare function log1p(x: number): number;
+declare function expm1(x: number): number;
+declare function cosm1(x: number): number;
+declare function acos(x: number): number;
+declare function acosh(x: number): number;
+declare function asinh(xx: number): number;
+declare function atanh(x: number): number;
+declare function asin(x: number): number;
+declare function atan(x: number): number;
+declare function atan2(y: number, x: number): number;
+declare function cos(x: number): number;
+declare function cosdg(x: number): number;
+declare function exp(x: number): number;
+declare function exp2(x: number): number;
+declare function exp10(x: number): number;
+declare function cosh(x: number): number;
+declare function sinh(x: number): number;
+declare function tanh(x: number): number;
+declare function log(x: number): number;
+declare function log2(x: number): number;
+declare function log10(x: number): number;
+declare function pow(x: number, y: number): number;
+declare function powi(x: number, nn: number): number;
+declare function sin(x: number): number;
+declare function sindg(x: number): number;
+declare function tan(x: number): number;
+declare function tandg(x: number): number;
+declare function ei(x: number): number;
+declare function expn(n: number, x: number): number;
+declare function shichi(x: number): readonly [
   number,
   {
     readonly si: number;
     readonly ci: number;
   },
 ];
-export declare function sici(x: number): readonly [
+declare function sici(x: number): readonly [
   number,
   {
     readonly si: number;
     readonly ci: number;
   },
 ];
-export declare function lbeta(a: number, b: number): number;
-export declare function beta(a: number, b: number): number;
-export declare function fac(i: number): number;
-export declare function gamma(x: number): number;
-export declare function lgam(x: number): number;
-export declare function incbet(aa: number, bb: number, xx: number): number;
-export declare function incbi(aa: number, bb: number, yy0: number): number;
-export declare function igam(a: number, x: number): number;
-export declare function igamc(a: number, x: number): number;
-export declare function igami(a: number, y0: number): number;
-export declare function psi(x: number): number;
-export declare function rgamma(x: number): number;
-export declare function erf(x: number): number;
-export declare function erfc(a: number): number;
-export declare function dawsn(xx: number): number;
-export declare function fresnl(xxa: number): readonly [
+declare function lbeta(a: number, b: number): number;
+declare function beta(a: number, b: number): number;
+declare function fac(i: number): number;
+declare function gamma(x: number): number;
+declare function lgam(x: number): number;
+declare function incbet(aa: number, bb: number, xx: number): number;
+declare function incbi(aa: number, bb: number, yy0: number): number;
+declare function igam(a: number, x: number): number;
+declare function igamc(a: number, x: number): number;
+declare function igami(a: number, y0: number): number;
+declare function psi(x: number): number;
+declare function rgamma(x: number): number;
+declare function erf(x: number): number;
+declare function erfc(a: number): number;
+declare function dawsn(xx: number): number;
+declare function fresnl(xxa: number): readonly [
   number,
   {
     readonly ssa: number;
     readonly cca: number;
   },
 ];
-export declare function airy(x: number): readonly [
+declare function airy(x: number): readonly [
   number,
   {
     readonly ai: number;
@@ -123,36 +119,31 @@ export declare function airy(x: number): readonly [
     readonly bip: number;
   },
 ];
-export declare function j0(x: number): number;
-export declare function j1(x: number): number;
-export declare function jn(n: number, x: number): number;
-export declare function jv(n: number, x: number): number;
-export declare function y0(x: number): number;
-export declare function y1(x: number): number;
-export declare function yn(n: number, x: number): number;
-export declare function yv(v: number, x: number): number;
-export declare function i0(x: number): number;
-export declare function i0e(x: number): number;
-export declare function i1(x: number): number;
-export declare function i1e(x: number): number;
-export declare function iv(v: number, x: number): number;
-export declare function k0(x: number): number;
-export declare function k0e(x: number): number;
-export declare function k1(x: number): number;
-export declare function k1e(x: number): number;
-export declare function kn(nn: number, x: number): number;
-export declare function hyperg(a: number, b: number, x: number): number;
-export declare function hyp2f1(
-  a: number,
-  b: number,
-  c: number,
-  x: number,
-): number;
-export declare function ellpe(x: number): number;
-export declare function ellie(phi: number, m: number): number;
-export declare function ellpk(x: number): number;
-export declare function ellik(phi: number, m: number): number;
-export declare function ellpj(
+declare function j0(x: number): number;
+declare function j1(x: number): number;
+declare function jn(n: number, x: number): number;
+declare function jv(n: number, x: number): number;
+declare function y0(x: number): number;
+declare function y1(x: number): number;
+declare function yn(n: number, x: number): number;
+declare function yv(v: number, x: number): number;
+declare function i0(x: number): number;
+declare function i0e(x: number): number;
+declare function i1(x: number): number;
+declare function i1e(x: number): number;
+declare function iv(v: number, x: number): number;
+declare function k0(x: number): number;
+declare function k0e(x: number): number;
+declare function k1(x: number): number;
+declare function k1e(x: number): number;
+declare function kn(nn: number, x: number): number;
+declare function hyperg(a: number, b: number, x: number): number;
+declare function hyp2f1(a: number, b: number, c: number, x: number): number;
+declare function ellpe(x: number): number;
+declare function ellie(phi: number, m: number): number;
+declare function ellpk(x: number): number;
+declare function ellik(phi: number, m: number): number;
+declare function ellpj(
   u: number,
   m: number,
 ): readonly [
@@ -164,57 +155,57 @@ export declare function ellpj(
     readonly ph: number;
   },
 ];
-export declare function btdtr(a: number, b: number, x: number): number;
-export declare function smirnov(n: number, e: number): number;
-export declare function kolmogorov(y: number): number;
-export declare function smirnovi(n: number, p: number): number;
-export declare function kolmogi(p: number): number;
-export declare function nbdtri(k: number, n: number, p: number): number;
-export declare function stdtri(k: number, p: number): number;
-export declare function bdtr(k: number, n: number, p: number): number;
-export declare function bdtrc(k: number, n: number, p: number): number;
-export declare function bdtri(k: number, n: number, y: number): number;
-export declare function chdtr(df: number, x: number): number;
-export declare function chdtrc(df: number, x: number): number;
-export declare function chdtri(df: number, y: number): number;
-export declare function fdtr(ia: number, ib: number, x: number): number;
-export declare function fdtrc(ia: number, ib: number, x: number): number;
-export declare function fdtri(ia: number, ib: number, y: number): number;
-export declare function gdtr(a: number, b: number, x: number): number;
-export declare function gdtrc(a: number, b: number, x: number): number;
-export declare function nbdtr(k: number, n: number, p: number): number;
-export declare function nbdtrc(k: number, n: number, p: number): number;
-export declare function ndtr(a: number): number;
-export declare function ndtri(y0: number): number;
-export declare function pdtr(k: number, m: number): number;
-export declare function pdtrc(k: number, m: number): number;
-export declare function pdtri(k: number, y: number): number;
-export declare function stdtr(k: number, t: number): number;
-export declare function plancki(w: number, T: number): number;
-export declare function planckc(w: number, T: number): number;
-export declare function planckd(w: number, T: number): number;
-export declare function planckw(T: number): number;
-export declare function spence(x: number): number;
-export declare function zetac(x: number): number;
-export declare function zeta(x: number, q: number): number;
-export declare function struve(v: number, x: number): number;
-export declare function simpsn(f: Float64Array, delta: number): number;
-export declare function cadd(a: Complex, b: Complex, c: Complex): Complex;
-export declare function csub(a: Complex, b: Complex, c: Complex): Complex;
-export declare function cmul(a: Complex, b: Complex, c: Complex): Complex;
-export declare function cdiv(a: Complex, b: Complex, c: Complex): Complex;
-export declare function csqrt(z: Complex, w: Complex): Complex;
-export declare function cexp(z: Complex, w: Complex): Complex;
-export declare function clog(z: Complex, w: Complex): Complex;
-export declare function ccos(z: Complex, w: Complex): Complex;
-export declare function cacos(z: Complex, w: Complex): Complex;
-export declare function csin(z: Complex, w: Complex): Complex;
-export declare function casin(z: Complex, w: Complex): Complex;
-export declare function ctan(z: Complex, w: Complex): Complex;
-export declare function catan(z: Complex, w: Complex): Complex;
-export declare function ccot(z: Complex, w: Complex): Complex;
-export declare function p1evl(x: number, coef: Float64Array, N: number): number;
-export declare function polylog(n: number, x: number): number;
+declare function btdtr(a: number, b: number, x: number): number;
+declare function smirnov(n: number, e: number): number;
+declare function kolmogorov(y: number): number;
+declare function smirnovi(n: number, p: number): number;
+declare function kolmogi(p: number): number;
+declare function nbdtri(k: number, n: number, p: number): number;
+declare function stdtri(k: number, p: number): number;
+declare function bdtr(k: number, n: number, p: number): number;
+declare function bdtrc(k: number, n: number, p: number): number;
+declare function bdtri(k: number, n: number, y: number): number;
+declare function chdtr(df: number, x: number): number;
+declare function chdtrc(df: number, x: number): number;
+declare function chdtri(df: number, y: number): number;
+declare function fdtr(ia: number, ib: number, x: number): number;
+declare function fdtrc(ia: number, ib: number, x: number): number;
+declare function fdtri(ia: number, ib: number, y: number): number;
+declare function gdtr(a: number, b: number, x: number): number;
+declare function gdtrc(a: number, b: number, x: number): number;
+declare function nbdtr(k: number, n: number, p: number): number;
+declare function nbdtrc(k: number, n: number, p: number): number;
+declare function ndtr(a: number): number;
+declare function ndtri(y0: number): number;
+declare function pdtr(k: number, m: number): number;
+declare function pdtrc(k: number, m: number): number;
+declare function pdtri(k: number, y: number): number;
+declare function stdtr(k: number, t: number): number;
+declare function plancki(w: number, T: number): number;
+declare function planckc(w: number, T: number): number;
+declare function planckd(w: number, T: number): number;
+declare function planckw(T: number): number;
+declare function spence(x: number): number;
+declare function zetac(x: number): number;
+declare function zeta(x: number, q: number): number;
+declare function struve(v: number, x: number): number;
+declare function simpsn(f: Float64Array, delta: number): number;
+declare function cadd(a: Complex, b: Complex, c: Complex): Complex;
+declare function csub(a: Complex, b: Complex, c: Complex): Complex;
+declare function cmul(a: Complex, b: Complex, c: Complex): Complex;
+declare function cdiv(a: Complex, b: Complex, c: Complex): Complex;
+declare function csqrt(z: Complex, w: Complex): Complex;
+declare function cexp(z: Complex, w: Complex): Complex;
+declare function clog(z: Complex, w: Complex): Complex;
+declare function ccos(z: Complex, w: Complex): Complex;
+declare function cacos(z: Complex, w: Complex): Complex;
+declare function csin(z: Complex, w: Complex): Complex;
+declare function casin(z: Complex, w: Complex): Complex;
+declare function ctan(z: Complex, w: Complex): Complex;
+declare function catan(z: Complex, w: Complex): Complex;
+declare function ccot(z: Complex, w: Complex): Complex;
+declare function p1evl(x: number, coef: Float64Array, N: number): number;
+declare function polylog(n: number, x: number): number;
 declare const _default: {
   compiled: Promise<void>;
   createComplex: (real?: number, imag?: number) => Complex;
@@ -369,4 +360,159 @@ declare const _default: {
   p1evl: typeof p1evl;
   polylog: typeof polylog;
 };
-export default _default;
+
+export {
+  acos,
+  acosh,
+  airy,
+  asin,
+  asinh,
+  atan,
+  atan2,
+  atanh,
+  bdtr,
+  bdtrc,
+  bdtri,
+  beta,
+  btdtr,
+  cacos,
+  cacosh,
+  cadd,
+  casin,
+  casinh,
+  catan,
+  catanh,
+  cbrt,
+  ccos,
+  ccosh,
+  ccot,
+  cdiv,
+  ceil,
+  cexp,
+  chbevl,
+  chdtr,
+  chdtrc,
+  chdtri,
+  clog,
+  cmul,
+  cneg,
+  compiled,
+  cos,
+  cosdg,
+  cosh,
+  cosm1,
+  cot,
+  cotdg,
+  cpow,
+  create as createComplex,
+  csin,
+  csinh,
+  csqrt,
+  csub,
+  ctan,
+  ctanh,
+  dawsn,
+  _default as default,
+  ei,
+  ellie,
+  ellik,
+  ellpe,
+  ellpj,
+  ellpk,
+  erf,
+  erfc,
+  exp,
+  exp10,
+  exp2,
+  expm1,
+  expn,
+  expx2,
+  fabs,
+  fac,
+  fdtr,
+  fdtrc,
+  fdtri,
+  floor,
+  fresnl,
+  frexp,
+  gamma,
+  gdtr,
+  gdtrc,
+  hyp2f1,
+  hyperg,
+  i0,
+  i0e,
+  i1,
+  i1e,
+  igam,
+  igamc,
+  igami,
+  incbet,
+  incbi,
+  isfinite,
+  isnan,
+  iv,
+  j0,
+  j1,
+  jn,
+  jv,
+  k0,
+  k0e,
+  k1,
+  k1e,
+  kn,
+  kolmogi,
+  kolmogorov,
+  lbeta,
+  ldexp,
+  lgam,
+  log,
+  log10,
+  log1p,
+  log2,
+  nbdtr,
+  nbdtrc,
+  nbdtri,
+  ndtr,
+  ndtri,
+  p1evl,
+  pdtr,
+  pdtrc,
+  pdtri,
+  planckc,
+  planckd,
+  plancki,
+  planckw,
+  polevl,
+  polylog,
+  pow,
+  powi,
+  psi,
+  radian,
+  rgamma,
+  round,
+  shichi,
+  sici,
+  signbit,
+  simpsn,
+  sin,
+  sincos,
+  sindg,
+  sinh,
+  smirnov,
+  smirnovi,
+  spence,
+  sqrt,
+  stdtr,
+  stdtri,
+  struve,
+  tan,
+  tandg,
+  tanh,
+  y0,
+  y1,
+  yn,
+  yv,
+  zeta,
+  zetac,
+};

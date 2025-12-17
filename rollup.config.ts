@@ -4,18 +4,8 @@ import nodePolyfills from "rollup-plugin-node-polyfills";
 import json from "@rollup/plugin-json";
 import alias from "@rollup/plugin-alias";
 import inject from "@rollup/plugin-inject";
+import { dts } from "rollup-plugin-dts";
 
-import fs from "fs";
-
-function copyFilePlugin(options: { src: string; dest: string }) {
-  const { src, dest } = options;
-  return {
-    name: "copy-file-plugin",
-    writeBundle() {
-      fs.copyFileSync(src, dest);
-    },
-  };
-}
 export default [
   {
     input: "./dist/index.js",
@@ -31,7 +21,6 @@ export default [
         preferBuiltins: true,
       }),
       json(),
-      copyFilePlugin({ src: "./dist/index.d.ts", dest: "./index.d.ts" }),
     ],
   },
   {
@@ -60,5 +49,10 @@ export default [
       }),
       json(),
     ],
+  },
+  {
+    input: "./dist/index.d.ts",
+    output: [{ file: "index.d.ts", format: "es" }],
+    plugins: [dts()],
   },
 ];
