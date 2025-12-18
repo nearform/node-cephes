@@ -1,6 +1,7 @@
 import cephes from "./cephes.js";
 import { isComplex, type Complex, create as createComplex } from "./complex.js";
 
+type Int = number;
 // Export compiled promise, in Node.js this is just a dummy promise as the
 // WebAssembly program will be compiled synchronously. It takes about 20ms
 // as of Node.js v10.6.1.
@@ -412,7 +413,7 @@ export function cbrt(x: number) {
 }
 
 // from cephes/misc/polevl.c
-export function polevl(x: number, coef: Float64Array, N: number) {
+export function polevl(x: number, coef: Float64Array, N: Int) {
   //Save the STACKTOP because the following code will do some stack allocs
   const stacktop = cephes.misc.stackSave();
 
@@ -453,7 +454,7 @@ export function polevl(x: number, coef: Float64Array, N: number) {
 }
 
 // from cephes/misc/chbevl.c
-export function chbevl(x: number, array: Float64Array, n: number) {
+export function chbevl(x: number, array: Float64Array, n: Int) {
   //Save the STACKTOP because the following code will do some stack allocs
   const stacktop = cephes.misc.stackSave();
 
@@ -576,7 +577,7 @@ export function frexp(x: number) {
 }
 
 // from cephes/cmath/floor.c
-export function ldexp(x: number, pw2: number) {
+export function ldexp(x: number, pw2: Int) {
   // argument: double x
   if (typeof x !== "number") {
     throw new TypeError("x must be a number");
@@ -616,7 +617,7 @@ export function fabs(x: number) {
 }
 
 // from cephes/cprob/expx2.c
-export function expx2(x: number, sign: number) {
+export function expx2(x: number, sign: Int) {
   // argument: double x
   if (typeof x !== "number") {
     throw new TypeError("x must be a number");
@@ -668,7 +669,7 @@ export function radian(d: number, m: number, s: number) {
 }
 
 // from cephes/cmath/sincos.c
-export function sincos(x: number, flg: number) {
+export function sincos(x: number, flg: Int) {
   //Save the STACKTOP because the following code will do some stack allocs
   const stacktop = cephes.cmath.stackSave();
 
@@ -1130,7 +1131,7 @@ export function pow(x: number, y: number) {
 }
 
 // from cephes/cmath/powi.c
-export function powi(x: number, nn: number) {
+export function powi(x: number, nn: Int) {
   // argument: double x
   if (typeof x !== "number") {
     throw new TypeError("x must be a number");
@@ -1238,7 +1239,7 @@ export function ei(x: number) {
 }
 
 // from cephes/misc/expn.c
-export function expn(n: number, x: number) {
+export function expn(n: Int, x: number) {
   // argument: int n
   if (typeof n !== "number") {
     throw new TypeError("n must be a number");
@@ -1377,7 +1378,7 @@ export function beta(a: number, b: number) {
 }
 
 // from cephes/misc/fac.c
-export function fac(i: number) {
+export function fac(i: Int) {
   // argument: int i
   if (typeof i !== "number") {
     throw new TypeError("i must be a number");
@@ -1753,7 +1754,7 @@ export function j1(x: number) {
 }
 
 // from cephes/bessel/jn.c
-export function jn(n: number, x: number) {
+export function jn(n: Int, x: number) {
   // argument: int n
   if (typeof n !== "number") {
     throw new TypeError("n must be a number");
@@ -1833,7 +1834,7 @@ export function y1(x: number) {
 }
 
 // from cephes/bessel/yn.c
-export function yn(n: number, x: number) {
+export function yn(n: Int, x: number) {
   // argument: int n
   if (typeof n !== "number") {
     throw new TypeError("n must be a number");
@@ -2038,7 +2039,7 @@ export function k1e(x: number) {
 }
 
 // from cephes/bessel/kn.c
-export function kn(nn: number, x: number) {
+export function kn(nn: Int, x: number) {
   // argument: int nn
   if (typeof nn !== "number") {
     throw new TypeError("nn must be a number");
@@ -2285,7 +2286,7 @@ export function btdtr(a: number, b: number, x: number) {
 }
 
 // from cephes/cprob/kolmogorov.c
-export function smirnov(n: number, e: number) {
+export function smirnov(n: Int, e: number) {
   // argument: int n
   if (typeof n !== "number") {
     throw new TypeError("n must be a number");
@@ -2325,7 +2326,7 @@ export function kolmogorov(y: number) {
 }
 
 // from cephes/cprob/kolmogorov.c
-export function smirnovi(n: number, p: number) {
+export function smirnovi(n: Int, p: number) {
   // argument: int n
   if (typeof n !== "number") {
     throw new TypeError("n must be a number");
@@ -2365,7 +2366,7 @@ export function kolmogi(p: number) {
 }
 
 // from cephes/cprob/nbdtr.c
-export function nbdtri(k: number, n: number, p: number) {
+export function nbdtri(k: Int, n: Int, p: number) {
   // argument: int k
   if (typeof k !== "number") {
     throw new TypeError("k must be a number");
@@ -2394,7 +2395,7 @@ export function nbdtri(k: number, n: number, p: number) {
 }
 
 // from cephes/cprob/stdtr.c
-export function stdtri(k: number, p: number) {
+export function stdtri(k: Int, p: number) {
   // argument: int k
   if (typeof k !== "number") {
     throw new TypeError("k must be a number");
@@ -2417,7 +2418,7 @@ export function stdtri(k: number, p: number) {
 }
 
 // from cephes/cprob/bdtr.c
-export function bdtr(k: number, n: number, p: number) {
+export function bdtr(k: Int, n: Int, p: number) {
   // argument: int k
   if (typeof k !== "number") {
     throw new TypeError("k must be a number");
@@ -2446,7 +2447,7 @@ export function bdtr(k: number, n: number, p: number) {
 }
 
 // from cephes/cprob/bdtr.c
-export function bdtrc(k: number, n: number, p: number) {
+export function bdtrc(k: Int, n: Int, p: number) {
   // argument: int k
   if (typeof k !== "number") {
     throw new TypeError("k must be a number");
@@ -2475,7 +2476,7 @@ export function bdtrc(k: number, n: number, p: number) {
 }
 
 // from cephes/cprob/bdtr.c
-export function bdtri(k: number, n: number, y: number) {
+export function bdtri(k: Int, n: Int, y: number) {
   // argument: int k
   if (typeof k !== "number") {
     throw new TypeError("k must be a number");
@@ -2573,7 +2574,7 @@ export function chdtri(df: number, y: number) {
 }
 
 // from cephes/cprob/fdtr.c
-export function fdtr(ia: number, ib: number, x: number) {
+export function fdtr(ia: Int, ib: Int, x: number) {
   // argument: int ia
   if (typeof ia !== "number") {
     throw new TypeError("ia must be a number");
@@ -2602,7 +2603,7 @@ export function fdtr(ia: number, ib: number, x: number) {
 }
 
 // from cephes/cprob/fdtr.c
-export function fdtrc(ia: number, ib: number, x: number) {
+export function fdtrc(ia: Int, ib: Int, x: number) {
   // argument: int ia
   if (typeof ia !== "number") {
     throw new TypeError("ia must be a number");
@@ -2631,7 +2632,7 @@ export function fdtrc(ia: number, ib: number, x: number) {
 }
 
 // from cephes/cprob/fdtr.c
-export function fdtri(ia: number, ib: number, y: number) {
+export function fdtri(ia: Int, ib: Int, y: number) {
   // argument: int ia
   if (typeof ia !== "number") {
     throw new TypeError("ia must be a number");
@@ -2718,7 +2719,7 @@ export function gdtrc(a: number, b: number, x: number) {
 }
 
 // from cephes/cprob/nbdtr.c
-export function nbdtr(k: number, n: number, p: number) {
+export function nbdtr(k: Int, n: Int, p: number) {
   // argument: int k
   if (typeof k !== "number") {
     throw new TypeError("k must be a number");
@@ -2747,7 +2748,7 @@ export function nbdtr(k: number, n: number, p: number) {
 }
 
 // from cephes/cprob/nbdtr.c
-export function nbdtrc(k: number, n: number, p: number) {
+export function nbdtrc(k: Int, n: Int, p: number) {
   // argument: int k
   if (typeof k !== "number") {
     throw new TypeError("k must be a number");
@@ -2810,7 +2811,7 @@ export function ndtri(y0: number) {
 }
 
 // from cephes/cprob/pdtr.c
-export function pdtr(k: number, m: number) {
+export function pdtr(k: Int, m: number) {
   // argument: int k
   if (typeof k !== "number") {
     throw new TypeError("k must be a number");
@@ -2833,7 +2834,7 @@ export function pdtr(k: number, m: number) {
 }
 
 // from cephes/cprob/pdtr.c
-export function pdtrc(k: number, m: number) {
+export function pdtrc(k: Int, m: number) {
   // argument: int k
   if (typeof k !== "number") {
     throw new TypeError("k must be a number");
@@ -2856,7 +2857,7 @@ export function pdtrc(k: number, m: number) {
 }
 
 // from cephes/cprob/pdtr.c
-export function pdtri(k: number, y: number) {
+export function pdtri(k: Int, y: number) {
   // argument: int k
   if (typeof k !== "number") {
     throw new TypeError("k must be a number");
@@ -2879,7 +2880,7 @@ export function pdtri(k: number, y: number) {
 }
 
 // from cephes/cprob/stdtr.c
-export function stdtr(k: number, t: number) {
+export function stdtr(k: Int, t: number) {
   // argument: int k
   if (typeof k !== "number") {
     throw new TypeError("k must be a number");
@@ -3714,7 +3715,7 @@ export function ccot(z: Complex, w: Complex) {
 }
 
 // from cephes/misc/polevl.c
-export function p1evl(x: number, coef: Float64Array, N: number) {
+export function p1evl(x: number, coef: Float64Array, N: Int) {
   //Save the STACKTOP because the following code will do some stack allocs
   const stacktop = cephes.misc.stackSave();
 
@@ -3755,7 +3756,7 @@ export function p1evl(x: number, coef: Float64Array, N: number) {
 }
 
 // from cephes/misc/polylog.c
-export function polylog(n: number, x: number) {
+export function polylog(n: Int, x: number) {
   // argument: int n
   if (typeof n !== "number") {
     throw new TypeError("n must be a number");

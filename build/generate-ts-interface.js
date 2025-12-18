@@ -76,6 +76,7 @@ const header = `
 import cephes from './cephes.js';
 import {isComplex, type Complex, create as createComplex} from "./complex.js"
 
+type Int = number;
 // Export compiled promise, in Node.js this is just a dummy promise as the
 // WebAssembly program will be compiled synchronously. It takes about 20ms
 // as of Node.js v10.6.1.
@@ -127,9 +128,7 @@ class InterfaceGenerator extends stream.Transform {
             throw `Unknown type ${type}`;
         }
       } else {
-        code += `${name}: ${
-          { double: "number", int: "number" }[type] ?? type
-        }, `;
+        code += `${name}: ${{ double: "number", int: "Int" }[type] ?? type}, `;
       }
     }
     // Remove training comma

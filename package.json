@@ -45,6 +45,7 @@
     "pumpify": "^2.0.1",
     "puppeteer": "^24.32.1",
     "rollup": "^4.53.3",
+    "rollup-plugin-dts": "^6.3.0",
     "rollup-plugin-node-polyfills": "^0.2.1",
     "serve-handler": "^6.1.6",
     "split2": "^3.0.0",
