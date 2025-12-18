@@ -2,8 +2,8 @@
 
 <!--
 Hello! curious reader. The README.md file is automatically generated, if you
-wish to make any corrections we wellcome you to do so, just make sure you
-make then in the build/ directory and not in README.md, thanks :)
+wish to make any corrections we welcome you to do so, just make sure you
+make them in the build/ directory and not in README.md, thanks :)
 -->
 
 This is a WebAssembly packaging of the [cephes library](http://www.netlib.org/cephes/).
@@ -11,10 +11,6 @@ The cephes library contains C implementations of most
 [special functions](https://en.wikipedia.org/wiki/Special_functions),
 [distributions](https://en.wikipedia.org/wiki/Probability_distribution),
 and other hard-to-implement mathematical functions.
-
-_Note that there are a few cephes functions that are not exposed here, as some
-of them are quite hard to make consumable in JavaScript using WebAssembly. Feel
-free to send a pull request if you need one of them._
 
 ## Install
 
