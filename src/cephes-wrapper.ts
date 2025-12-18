@@ -8,7 +8,17 @@ import {
 } from "./cephes-compiled.js";
 
 import wasmMap from "./cephes.wasm.base64.json" with { type: "json" };
-import errorMappings from "./errors.json" with { type: "json" };
+import {
+  ArgumentDomainError,
+  FunctionSingularityError,
+  OverflowRangeError,
+  PartialLossOfPrecisionError,
+  TotalLossOfPrecisionError,
+  UnderflowRangeError,
+  UnixDomainErrorCode,
+  UnixRangeErrorCode,
+  UnknownCephesError,
+} from "./exceptions.js";
 
 type MemorySize = 8 | 16 | 32 | "F32" | "F64";
 
@@ -36,7 +46,7 @@ class BaseCephesWrapper extends CephesCompiled {
 
   _AsciiToString(pkg: CephesPackageName, ptr: Pointer) {
     let str = "";
-    while (1) {
+    while (true) {
       const ch = this.#memory[pkg][8][ptr++ >> 0];
       if (ch === 0) return str;
       str += String.fromCharCode(ch);
@@ -47,16 +57,26 @@ class BaseCephesWrapper extends CephesCompiled {
     const wasmImports = {
       mtherr: (name: Pointer /* char* */, code: number /* int */) => {
         // from mtherr.c
-        const codemsg =
-          (errorMappings as { [code: string]: string })[String(code)] ||
-          "unknown error";
-        const fnname = this._AsciiToString(pkg, name);
-        const message = 'cephes reports "' + codemsg + '" in ' + fnname;
-
-        if (code === 1) {
-          throw new RangeError(message);
-        } else {
-          throw new Error(message);
+        const fnname = this._AsciiToString(pkg, name) as string;
+        switch (code) {
+          case 1:
+            throw new ArgumentDomainError(fnname);
+          case 2:
+            throw new FunctionSingularityError(fnname);
+          case 3:
+            throw new OverflowRangeError(fnname);
+          case 4:
+            throw new UnderflowRangeError(fnname);
+          case 5:
+            throw new TotalLossOfPrecisionError(fnname);
+          case 6:
+            throw new PartialLossOfPrecisionError(fnname);
+          case 33:
+            throw new UnixDomainErrorCode(fnname);
+          case 34:
+            throw new UnixRangeErrorCode(fnname);
+          default:
+            throw new UnknownCephesError(fnname);
         }
       },
     };

@@ -28,320 +28,320 @@ export function signbit(x: number) {
 export function csinh(z: Complex, w: Complex) {
   //Save the STACKTOP because the following code will do some stack allocs
   const stacktop = cephes.cmath.stackSave();
+  try {
+    // argument: Complex z
+    if (!isComplex(z)) {
+      throw new TypeError("z must be a Complex");
+    }
+    const carg_z = cephes.cmath.stackAlloc(16);
+    const zBuffer = new Float64Array([z.real, z.imag]);
+    cephes.cmath.writeArrayToMemory(
+      new Uint8Array(zBuffer.buffer, zBuffer.byteOffset, zBuffer.byteLength),
+      carg_z,
+    );
 
-  // argument: Complex z
-  if (!isComplex(z)) {
+    // argument: Complex w
+    if (!isComplex(w)) {
+      throw new TypeError("w must be a Complex");
+    }
+    const carg_w = cephes.cmath.stackAlloc(16);
+    const wBuffer = new Float64Array([w.real, w.imag]);
+    cephes.cmath.writeArrayToMemory(
+      new Uint8Array(wBuffer.buffer, wBuffer.byteOffset, wBuffer.byteLength),
+      carg_w,
+    );
+
+    // return: void
+    cephes.cephes_csinh(carg_z, carg_w);
+
+    [z.real, z.imag] = cephes.cmath.getValue(carg_z, "Complex");
+    [w.real, w.imag] = cephes.cmath.getValue(carg_w, "Complex");
+
+    return w;
+  } finally {
+    // Restore internal stacktop before returning
     cephes.cmath.stackRestore(stacktop);
-    throw new TypeError("z must be a Complex");
   }
-  const carg_z = cephes.cmath.stackAlloc(16);
-  const zBuffer = new Float64Array([z.real, z.imag]);
-  cephes.cmath.writeArrayToMemory(
-    new Uint8Array(zBuffer.buffer, zBuffer.byteOffset, zBuffer.byteLength),
-    carg_z,
-  );
-
-  // argument: Complex w
-  if (!isComplex(w)) {
-    cephes.cmath.stackRestore(stacktop);
-    throw new TypeError("w must be a Complex");
-  }
-  const carg_w = cephes.cmath.stackAlloc(16);
-  const wBuffer = new Float64Array([w.real, w.imag]);
-  cephes.cmath.writeArrayToMemory(
-    new Uint8Array(wBuffer.buffer, wBuffer.byteOffset, wBuffer.byteLength),
-    carg_w,
-  );
-
-  // return: void
-  cephes.cephes_csinh(carg_z, carg_w);
-
-  [z.real, z.imag] = cephes.cmath.getValue(carg_z, "Complex");
-  [w.real, w.imag] = cephes.cmath.getValue(carg_w, "Complex");
-
-  // Restore internal stacktop before returning
-  cephes.cmath.stackRestore(stacktop);
-  return w;
 }
 
 // from cephes/cmath/clog.c
 export function casinh(z: Complex, w: Complex) {
   //Save the STACKTOP because the following code will do some stack allocs
   const stacktop = cephes.cmath.stackSave();
+  try {
+    // argument: Complex z
+    if (!isComplex(z)) {
+      throw new TypeError("z must be a Complex");
+    }
+    const carg_z = cephes.cmath.stackAlloc(16);
+    const zBuffer = new Float64Array([z.real, z.imag]);
+    cephes.cmath.writeArrayToMemory(
+      new Uint8Array(zBuffer.buffer, zBuffer.byteOffset, zBuffer.byteLength),
+      carg_z,
+    );
 
-  // argument: Complex z
-  if (!isComplex(z)) {
+    // argument: Complex w
+    if (!isComplex(w)) {
+      throw new TypeError("w must be a Complex");
+    }
+    const carg_w = cephes.cmath.stackAlloc(16);
+    const wBuffer = new Float64Array([w.real, w.imag]);
+    cephes.cmath.writeArrayToMemory(
+      new Uint8Array(wBuffer.buffer, wBuffer.byteOffset, wBuffer.byteLength),
+      carg_w,
+    );
+
+    // return: void
+    cephes.cephes_casinh(carg_z, carg_w);
+
+    [z.real, z.imag] = cephes.cmath.getValue(carg_z, "Complex");
+    [w.real, w.imag] = cephes.cmath.getValue(carg_w, "Complex");
+
+    return w;
+  } finally {
+    // Restore internal stacktop before returning
     cephes.cmath.stackRestore(stacktop);
-    throw new TypeError("z must be a Complex");
   }
-  const carg_z = cephes.cmath.stackAlloc(16);
-  const zBuffer = new Float64Array([z.real, z.imag]);
-  cephes.cmath.writeArrayToMemory(
-    new Uint8Array(zBuffer.buffer, zBuffer.byteOffset, zBuffer.byteLength),
-    carg_z,
-  );
-
-  // argument: Complex w
-  if (!isComplex(w)) {
-    cephes.cmath.stackRestore(stacktop);
-    throw new TypeError("w must be a Complex");
-  }
-  const carg_w = cephes.cmath.stackAlloc(16);
-  const wBuffer = new Float64Array([w.real, w.imag]);
-  cephes.cmath.writeArrayToMemory(
-    new Uint8Array(wBuffer.buffer, wBuffer.byteOffset, wBuffer.byteLength),
-    carg_w,
-  );
-
-  // return: void
-  cephes.cephes_casinh(carg_z, carg_w);
-
-  [z.real, z.imag] = cephes.cmath.getValue(carg_z, "Complex");
-  [w.real, w.imag] = cephes.cmath.getValue(carg_w, "Complex");
-
-  // Restore internal stacktop before returning
-  cephes.cmath.stackRestore(stacktop);
-  return w;
 }
 
 // from cephes/cmath/clog.c
 export function ccosh(z: Complex, w: Complex) {
   //Save the STACKTOP because the following code will do some stack allocs
   const stacktop = cephes.cmath.stackSave();
+  try {
+    // argument: Complex z
+    if (!isComplex(z)) {
+      throw new TypeError("z must be a Complex");
+    }
+    const carg_z = cephes.cmath.stackAlloc(16);
+    const zBuffer = new Float64Array([z.real, z.imag]);
+    cephes.cmath.writeArrayToMemory(
+      new Uint8Array(zBuffer.buffer, zBuffer.byteOffset, zBuffer.byteLength),
+      carg_z,
+    );
 
-  // argument: Complex z
-  if (!isComplex(z)) {
+    // argument: Complex w
+    if (!isComplex(w)) {
+      throw new TypeError("w must be a Complex");
+    }
+    const carg_w = cephes.cmath.stackAlloc(16);
+    const wBuffer = new Float64Array([w.real, w.imag]);
+    cephes.cmath.writeArrayToMemory(
+      new Uint8Array(wBuffer.buffer, wBuffer.byteOffset, wBuffer.byteLength),
+      carg_w,
+    );
+
+    // return: void
+    cephes.cephes_ccosh(carg_z, carg_w);
+
+    [z.real, z.imag] = cephes.cmath.getValue(carg_z, "Complex");
+    [w.real, w.imag] = cephes.cmath.getValue(carg_w, "Complex");
+
+    return w;
+  } finally {
+    // Restore internal stacktop before returning
     cephes.cmath.stackRestore(stacktop);
-    throw new TypeError("z must be a Complex");
   }
-  const carg_z = cephes.cmath.stackAlloc(16);
-  const zBuffer = new Float64Array([z.real, z.imag]);
-  cephes.cmath.writeArrayToMemory(
-    new Uint8Array(zBuffer.buffer, zBuffer.byteOffset, zBuffer.byteLength),
-    carg_z,
-  );
-
-  // argument: Complex w
-  if (!isComplex(w)) {
-    cephes.cmath.stackRestore(stacktop);
-    throw new TypeError("w must be a Complex");
-  }
-  const carg_w = cephes.cmath.stackAlloc(16);
-  const wBuffer = new Float64Array([w.real, w.imag]);
-  cephes.cmath.writeArrayToMemory(
-    new Uint8Array(wBuffer.buffer, wBuffer.byteOffset, wBuffer.byteLength),
-    carg_w,
-  );
-
-  // return: void
-  cephes.cephes_ccosh(carg_z, carg_w);
-
-  [z.real, z.imag] = cephes.cmath.getValue(carg_z, "Complex");
-  [w.real, w.imag] = cephes.cmath.getValue(carg_w, "Complex");
-
-  // Restore internal stacktop before returning
-  cephes.cmath.stackRestore(stacktop);
-  return w;
 }
 
 // from cephes/cmath/clog.c
 export function cacosh(z: Complex, w: Complex) {
   //Save the STACKTOP because the following code will do some stack allocs
   const stacktop = cephes.cmath.stackSave();
+  try {
+    // argument: Complex z
+    if (!isComplex(z)) {
+      throw new TypeError("z must be a Complex");
+    }
+    const carg_z = cephes.cmath.stackAlloc(16);
+    const zBuffer = new Float64Array([z.real, z.imag]);
+    cephes.cmath.writeArrayToMemory(
+      new Uint8Array(zBuffer.buffer, zBuffer.byteOffset, zBuffer.byteLength),
+      carg_z,
+    );
 
-  // argument: Complex z
-  if (!isComplex(z)) {
+    // argument: Complex w
+    if (!isComplex(w)) {
+      throw new TypeError("w must be a Complex");
+    }
+    const carg_w = cephes.cmath.stackAlloc(16);
+    const wBuffer = new Float64Array([w.real, w.imag]);
+    cephes.cmath.writeArrayToMemory(
+      new Uint8Array(wBuffer.buffer, wBuffer.byteOffset, wBuffer.byteLength),
+      carg_w,
+    );
+
+    // return: void
+    cephes.cephes_cacosh(carg_z, carg_w);
+
+    [z.real, z.imag] = cephes.cmath.getValue(carg_z, "Complex");
+    [w.real, w.imag] = cephes.cmath.getValue(carg_w, "Complex");
+
+    return w;
+  } finally {
+    // Restore internal stacktop before returning
     cephes.cmath.stackRestore(stacktop);
-    throw new TypeError("z must be a Complex");
   }
-  const carg_z = cephes.cmath.stackAlloc(16);
-  const zBuffer = new Float64Array([z.real, z.imag]);
-  cephes.cmath.writeArrayToMemory(
-    new Uint8Array(zBuffer.buffer, zBuffer.byteOffset, zBuffer.byteLength),
-    carg_z,
-  );
-
-  // argument: Complex w
-  if (!isComplex(w)) {
-    cephes.cmath.stackRestore(stacktop);
-    throw new TypeError("w must be a Complex");
-  }
-  const carg_w = cephes.cmath.stackAlloc(16);
-  const wBuffer = new Float64Array([w.real, w.imag]);
-  cephes.cmath.writeArrayToMemory(
-    new Uint8Array(wBuffer.buffer, wBuffer.byteOffset, wBuffer.byteLength),
-    carg_w,
-  );
-
-  // return: void
-  cephes.cephes_cacosh(carg_z, carg_w);
-
-  [z.real, z.imag] = cephes.cmath.getValue(carg_z, "Complex");
-  [w.real, w.imag] = cephes.cmath.getValue(carg_w, "Complex");
-
-  // Restore internal stacktop before returning
-  cephes.cmath.stackRestore(stacktop);
-  return w;
 }
 
 // from cephes/cmath/clog.c
 export function ctanh(z: Complex, w: Complex) {
   //Save the STACKTOP because the following code will do some stack allocs
   const stacktop = cephes.cmath.stackSave();
+  try {
+    // argument: Complex z
+    if (!isComplex(z)) {
+      throw new TypeError("z must be a Complex");
+    }
+    const carg_z = cephes.cmath.stackAlloc(16);
+    const zBuffer = new Float64Array([z.real, z.imag]);
+    cephes.cmath.writeArrayToMemory(
+      new Uint8Array(zBuffer.buffer, zBuffer.byteOffset, zBuffer.byteLength),
+      carg_z,
+    );
 
-  // argument: Complex z
-  if (!isComplex(z)) {
+    // argument: Complex w
+    if (!isComplex(w)) {
+      throw new TypeError("w must be a Complex");
+    }
+    const carg_w = cephes.cmath.stackAlloc(16);
+    const wBuffer = new Float64Array([w.real, w.imag]);
+    cephes.cmath.writeArrayToMemory(
+      new Uint8Array(wBuffer.buffer, wBuffer.byteOffset, wBuffer.byteLength),
+      carg_w,
+    );
+
+    // return: void
+    cephes.cephes_ctanh(carg_z, carg_w);
+
+    [z.real, z.imag] = cephes.cmath.getValue(carg_z, "Complex");
+    [w.real, w.imag] = cephes.cmath.getValue(carg_w, "Complex");
+
+    return w;
+  } finally {
+    // Restore internal stacktop before returning
     cephes.cmath.stackRestore(stacktop);
-    throw new TypeError("z must be a Complex");
   }
-  const carg_z = cephes.cmath.stackAlloc(16);
-  const zBuffer = new Float64Array([z.real, z.imag]);
-  cephes.cmath.writeArrayToMemory(
-    new Uint8Array(zBuffer.buffer, zBuffer.byteOffset, zBuffer.byteLength),
-    carg_z,
-  );
-
-  // argument: Complex w
-  if (!isComplex(w)) {
-    cephes.cmath.stackRestore(stacktop);
-    throw new TypeError("w must be a Complex");
-  }
-  const carg_w = cephes.cmath.stackAlloc(16);
-  const wBuffer = new Float64Array([w.real, w.imag]);
-  cephes.cmath.writeArrayToMemory(
-    new Uint8Array(wBuffer.buffer, wBuffer.byteOffset, wBuffer.byteLength),
-    carg_w,
-  );
-
-  // return: void
-  cephes.cephes_ctanh(carg_z, carg_w);
-
-  [z.real, z.imag] = cephes.cmath.getValue(carg_z, "Complex");
-  [w.real, w.imag] = cephes.cmath.getValue(carg_w, "Complex");
-
-  // Restore internal stacktop before returning
-  cephes.cmath.stackRestore(stacktop);
-  return w;
 }
 
 // from cephes/cmath/clog.c
 export function catanh(z: Complex, w: Complex) {
   //Save the STACKTOP because the following code will do some stack allocs
   const stacktop = cephes.cmath.stackSave();
+  try {
+    // argument: Complex z
+    if (!isComplex(z)) {
+      throw new TypeError("z must be a Complex");
+    }
+    const carg_z = cephes.cmath.stackAlloc(16);
+    const zBuffer = new Float64Array([z.real, z.imag]);
+    cephes.cmath.writeArrayToMemory(
+      new Uint8Array(zBuffer.buffer, zBuffer.byteOffset, zBuffer.byteLength),
+      carg_z,
+    );
 
-  // argument: Complex z
-  if (!isComplex(z)) {
+    // argument: Complex w
+    if (!isComplex(w)) {
+      throw new TypeError("w must be a Complex");
+    }
+    const carg_w = cephes.cmath.stackAlloc(16);
+    const wBuffer = new Float64Array([w.real, w.imag]);
+    cephes.cmath.writeArrayToMemory(
+      new Uint8Array(wBuffer.buffer, wBuffer.byteOffset, wBuffer.byteLength),
+      carg_w,
+    );
+
+    // return: void
+    cephes.cephes_catanh(carg_z, carg_w);
+
+    [z.real, z.imag] = cephes.cmath.getValue(carg_z, "Complex");
+    [w.real, w.imag] = cephes.cmath.getValue(carg_w, "Complex");
+
+    return w;
+  } finally {
+    // Restore internal stacktop before returning
     cephes.cmath.stackRestore(stacktop);
-    throw new TypeError("z must be a Complex");
   }
-  const carg_z = cephes.cmath.stackAlloc(16);
-  const zBuffer = new Float64Array([z.real, z.imag]);
-  cephes.cmath.writeArrayToMemory(
-    new Uint8Array(zBuffer.buffer, zBuffer.byteOffset, zBuffer.byteLength),
-    carg_z,
-  );
-
-  // argument: Complex w
-  if (!isComplex(w)) {
-    cephes.cmath.stackRestore(stacktop);
-    throw new TypeError("w must be a Complex");
-  }
-  const carg_w = cephes.cmath.stackAlloc(16);
-  const wBuffer = new Float64Array([w.real, w.imag]);
-  cephes.cmath.writeArrayToMemory(
-    new Uint8Array(wBuffer.buffer, wBuffer.byteOffset, wBuffer.byteLength),
-    carg_w,
-  );
-
-  // return: void
-  cephes.cephes_catanh(carg_z, carg_w);
-
-  [z.real, z.imag] = cephes.cmath.getValue(carg_z, "Complex");
-  [w.real, w.imag] = cephes.cmath.getValue(carg_w, "Complex");
-
-  // Restore internal stacktop before returning
-  cephes.cmath.stackRestore(stacktop);
-  return w;
 }
 
 // from cephes/cmath/clog.c
 export function cpow(a: Complex, z: Complex, w: Complex) {
   //Save the STACKTOP because the following code will do some stack allocs
   const stacktop = cephes.cmath.stackSave();
+  try {
+    // argument: Complex a
+    if (!isComplex(a)) {
+      throw new TypeError("a must be a Complex");
+    }
+    const carg_a = cephes.cmath.stackAlloc(16);
+    const aBuffer = new Float64Array([a.real, a.imag]);
+    cephes.cmath.writeArrayToMemory(
+      new Uint8Array(aBuffer.buffer, aBuffer.byteOffset, aBuffer.byteLength),
+      carg_a,
+    );
 
-  // argument: Complex a
-  if (!isComplex(a)) {
+    // argument: Complex z
+    if (!isComplex(z)) {
+      throw new TypeError("z must be a Complex");
+    }
+    const carg_z = cephes.cmath.stackAlloc(16);
+    const zBuffer = new Float64Array([z.real, z.imag]);
+    cephes.cmath.writeArrayToMemory(
+      new Uint8Array(zBuffer.buffer, zBuffer.byteOffset, zBuffer.byteLength),
+      carg_z,
+    );
+
+    // argument: Complex w
+    if (!isComplex(w)) {
+      throw new TypeError("w must be a Complex");
+    }
+    const carg_w = cephes.cmath.stackAlloc(16);
+    const wBuffer = new Float64Array([w.real, w.imag]);
+    cephes.cmath.writeArrayToMemory(
+      new Uint8Array(wBuffer.buffer, wBuffer.byteOffset, wBuffer.byteLength),
+      carg_w,
+    );
+
+    // return: void
+    cephes.cephes_cpow(carg_a, carg_z, carg_w);
+
+    [a.real, a.imag] = cephes.cmath.getValue(carg_a, "Complex");
+    [z.real, z.imag] = cephes.cmath.getValue(carg_z, "Complex");
+    [w.real, w.imag] = cephes.cmath.getValue(carg_w, "Complex");
+
+    return w;
+  } finally {
+    // Restore internal stacktop before returning
     cephes.cmath.stackRestore(stacktop);
-    throw new TypeError("a must be a Complex");
   }
-  const carg_a = cephes.cmath.stackAlloc(16);
-  const aBuffer = new Float64Array([a.real, a.imag]);
-  cephes.cmath.writeArrayToMemory(
-    new Uint8Array(aBuffer.buffer, aBuffer.byteOffset, aBuffer.byteLength),
-    carg_a,
-  );
-
-  // argument: Complex z
-  if (!isComplex(z)) {
-    cephes.cmath.stackRestore(stacktop);
-    throw new TypeError("z must be a Complex");
-  }
-  const carg_z = cephes.cmath.stackAlloc(16);
-  const zBuffer = new Float64Array([z.real, z.imag]);
-  cephes.cmath.writeArrayToMemory(
-    new Uint8Array(zBuffer.buffer, zBuffer.byteOffset, zBuffer.byteLength),
-    carg_z,
-  );
-
-  // argument: Complex w
-  if (!isComplex(w)) {
-    cephes.cmath.stackRestore(stacktop);
-    throw new TypeError("w must be a Complex");
-  }
-  const carg_w = cephes.cmath.stackAlloc(16);
-  const wBuffer = new Float64Array([w.real, w.imag]);
-  cephes.cmath.writeArrayToMemory(
-    new Uint8Array(wBuffer.buffer, wBuffer.byteOffset, wBuffer.byteLength),
-    carg_w,
-  );
-
-  // return: void
-  cephes.cephes_cpow(carg_a, carg_z, carg_w);
-
-  [a.real, a.imag] = cephes.cmath.getValue(carg_a, "Complex");
-  [z.real, z.imag] = cephes.cmath.getValue(carg_z, "Complex");
-  [w.real, w.imag] = cephes.cmath.getValue(carg_w, "Complex");
-
-  // Restore internal stacktop before returning
-  cephes.cmath.stackRestore(stacktop);
-  return w;
 }
 
 // from cephes/ellf/cmplx.c
 export function cneg(a: Complex) {
   //Save the STACKTOP because the following code will do some stack allocs
   const stacktop = cephes.ellf.stackSave();
+  try {
+    // argument: Complex a
+    if (!isComplex(a)) {
+      throw new TypeError("a must be a Complex");
+    }
+    const carg_a = cephes.ellf.stackAlloc(16);
+    const aBuffer = new Float64Array([a.real, a.imag]);
+    cephes.ellf.writeArrayToMemory(
+      new Uint8Array(aBuffer.buffer, aBuffer.byteOffset, aBuffer.byteLength),
+      carg_a,
+    );
 
-  // argument: Complex a
-  if (!isComplex(a)) {
+    // return: void
+    cephes.cephes_cneg(carg_a);
+
+    [a.real, a.imag] = cephes.ellf.getValue(carg_a, "Complex");
+
+    return a;
+  } finally {
+    // Restore internal stacktop before returning
     cephes.ellf.stackRestore(stacktop);
-    throw new TypeError("a must be a Complex");
   }
-  const carg_a = cephes.ellf.stackAlloc(16);
-  const aBuffer = new Float64Array([a.real, a.imag]);
-  cephes.ellf.writeArrayToMemory(
-    new Uint8Array(aBuffer.buffer, aBuffer.byteOffset, aBuffer.byteLength),
-    carg_a,
-  );
-
-  // return: void
-  cephes.cephes_cneg(carg_a);
-
-  [a.real, a.imag] = cephes.ellf.getValue(carg_a, "Complex");
-
-  // Restore internal stacktop before returning
-  cephes.ellf.stackRestore(stacktop);
-  return a;
 }
 
 // from cephes/cmath/isnan.c
@@ -416,82 +416,80 @@ export function cbrt(x: number) {
 export function polevl(x: number, coef: Float64Array, N: Int) {
   //Save the STACKTOP because the following code will do some stack allocs
   const stacktop = cephes.misc.stackSave();
+  try {
+    // argument: double x
+    if (typeof x !== "number") {
+      throw new TypeError("x must be a number");
+    }
+    const carg_x = x;
 
-  // argument: double x
-  if (typeof x !== "number") {
+    // argument: double[] coef
+    if (!(coef instanceof Float64Array)) {
+      throw new TypeError("coef must be either a Float64Array");
+    }
+    const carg_coef = cephes.misc.stackAlloc(coef.length << 3);
+    cephes.misc.writeArrayToMemory(
+      new Uint8Array(coef.buffer, coef.byteOffset, coef.byteLength),
+      carg_coef,
+    );
+
+    // argument: int N
+    if (typeof N !== "number") {
+      throw new TypeError("N must be a number");
+    }
+    const carg_N = N | 0;
+
+    // return: double
+    const fn_ret = cephes.cephes_polevl(carg_x, carg_coef, carg_N);
+
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+
+    return ret;
+  } finally {
+    // Restore internal stacktop before returning
     cephes.misc.stackRestore(stacktop);
-    throw new TypeError("x must be a number");
   }
-  const carg_x = x;
-
-  // argument: double[] coef
-  if (!(coef instanceof Float64Array)) {
-    cephes.misc.stackRestore(stacktop);
-    throw new TypeError("coef must be either a Float64Array");
-  }
-  const carg_coef = cephes.misc.stackAlloc(coef.length << 3);
-  cephes.misc.writeArrayToMemory(
-    new Uint8Array(coef.buffer, coef.byteOffset, coef.byteLength),
-    carg_coef,
-  );
-
-  // argument: int N
-  if (typeof N !== "number") {
-    cephes.misc.stackRestore(stacktop);
-    throw new TypeError("N must be a number");
-  }
-  const carg_N = N | 0;
-
-  // return: double
-  const fn_ret = cephes.cephes_polevl(carg_x, carg_coef, carg_N);
-
-  // No pointers, so just return fn_ret
-  const ret = fn_ret;
-
-  // Restore internal stacktop before returning
-  cephes.misc.stackRestore(stacktop);
-  return ret;
 }
 
 // from cephes/misc/chbevl.c
 export function chbevl(x: number, array: Float64Array, n: Int) {
   //Save the STACKTOP because the following code will do some stack allocs
   const stacktop = cephes.misc.stackSave();
+  try {
+    // argument: double x
+    if (typeof x !== "number") {
+      throw new TypeError("x must be a number");
+    }
+    const carg_x = x;
 
-  // argument: double x
-  if (typeof x !== "number") {
+    // argument: double[] array
+    if (!(array instanceof Float64Array)) {
+      throw new TypeError("array must be either a Float64Array");
+    }
+    const carg_array = cephes.misc.stackAlloc(array.length << 3);
+    cephes.misc.writeArrayToMemory(
+      new Uint8Array(array.buffer, array.byteOffset, array.byteLength),
+      carg_array,
+    );
+
+    // argument: int n
+    if (typeof n !== "number") {
+      throw new TypeError("n must be a number");
+    }
+    const carg_n = n | 0;
+
+    // return: double
+    const fn_ret = cephes.cephes_chbevl(carg_x, carg_array, carg_n);
+
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+
+    return ret;
+  } finally {
+    // Restore internal stacktop before returning
     cephes.misc.stackRestore(stacktop);
-    throw new TypeError("x must be a number");
   }
-  const carg_x = x;
-
-  // argument: double[] array
-  if (!(array instanceof Float64Array)) {
-    cephes.misc.stackRestore(stacktop);
-    throw new TypeError("array must be either a Float64Array");
-  }
-  const carg_array = cephes.misc.stackAlloc(array.length << 3);
-  cephes.misc.writeArrayToMemory(
-    new Uint8Array(array.buffer, array.byteOffset, array.byteLength),
-    carg_array,
-  );
-
-  // argument: int n
-  if (typeof n !== "number") {
-    cephes.misc.stackRestore(stacktop);
-    throw new TypeError("n must be a number");
-  }
-  const carg_n = n | 0;
-
-  // return: double
-  const fn_ret = cephes.cephes_chbevl(carg_x, carg_array, carg_n);
-
-  // No pointers, so just return fn_ret
-  const ret = fn_ret;
-
-  // Restore internal stacktop before returning
-  cephes.misc.stackRestore(stacktop);
-  return ret;
 }
 
 // from cephes/cmath/round.c
@@ -549,31 +547,32 @@ export function floor(x: number) {
 export function frexp(x: number) {
   //Save the STACKTOP because the following code will do some stack allocs
   const stacktop = cephes.cmath.stackSave();
+  try {
+    // argument: double x
+    if (typeof x !== "number") {
+      throw new TypeError("x must be a number");
+    }
+    const carg_x = x;
 
-  // argument: double x
-  if (typeof x !== "number") {
+    // argument: int* pw2
+    const carg_pw2 = cephes.cmath.stackAlloc(4); // No need to zero-set it.
+
+    // return: double
+    const fn_ret = cephes.cephes_frexp(carg_x, carg_pw2);
+
+    // There are pointers, so return the values of thoese too
+    const ret = [
+      fn_ret,
+      {
+        pw2: cephes.cmath.getValue(carg_pw2, "i32"),
+      },
+    ] as const;
+
+    return ret;
+  } finally {
+    // Restore internal stacktop before returning
     cephes.cmath.stackRestore(stacktop);
-    throw new TypeError("x must be a number");
   }
-  const carg_x = x;
-
-  // argument: int* pw2
-  const carg_pw2 = cephes.cmath.stackAlloc(4); // No need to zero-set it.
-
-  // return: double
-  const fn_ret = cephes.cephes_frexp(carg_x, carg_pw2);
-
-  // There are pointers, so return the values of thoese too
-  const ret = [
-    fn_ret,
-    {
-      pw2: cephes.cmath.getValue(carg_pw2, "i32"),
-    },
-  ] as const;
-
-  // Restore internal stacktop before returning
-  cephes.cmath.stackRestore(stacktop);
-  return ret;
 }
 
 // from cephes/cmath/floor.c
@@ -672,42 +671,42 @@ export function radian(d: number, m: number, s: number) {
 export function sincos(x: number, flg: Int) {
   //Save the STACKTOP because the following code will do some stack allocs
   const stacktop = cephes.cmath.stackSave();
+  try {
+    // argument: double x
+    if (typeof x !== "number") {
+      throw new TypeError("x must be a number");
+    }
+    const carg_x = x;
 
-  // argument: double x
-  if (typeof x !== "number") {
+    // argument: double* s
+    const carg_s = cephes.cmath.stackAlloc(8); // No need to zero-set it.
+
+    // argument: double* c
+    const carg_c = cephes.cmath.stackAlloc(8); // No need to zero-set it.
+
+    // argument: int flg
+    if (typeof flg !== "number") {
+      throw new TypeError("flg must be a number");
+    }
+    const carg_flg = flg | 0;
+
+    // return: int
+    const fn_ret = cephes.cephes_sincos(carg_x, carg_s, carg_c, carg_flg) | 0;
+
+    // There are pointers, so return the values of thoese too
+    const ret = [
+      fn_ret,
+      {
+        s: cephes.cmath.getValue(carg_s, "double"),
+        c: cephes.cmath.getValue(carg_c, "double"),
+      },
+    ] as const;
+
+    return ret;
+  } finally {
+    // Restore internal stacktop before returning
     cephes.cmath.stackRestore(stacktop);
-    throw new TypeError("x must be a number");
   }
-  const carg_x = x;
-
-  // argument: double* s
-  const carg_s = cephes.cmath.stackAlloc(8); // No need to zero-set it.
-
-  // argument: double* c
-  const carg_c = cephes.cmath.stackAlloc(8); // No need to zero-set it.
-
-  // argument: int flg
-  if (typeof flg !== "number") {
-    cephes.cmath.stackRestore(stacktop);
-    throw new TypeError("flg must be a number");
-  }
-  const carg_flg = flg | 0;
-
-  // return: int
-  const fn_ret = cephes.cephes_sincos(carg_x, carg_s, carg_c, carg_flg) | 0;
-
-  // There are pointers, so return the values of thoese too
-  const ret = [
-    fn_ret,
-    {
-      s: cephes.cmath.getValue(carg_s, "double"),
-      c: cephes.cmath.getValue(carg_c, "double"),
-    },
-  ] as const;
-
-  // Restore internal stacktop before returning
-  cephes.cmath.stackRestore(stacktop);
-  return ret;
 }
 
 // from cephes/cmath/tan.c
@@ -1265,70 +1264,72 @@ export function expn(n: Int, x: number) {
 export function shichi(x: number) {
   //Save the STACKTOP because the following code will do some stack allocs
   const stacktop = cephes.misc.stackSave();
+  try {
+    // argument: double x
+    if (typeof x !== "number") {
+      throw new TypeError("x must be a number");
+    }
+    const carg_x = x;
 
-  // argument: double x
-  if (typeof x !== "number") {
+    // argument: double* si
+    const carg_si = cephes.misc.stackAlloc(8); // No need to zero-set it.
+
+    // argument: double* ci
+    const carg_ci = cephes.misc.stackAlloc(8); // No need to zero-set it.
+
+    // return: int
+    const fn_ret = cephes.cephes_shichi(carg_x, carg_si, carg_ci) | 0;
+
+    // There are pointers, so return the values of thoese too
+    const ret = [
+      fn_ret,
+      {
+        si: cephes.misc.getValue(carg_si, "double"),
+        ci: cephes.misc.getValue(carg_ci, "double"),
+      },
+    ] as const;
+
+    return ret;
+  } finally {
+    // Restore internal stacktop before returning
     cephes.misc.stackRestore(stacktop);
-    throw new TypeError("x must be a number");
   }
-  const carg_x = x;
-
-  // argument: double* si
-  const carg_si = cephes.misc.stackAlloc(8); // No need to zero-set it.
-
-  // argument: double* ci
-  const carg_ci = cephes.misc.stackAlloc(8); // No need to zero-set it.
-
-  // return: int
-  const fn_ret = cephes.cephes_shichi(carg_x, carg_si, carg_ci) | 0;
-
-  // There are pointers, so return the values of thoese too
-  const ret = [
-    fn_ret,
-    {
-      si: cephes.misc.getValue(carg_si, "double"),
-      ci: cephes.misc.getValue(carg_ci, "double"),
-    },
-  ] as const;
-
-  // Restore internal stacktop before returning
-  cephes.misc.stackRestore(stacktop);
-  return ret;
 }
 
 // from cephes/misc/sici.c
 export function sici(x: number) {
   //Save the STACKTOP because the following code will do some stack allocs
   const stacktop = cephes.misc.stackSave();
+  try {
+    // argument: double x
+    if (typeof x !== "number") {
+      throw new TypeError("x must be a number");
+    }
+    const carg_x = x;
 
-  // argument: double x
-  if (typeof x !== "number") {
+    // argument: double* si
+    const carg_si = cephes.misc.stackAlloc(8); // No need to zero-set it.
+
+    // argument: double* ci
+    const carg_ci = cephes.misc.stackAlloc(8); // No need to zero-set it.
+
+    // return: int
+    const fn_ret = cephes.cephes_sici(carg_x, carg_si, carg_ci) | 0;
+
+    // There are pointers, so return the values of thoese too
+    const ret = [
+      fn_ret,
+      {
+        si: cephes.misc.getValue(carg_si, "double"),
+        ci: cephes.misc.getValue(carg_ci, "double"),
+      },
+    ] as const;
+
+    return ret;
+  } finally {
+    // Restore internal stacktop before returning
     cephes.misc.stackRestore(stacktop);
-    throw new TypeError("x must be a number");
   }
-  const carg_x = x;
-
-  // argument: double* si
-  const carg_si = cephes.misc.stackAlloc(8); // No need to zero-set it.
-
-  // argument: double* ci
-  const carg_ci = cephes.misc.stackAlloc(8); // No need to zero-set it.
-
-  // return: int
-  const fn_ret = cephes.cephes_sici(carg_x, carg_si, carg_ci) | 0;
-
-  // There are pointers, so return the values of thoese too
-  const ret = [
-    fn_ret,
-    {
-      si: cephes.misc.getValue(carg_si, "double"),
-      ci: cephes.misc.getValue(carg_ci, "double"),
-    },
-  ] as const;
-
-  // Restore internal stacktop before returning
-  cephes.misc.stackRestore(stacktop);
-  return ret;
 }
 
 // from cephes/misc/beta.c
@@ -1644,79 +1645,81 @@ export function dawsn(xx: number) {
 export function fresnl(xxa: number) {
   //Save the STACKTOP because the following code will do some stack allocs
   const stacktop = cephes.misc.stackSave();
+  try {
+    // argument: double xxa
+    if (typeof xxa !== "number") {
+      throw new TypeError("xxa must be a number");
+    }
+    const carg_xxa = xxa;
 
-  // argument: double xxa
-  if (typeof xxa !== "number") {
+    // argument: double* ssa
+    const carg_ssa = cephes.misc.stackAlloc(8); // No need to zero-set it.
+
+    // argument: double* cca
+    const carg_cca = cephes.misc.stackAlloc(8); // No need to zero-set it.
+
+    // return: int
+    const fn_ret = cephes.cephes_fresnl(carg_xxa, carg_ssa, carg_cca) | 0;
+
+    // There are pointers, so return the values of thoese too
+    const ret = [
+      fn_ret,
+      {
+        ssa: cephes.misc.getValue(carg_ssa, "double"),
+        cca: cephes.misc.getValue(carg_cca, "double"),
+      },
+    ] as const;
+
+    return ret;
+  } finally {
+    // Restore internal stacktop before returning
     cephes.misc.stackRestore(stacktop);
-    throw new TypeError("xxa must be a number");
   }
-  const carg_xxa = xxa;
-
-  // argument: double* ssa
-  const carg_ssa = cephes.misc.stackAlloc(8); // No need to zero-set it.
-
-  // argument: double* cca
-  const carg_cca = cephes.misc.stackAlloc(8); // No need to zero-set it.
-
-  // return: int
-  const fn_ret = cephes.cephes_fresnl(carg_xxa, carg_ssa, carg_cca) | 0;
-
-  // There are pointers, so return the values of thoese too
-  const ret = [
-    fn_ret,
-    {
-      ssa: cephes.misc.getValue(carg_ssa, "double"),
-      cca: cephes.misc.getValue(carg_cca, "double"),
-    },
-  ] as const;
-
-  // Restore internal stacktop before returning
-  cephes.misc.stackRestore(stacktop);
-  return ret;
 }
 
 // from cephes/bessel/airy.c
 export function airy(x: number) {
   //Save the STACKTOP because the following code will do some stack allocs
   const stacktop = cephes.bessel.stackSave();
+  try {
+    // argument: double x
+    if (typeof x !== "number") {
+      throw new TypeError("x must be a number");
+    }
+    const carg_x = x;
 
-  // argument: double x
-  if (typeof x !== "number") {
+    // argument: double* ai
+    const carg_ai = cephes.bessel.stackAlloc(8); // No need to zero-set it.
+
+    // argument: double* aip
+    const carg_aip = cephes.bessel.stackAlloc(8); // No need to zero-set it.
+
+    // argument: double* bi
+    const carg_bi = cephes.bessel.stackAlloc(8); // No need to zero-set it.
+
+    // argument: double* bip
+    const carg_bip = cephes.bessel.stackAlloc(8); // No need to zero-set it.
+
+    // return: int
+    const fn_ret =
+      cephes.cephes_airy(carg_x, carg_ai, carg_aip, carg_bi, carg_bip) | 0;
+
+    // There are pointers, so return the values of thoese too
+    const ret = [
+      fn_ret,
+      {
+        ai: cephes.bessel.getValue(carg_ai, "double"),
+        aip: cephes.bessel.getValue(carg_aip, "double"),
+        bi: cephes.bessel.getValue(carg_bi, "double"),
+        bip: cephes.bessel.getValue(carg_bip, "double"),
+      },
+    ] as const;
+
+    return ret;
+  } finally {
+    // Restore internal stacktop before returning
     cephes.bessel.stackRestore(stacktop);
-    throw new TypeError("x must be a number");
   }
-  const carg_x = x;
-
-  // argument: double* ai
-  const carg_ai = cephes.bessel.stackAlloc(8); // No need to zero-set it.
-
-  // argument: double* aip
-  const carg_aip = cephes.bessel.stackAlloc(8); // No need to zero-set it.
-
-  // argument: double* bi
-  const carg_bi = cephes.bessel.stackAlloc(8); // No need to zero-set it.
-
-  // argument: double* bip
-  const carg_bip = cephes.bessel.stackAlloc(8); // No need to zero-set it.
-
-  // return: int
-  const fn_ret =
-    cephes.cephes_airy(carg_x, carg_ai, carg_aip, carg_bi, carg_bip) | 0;
-
-  // There are pointers, so return the values of thoese too
-  const ret = [
-    fn_ret,
-    {
-      ai: cephes.bessel.getValue(carg_ai, "double"),
-      aip: cephes.bessel.getValue(carg_aip, "double"),
-      bi: cephes.bessel.getValue(carg_bi, "double"),
-      bip: cephes.bessel.getValue(carg_bip, "double"),
-    },
-  ] as const;
-
-  // Restore internal stacktop before returning
-  cephes.bessel.stackRestore(stacktop);
-  return ret;
 }
 
 // from cephes/bessel/j0.c
@@ -2209,51 +2212,52 @@ export function ellik(phi: number, m: number) {
 export function ellpj(u: number, m: number) {
   //Save the STACKTOP because the following code will do some stack allocs
   const stacktop = cephes.ellf.stackSave();
+  try {
+    // argument: double u
+    if (typeof u !== "number") {
+      throw new TypeError("u must be a number");
+    }
+    const carg_u = u;
 
-  // argument: double u
-  if (typeof u !== "number") {
+    // argument: double m
+    if (typeof m !== "number") {
+      throw new TypeError("m must be a number");
+    }
+    const carg_m = m;
+
+    // argument: double* sn
+    const carg_sn = cephes.ellf.stackAlloc(8); // No need to zero-set it.
+
+    // argument: double* cn
+    const carg_cn = cephes.ellf.stackAlloc(8); // No need to zero-set it.
+
+    // argument: double* dn
+    const carg_dn = cephes.ellf.stackAlloc(8); // No need to zero-set it.
+
+    // argument: double* ph
+    const carg_ph = cephes.ellf.stackAlloc(8); // No need to zero-set it.
+
+    // return: int
+    const fn_ret =
+      cephes.cephes_ellpj(carg_u, carg_m, carg_sn, carg_cn, carg_dn, carg_ph) |
+      0;
+
+    // There are pointers, so return the values of thoese too
+    const ret = [
+      fn_ret,
+      {
+        sn: cephes.ellf.getValue(carg_sn, "double"),
+        cn: cephes.ellf.getValue(carg_cn, "double"),
+        dn: cephes.ellf.getValue(carg_dn, "double"),
+        ph: cephes.ellf.getValue(carg_ph, "double"),
+      },
+    ] as const;
+
+    return ret;
+  } finally {
+    // Restore internal stacktop before returning
     cephes.ellf.stackRestore(stacktop);
-    throw new TypeError("u must be a number");
   }
-  const carg_u = u;
-
-  // argument: double m
-  if (typeof m !== "number") {
-    cephes.ellf.stackRestore(stacktop);
-    throw new TypeError("m must be a number");
-  }
-  const carg_m = m;
-
-  // argument: double* sn
-  const carg_sn = cephes.ellf.stackAlloc(8); // No need to zero-set it.
-
-  // argument: double* cn
-  const carg_cn = cephes.ellf.stackAlloc(8); // No need to zero-set it.
-
-  // argument: double* dn
-  const carg_dn = cephes.ellf.stackAlloc(8); // No need to zero-set it.
-
-  // argument: double* ph
-  const carg_ph = cephes.ellf.stackAlloc(8); // No need to zero-set it.
-
-  // return: int
-  const fn_ret =
-    cephes.cephes_ellpj(carg_u, carg_m, carg_sn, carg_cn, carg_dn, carg_ph) | 0;
-
-  // There are pointers, so return the values of thoese too
-  const ret = [
-    fn_ret,
-    {
-      sn: cephes.ellf.getValue(carg_sn, "double"),
-      cn: cephes.ellf.getValue(carg_cn, "double"),
-      dn: cephes.ellf.getValue(carg_dn, "double"),
-      ph: cephes.ellf.getValue(carg_ph, "double"),
-    },
-  ] as const;
-
-  // Restore internal stacktop before returning
-  cephes.ellf.stackRestore(stacktop);
-  return ret;
 }
 
 // from cephes/cprob/btdtr.c
@@ -3072,687 +3076,682 @@ export function struve(v: number, x: number) {
 export function simpsn(f: Float64Array, delta: number) {
   //Save the STACKTOP because the following code will do some stack allocs
   const stacktop = cephes.misc.stackSave();
+  try {
+    // argument: double[] f
+    if (!(f instanceof Float64Array)) {
+      throw new TypeError("f must be either a Float64Array");
+    }
+    const carg_f = cephes.misc.stackAlloc(f.length << 3);
+    cephes.misc.writeArrayToMemory(
+      new Uint8Array(f.buffer, f.byteOffset, f.byteLength),
+      carg_f,
+    );
 
-  // argument: double[] f
-  if (!(f instanceof Float64Array)) {
+    // argument: double delta
+    if (typeof delta !== "number") {
+      throw new TypeError("delta must be a number");
+    }
+    const carg_delta = delta;
+
+    // return: double
+    const fn_ret = cephes.cephes_simpsn(carg_f, carg_delta);
+
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+
+    return ret;
+  } finally {
+    // Restore internal stacktop before returning
     cephes.misc.stackRestore(stacktop);
-    throw new TypeError("f must be either a Float64Array");
   }
-  const carg_f = cephes.misc.stackAlloc(f.length << 3);
-  cephes.misc.writeArrayToMemory(
-    new Uint8Array(f.buffer, f.byteOffset, f.byteLength),
-    carg_f,
-  );
-
-  // argument: double delta
-  if (typeof delta !== "number") {
-    cephes.misc.stackRestore(stacktop);
-    throw new TypeError("delta must be a number");
-  }
-  const carg_delta = delta;
-
-  // return: double
-  const fn_ret = cephes.cephes_simpsn(carg_f, carg_delta);
-
-  // No pointers, so just return fn_ret
-  const ret = fn_ret;
-
-  // Restore internal stacktop before returning
-  cephes.misc.stackRestore(stacktop);
-  return ret;
 }
 
 // from cephes/ellf/cmplx.c
 export function cadd(a: Complex, b: Complex, c: Complex) {
   //Save the STACKTOP because the following code will do some stack allocs
   const stacktop = cephes.ellf.stackSave();
+  try {
+    // argument: Complex a
+    if (!isComplex(a)) {
+      throw new TypeError("a must be a Complex");
+    }
+    const carg_a = cephes.ellf.stackAlloc(16);
+    const aBuffer = new Float64Array([a.real, a.imag]);
+    cephes.ellf.writeArrayToMemory(
+      new Uint8Array(aBuffer.buffer, aBuffer.byteOffset, aBuffer.byteLength),
+      carg_a,
+    );
 
-  // argument: Complex a
-  if (!isComplex(a)) {
+    // argument: Complex b
+    if (!isComplex(b)) {
+      throw new TypeError("b must be a Complex");
+    }
+    const carg_b = cephes.ellf.stackAlloc(16);
+    const bBuffer = new Float64Array([b.real, b.imag]);
+    cephes.ellf.writeArrayToMemory(
+      new Uint8Array(bBuffer.buffer, bBuffer.byteOffset, bBuffer.byteLength),
+      carg_b,
+    );
+
+    // argument: Complex c
+    if (!isComplex(c)) {
+      throw new TypeError("c must be a Complex");
+    }
+    const carg_c = cephes.ellf.stackAlloc(16);
+    const cBuffer = new Float64Array([c.real, c.imag]);
+    cephes.ellf.writeArrayToMemory(
+      new Uint8Array(cBuffer.buffer, cBuffer.byteOffset, cBuffer.byteLength),
+      carg_c,
+    );
+
+    // return: void
+    cephes.cephes_cadd(carg_a, carg_b, carg_c);
+
+    [a.real, a.imag] = cephes.ellf.getValue(carg_a, "Complex");
+    [b.real, b.imag] = cephes.ellf.getValue(carg_b, "Complex");
+    [c.real, c.imag] = cephes.ellf.getValue(carg_c, "Complex");
+
+    return c;
+  } finally {
+    // Restore internal stacktop before returning
     cephes.ellf.stackRestore(stacktop);
-    throw new TypeError("a must be a Complex");
   }
-  const carg_a = cephes.ellf.stackAlloc(16);
-  const aBuffer = new Float64Array([a.real, a.imag]);
-  cephes.ellf.writeArrayToMemory(
-    new Uint8Array(aBuffer.buffer, aBuffer.byteOffset, aBuffer.byteLength),
-    carg_a,
-  );
-
-  // argument: Complex b
-  if (!isComplex(b)) {
-    cephes.ellf.stackRestore(stacktop);
-    throw new TypeError("b must be a Complex");
-  }
-  const carg_b = cephes.ellf.stackAlloc(16);
-  const bBuffer = new Float64Array([b.real, b.imag]);
-  cephes.ellf.writeArrayToMemory(
-    new Uint8Array(bBuffer.buffer, bBuffer.byteOffset, bBuffer.byteLength),
-    carg_b,
-  );
-
-  // argument: Complex c
-  if (!isComplex(c)) {
-    cephes.ellf.stackRestore(stacktop);
-    throw new TypeError("c must be a Complex");
-  }
-  const carg_c = cephes.ellf.stackAlloc(16);
-  const cBuffer = new Float64Array([c.real, c.imag]);
-  cephes.ellf.writeArrayToMemory(
-    new Uint8Array(cBuffer.buffer, cBuffer.byteOffset, cBuffer.byteLength),
-    carg_c,
-  );
-
-  // return: void
-  cephes.cephes_cadd(carg_a, carg_b, carg_c);
-
-  [a.real, a.imag] = cephes.ellf.getValue(carg_a, "Complex");
-  [b.real, b.imag] = cephes.ellf.getValue(carg_b, "Complex");
-  [c.real, c.imag] = cephes.ellf.getValue(carg_c, "Complex");
-
-  // Restore internal stacktop before returning
-  cephes.ellf.stackRestore(stacktop);
-  return c;
 }
 
 // from cephes/ellf/cmplx.c
 export function csub(a: Complex, b: Complex, c: Complex) {
   //Save the STACKTOP because the following code will do some stack allocs
   const stacktop = cephes.ellf.stackSave();
+  try {
+    // argument: Complex a
+    if (!isComplex(a)) {
+      throw new TypeError("a must be a Complex");
+    }
+    const carg_a = cephes.ellf.stackAlloc(16);
+    const aBuffer = new Float64Array([a.real, a.imag]);
+    cephes.ellf.writeArrayToMemory(
+      new Uint8Array(aBuffer.buffer, aBuffer.byteOffset, aBuffer.byteLength),
+      carg_a,
+    );
 
-  // argument: Complex a
-  if (!isComplex(a)) {
+    // argument: Complex b
+    if (!isComplex(b)) {
+      throw new TypeError("b must be a Complex");
+    }
+    const carg_b = cephes.ellf.stackAlloc(16);
+    const bBuffer = new Float64Array([b.real, b.imag]);
+    cephes.ellf.writeArrayToMemory(
+      new Uint8Array(bBuffer.buffer, bBuffer.byteOffset, bBuffer.byteLength),
+      carg_b,
+    );
+
+    // argument: Complex c
+    if (!isComplex(c)) {
+      throw new TypeError("c must be a Complex");
+    }
+    const carg_c = cephes.ellf.stackAlloc(16);
+    const cBuffer = new Float64Array([c.real, c.imag]);
+    cephes.ellf.writeArrayToMemory(
+      new Uint8Array(cBuffer.buffer, cBuffer.byteOffset, cBuffer.byteLength),
+      carg_c,
+    );
+
+    // return: void
+    cephes.cephes_csub(carg_a, carg_b, carg_c);
+
+    [a.real, a.imag] = cephes.ellf.getValue(carg_a, "Complex");
+    [b.real, b.imag] = cephes.ellf.getValue(carg_b, "Complex");
+    [c.real, c.imag] = cephes.ellf.getValue(carg_c, "Complex");
+
+    return c;
+  } finally {
+    // Restore internal stacktop before returning
     cephes.ellf.stackRestore(stacktop);
-    throw new TypeError("a must be a Complex");
   }
-  const carg_a = cephes.ellf.stackAlloc(16);
-  const aBuffer = new Float64Array([a.real, a.imag]);
-  cephes.ellf.writeArrayToMemory(
-    new Uint8Array(aBuffer.buffer, aBuffer.byteOffset, aBuffer.byteLength),
-    carg_a,
-  );
-
-  // argument: Complex b
-  if (!isComplex(b)) {
-    cephes.ellf.stackRestore(stacktop);
-    throw new TypeError("b must be a Complex");
-  }
-  const carg_b = cephes.ellf.stackAlloc(16);
-  const bBuffer = new Float64Array([b.real, b.imag]);
-  cephes.ellf.writeArrayToMemory(
-    new Uint8Array(bBuffer.buffer, bBuffer.byteOffset, bBuffer.byteLength),
-    carg_b,
-  );
-
-  // argument: Complex c
-  if (!isComplex(c)) {
-    cephes.ellf.stackRestore(stacktop);
-    throw new TypeError("c must be a Complex");
-  }
-  const carg_c = cephes.ellf.stackAlloc(16);
-  const cBuffer = new Float64Array([c.real, c.imag]);
-  cephes.ellf.writeArrayToMemory(
-    new Uint8Array(cBuffer.buffer, cBuffer.byteOffset, cBuffer.byteLength),
-    carg_c,
-  );
-
-  // return: void
-  cephes.cephes_csub(carg_a, carg_b, carg_c);
-
-  [a.real, a.imag] = cephes.ellf.getValue(carg_a, "Complex");
-  [b.real, b.imag] = cephes.ellf.getValue(carg_b, "Complex");
-  [c.real, c.imag] = cephes.ellf.getValue(carg_c, "Complex");
-
-  // Restore internal stacktop before returning
-  cephes.ellf.stackRestore(stacktop);
-  return c;
 }
 
 // from cephes/ellf/cmplx.c
 export function cmul(a: Complex, b: Complex, c: Complex) {
   //Save the STACKTOP because the following code will do some stack allocs
   const stacktop = cephes.ellf.stackSave();
+  try {
+    // argument: Complex a
+    if (!isComplex(a)) {
+      throw new TypeError("a must be a Complex");
+    }
+    const carg_a = cephes.ellf.stackAlloc(16);
+    const aBuffer = new Float64Array([a.real, a.imag]);
+    cephes.ellf.writeArrayToMemory(
+      new Uint8Array(aBuffer.buffer, aBuffer.byteOffset, aBuffer.byteLength),
+      carg_a,
+    );
 
-  // argument: Complex a
-  if (!isComplex(a)) {
+    // argument: Complex b
+    if (!isComplex(b)) {
+      throw new TypeError("b must be a Complex");
+    }
+    const carg_b = cephes.ellf.stackAlloc(16);
+    const bBuffer = new Float64Array([b.real, b.imag]);
+    cephes.ellf.writeArrayToMemory(
+      new Uint8Array(bBuffer.buffer, bBuffer.byteOffset, bBuffer.byteLength),
+      carg_b,
+    );
+
+    // argument: Complex c
+    if (!isComplex(c)) {
+      throw new TypeError("c must be a Complex");
+    }
+    const carg_c = cephes.ellf.stackAlloc(16);
+    const cBuffer = new Float64Array([c.real, c.imag]);
+    cephes.ellf.writeArrayToMemory(
+      new Uint8Array(cBuffer.buffer, cBuffer.byteOffset, cBuffer.byteLength),
+      carg_c,
+    );
+
+    // return: void
+    cephes.cephes_cmul(carg_a, carg_b, carg_c);
+
+    [a.real, a.imag] = cephes.ellf.getValue(carg_a, "Complex");
+    [b.real, b.imag] = cephes.ellf.getValue(carg_b, "Complex");
+    [c.real, c.imag] = cephes.ellf.getValue(carg_c, "Complex");
+
+    return c;
+  } finally {
+    // Restore internal stacktop before returning
     cephes.ellf.stackRestore(stacktop);
-    throw new TypeError("a must be a Complex");
   }
-  const carg_a = cephes.ellf.stackAlloc(16);
-  const aBuffer = new Float64Array([a.real, a.imag]);
-  cephes.ellf.writeArrayToMemory(
-    new Uint8Array(aBuffer.buffer, aBuffer.byteOffset, aBuffer.byteLength),
-    carg_a,
-  );
-
-  // argument: Complex b
-  if (!isComplex(b)) {
-    cephes.ellf.stackRestore(stacktop);
-    throw new TypeError("b must be a Complex");
-  }
-  const carg_b = cephes.ellf.stackAlloc(16);
-  const bBuffer = new Float64Array([b.real, b.imag]);
-  cephes.ellf.writeArrayToMemory(
-    new Uint8Array(bBuffer.buffer, bBuffer.byteOffset, bBuffer.byteLength),
-    carg_b,
-  );
-
-  // argument: Complex c
-  if (!isComplex(c)) {
-    cephes.ellf.stackRestore(stacktop);
-    throw new TypeError("c must be a Complex");
-  }
-  const carg_c = cephes.ellf.stackAlloc(16);
-  const cBuffer = new Float64Array([c.real, c.imag]);
-  cephes.ellf.writeArrayToMemory(
-    new Uint8Array(cBuffer.buffer, cBuffer.byteOffset, cBuffer.byteLength),
-    carg_c,
-  );
-
-  // return: void
-  cephes.cephes_cmul(carg_a, carg_b, carg_c);
-
-  [a.real, a.imag] = cephes.ellf.getValue(carg_a, "Complex");
-  [b.real, b.imag] = cephes.ellf.getValue(carg_b, "Complex");
-  [c.real, c.imag] = cephes.ellf.getValue(carg_c, "Complex");
-
-  // Restore internal stacktop before returning
-  cephes.ellf.stackRestore(stacktop);
-  return c;
 }
 
 // from cephes/ellf/cmplx.c
 export function cdiv(a: Complex, b: Complex, c: Complex) {
   //Save the STACKTOP because the following code will do some stack allocs
   const stacktop = cephes.ellf.stackSave();
+  try {
+    // argument: Complex a
+    if (!isComplex(a)) {
+      throw new TypeError("a must be a Complex");
+    }
+    const carg_a = cephes.ellf.stackAlloc(16);
+    const aBuffer = new Float64Array([a.real, a.imag]);
+    cephes.ellf.writeArrayToMemory(
+      new Uint8Array(aBuffer.buffer, aBuffer.byteOffset, aBuffer.byteLength),
+      carg_a,
+    );
 
-  // argument: Complex a
-  if (!isComplex(a)) {
+    // argument: Complex b
+    if (!isComplex(b)) {
+      throw new TypeError("b must be a Complex");
+    }
+    const carg_b = cephes.ellf.stackAlloc(16);
+    const bBuffer = new Float64Array([b.real, b.imag]);
+    cephes.ellf.writeArrayToMemory(
+      new Uint8Array(bBuffer.buffer, bBuffer.byteOffset, bBuffer.byteLength),
+      carg_b,
+    );
+
+    // argument: Complex c
+    if (!isComplex(c)) {
+      throw new TypeError("c must be a Complex");
+    }
+    const carg_c = cephes.ellf.stackAlloc(16);
+    const cBuffer = new Float64Array([c.real, c.imag]);
+    cephes.ellf.writeArrayToMemory(
+      new Uint8Array(cBuffer.buffer, cBuffer.byteOffset, cBuffer.byteLength),
+      carg_c,
+    );
+
+    // return: void
+    cephes.cephes_cdiv(carg_a, carg_b, carg_c);
+
+    [a.real, a.imag] = cephes.ellf.getValue(carg_a, "Complex");
+    [b.real, b.imag] = cephes.ellf.getValue(carg_b, "Complex");
+    [c.real, c.imag] = cephes.ellf.getValue(carg_c, "Complex");
+
+    return c;
+  } finally {
+    // Restore internal stacktop before returning
     cephes.ellf.stackRestore(stacktop);
-    throw new TypeError("a must be a Complex");
   }
-  const carg_a = cephes.ellf.stackAlloc(16);
-  const aBuffer = new Float64Array([a.real, a.imag]);
-  cephes.ellf.writeArrayToMemory(
-    new Uint8Array(aBuffer.buffer, aBuffer.byteOffset, aBuffer.byteLength),
-    carg_a,
-  );
-
-  // argument: Complex b
-  if (!isComplex(b)) {
-    cephes.ellf.stackRestore(stacktop);
-    throw new TypeError("b must be a Complex");
-  }
-  const carg_b = cephes.ellf.stackAlloc(16);
-  const bBuffer = new Float64Array([b.real, b.imag]);
-  cephes.ellf.writeArrayToMemory(
-    new Uint8Array(bBuffer.buffer, bBuffer.byteOffset, bBuffer.byteLength),
-    carg_b,
-  );
-
-  // argument: Complex c
-  if (!isComplex(c)) {
-    cephes.ellf.stackRestore(stacktop);
-    throw new TypeError("c must be a Complex");
-  }
-  const carg_c = cephes.ellf.stackAlloc(16);
-  const cBuffer = new Float64Array([c.real, c.imag]);
-  cephes.ellf.writeArrayToMemory(
-    new Uint8Array(cBuffer.buffer, cBuffer.byteOffset, cBuffer.byteLength),
-    carg_c,
-  );
-
-  // return: void
-  cephes.cephes_cdiv(carg_a, carg_b, carg_c);
-
-  [a.real, a.imag] = cephes.ellf.getValue(carg_a, "Complex");
-  [b.real, b.imag] = cephes.ellf.getValue(carg_b, "Complex");
-  [c.real, c.imag] = cephes.ellf.getValue(carg_c, "Complex");
-
-  // Restore internal stacktop before returning
-  cephes.ellf.stackRestore(stacktop);
-  return c;
 }
 
 // from cephes/ellf/cmplx.c
 export function csqrt(z: Complex, w: Complex) {
   //Save the STACKTOP because the following code will do some stack allocs
   const stacktop = cephes.ellf.stackSave();
+  try {
+    // argument: Complex z
+    if (!isComplex(z)) {
+      throw new TypeError("z must be a Complex");
+    }
+    const carg_z = cephes.ellf.stackAlloc(16);
+    const zBuffer = new Float64Array([z.real, z.imag]);
+    cephes.ellf.writeArrayToMemory(
+      new Uint8Array(zBuffer.buffer, zBuffer.byteOffset, zBuffer.byteLength),
+      carg_z,
+    );
 
-  // argument: Complex z
-  if (!isComplex(z)) {
+    // argument: Complex w
+    if (!isComplex(w)) {
+      throw new TypeError("w must be a Complex");
+    }
+    const carg_w = cephes.ellf.stackAlloc(16);
+    const wBuffer = new Float64Array([w.real, w.imag]);
+    cephes.ellf.writeArrayToMemory(
+      new Uint8Array(wBuffer.buffer, wBuffer.byteOffset, wBuffer.byteLength),
+      carg_w,
+    );
+
+    // return: void
+    cephes.cephes_csqrt(carg_z, carg_w);
+
+    [z.real, z.imag] = cephes.ellf.getValue(carg_z, "Complex");
+    [w.real, w.imag] = cephes.ellf.getValue(carg_w, "Complex");
+
+    return w;
+  } finally {
+    // Restore internal stacktop before returning
     cephes.ellf.stackRestore(stacktop);
-    throw new TypeError("z must be a Complex");
   }
-  const carg_z = cephes.ellf.stackAlloc(16);
-  const zBuffer = new Float64Array([z.real, z.imag]);
-  cephes.ellf.writeArrayToMemory(
-    new Uint8Array(zBuffer.buffer, zBuffer.byteOffset, zBuffer.byteLength),
-    carg_z,
-  );
-
-  // argument: Complex w
-  if (!isComplex(w)) {
-    cephes.ellf.stackRestore(stacktop);
-    throw new TypeError("w must be a Complex");
-  }
-  const carg_w = cephes.ellf.stackAlloc(16);
-  const wBuffer = new Float64Array([w.real, w.imag]);
-  cephes.ellf.writeArrayToMemory(
-    new Uint8Array(wBuffer.buffer, wBuffer.byteOffset, wBuffer.byteLength),
-    carg_w,
-  );
-
-  // return: void
-  cephes.cephes_csqrt(carg_z, carg_w);
-
-  [z.real, z.imag] = cephes.ellf.getValue(carg_z, "Complex");
-  [w.real, w.imag] = cephes.ellf.getValue(carg_w, "Complex");
-
-  // Restore internal stacktop before returning
-  cephes.ellf.stackRestore(stacktop);
-  return w;
 }
 
 // from cephes/cmath/clog.c
 export function cexp(z: Complex, w: Complex) {
   //Save the STACKTOP because the following code will do some stack allocs
   const stacktop = cephes.cmath.stackSave();
+  try {
+    // argument: Complex z
+    if (!isComplex(z)) {
+      throw new TypeError("z must be a Complex");
+    }
+    const carg_z = cephes.cmath.stackAlloc(16);
+    const zBuffer = new Float64Array([z.real, z.imag]);
+    cephes.cmath.writeArrayToMemory(
+      new Uint8Array(zBuffer.buffer, zBuffer.byteOffset, zBuffer.byteLength),
+      carg_z,
+    );
 
-  // argument: Complex z
-  if (!isComplex(z)) {
+    // argument: Complex w
+    if (!isComplex(w)) {
+      throw new TypeError("w must be a Complex");
+    }
+    const carg_w = cephes.cmath.stackAlloc(16);
+    const wBuffer = new Float64Array([w.real, w.imag]);
+    cephes.cmath.writeArrayToMemory(
+      new Uint8Array(wBuffer.buffer, wBuffer.byteOffset, wBuffer.byteLength),
+      carg_w,
+    );
+
+    // return: void
+    cephes.cephes_cexp(carg_z, carg_w);
+
+    [z.real, z.imag] = cephes.cmath.getValue(carg_z, "Complex");
+    [w.real, w.imag] = cephes.cmath.getValue(carg_w, "Complex");
+
+    return w;
+  } finally {
+    // Restore internal stacktop before returning
     cephes.cmath.stackRestore(stacktop);
-    throw new TypeError("z must be a Complex");
   }
-  const carg_z = cephes.cmath.stackAlloc(16);
-  const zBuffer = new Float64Array([z.real, z.imag]);
-  cephes.cmath.writeArrayToMemory(
-    new Uint8Array(zBuffer.buffer, zBuffer.byteOffset, zBuffer.byteLength),
-    carg_z,
-  );
-
-  // argument: Complex w
-  if (!isComplex(w)) {
-    cephes.cmath.stackRestore(stacktop);
-    throw new TypeError("w must be a Complex");
-  }
-  const carg_w = cephes.cmath.stackAlloc(16);
-  const wBuffer = new Float64Array([w.real, w.imag]);
-  cephes.cmath.writeArrayToMemory(
-    new Uint8Array(wBuffer.buffer, wBuffer.byteOffset, wBuffer.byteLength),
-    carg_w,
-  );
-
-  // return: void
-  cephes.cephes_cexp(carg_z, carg_w);
-
-  [z.real, z.imag] = cephes.cmath.getValue(carg_z, "Complex");
-  [w.real, w.imag] = cephes.cmath.getValue(carg_w, "Complex");
-
-  // Restore internal stacktop before returning
-  cephes.cmath.stackRestore(stacktop);
-  return w;
 }
 
 // from cephes/cmath/clog.c
 export function clog(z: Complex, w: Complex) {
   //Save the STACKTOP because the following code will do some stack allocs
   const stacktop = cephes.cmath.stackSave();
+  try {
+    // argument: Complex z
+    if (!isComplex(z)) {
+      throw new TypeError("z must be a Complex");
+    }
+    const carg_z = cephes.cmath.stackAlloc(16);
+    const zBuffer = new Float64Array([z.real, z.imag]);
+    cephes.cmath.writeArrayToMemory(
+      new Uint8Array(zBuffer.buffer, zBuffer.byteOffset, zBuffer.byteLength),
+      carg_z,
+    );
 
-  // argument: Complex z
-  if (!isComplex(z)) {
+    // argument: Complex w
+    if (!isComplex(w)) {
+      throw new TypeError("w must be a Complex");
+    }
+    const carg_w = cephes.cmath.stackAlloc(16);
+    const wBuffer = new Float64Array([w.real, w.imag]);
+    cephes.cmath.writeArrayToMemory(
+      new Uint8Array(wBuffer.buffer, wBuffer.byteOffset, wBuffer.byteLength),
+      carg_w,
+    );
+
+    // return: void
+    cephes.cephes_clog(carg_z, carg_w);
+
+    [z.real, z.imag] = cephes.cmath.getValue(carg_z, "Complex");
+    [w.real, w.imag] = cephes.cmath.getValue(carg_w, "Complex");
+
+    return w;
+  } finally {
+    // Restore internal stacktop before returning
     cephes.cmath.stackRestore(stacktop);
-    throw new TypeError("z must be a Complex");
   }
-  const carg_z = cephes.cmath.stackAlloc(16);
-  const zBuffer = new Float64Array([z.real, z.imag]);
-  cephes.cmath.writeArrayToMemory(
-    new Uint8Array(zBuffer.buffer, zBuffer.byteOffset, zBuffer.byteLength),
-    carg_z,
-  );
-
-  // argument: Complex w
-  if (!isComplex(w)) {
-    cephes.cmath.stackRestore(stacktop);
-    throw new TypeError("w must be a Complex");
-  }
-  const carg_w = cephes.cmath.stackAlloc(16);
-  const wBuffer = new Float64Array([w.real, w.imag]);
-  cephes.cmath.writeArrayToMemory(
-    new Uint8Array(wBuffer.buffer, wBuffer.byteOffset, wBuffer.byteLength),
-    carg_w,
-  );
-
-  // return: void
-  cephes.cephes_clog(carg_z, carg_w);
-
-  [z.real, z.imag] = cephes.cmath.getValue(carg_z, "Complex");
-  [w.real, w.imag] = cephes.cmath.getValue(carg_w, "Complex");
-
-  // Restore internal stacktop before returning
-  cephes.cmath.stackRestore(stacktop);
-  return w;
 }
 
 // from cephes/cmath/clog.c
 export function ccos(z: Complex, w: Complex) {
   //Save the STACKTOP because the following code will do some stack allocs
   const stacktop = cephes.cmath.stackSave();
+  try {
+    // argument: Complex z
+    if (!isComplex(z)) {
+      throw new TypeError("z must be a Complex");
+    }
+    const carg_z = cephes.cmath.stackAlloc(16);
+    const zBuffer = new Float64Array([z.real, z.imag]);
+    cephes.cmath.writeArrayToMemory(
+      new Uint8Array(zBuffer.buffer, zBuffer.byteOffset, zBuffer.byteLength),
+      carg_z,
+    );
 
-  // argument: Complex z
-  if (!isComplex(z)) {
+    // argument: Complex w
+    if (!isComplex(w)) {
+      throw new TypeError("w must be a Complex");
+    }
+    const carg_w = cephes.cmath.stackAlloc(16);
+    const wBuffer = new Float64Array([w.real, w.imag]);
+    cephes.cmath.writeArrayToMemory(
+      new Uint8Array(wBuffer.buffer, wBuffer.byteOffset, wBuffer.byteLength),
+      carg_w,
+    );
+
+    // return: void
+    cephes.cephes_ccos(carg_z, carg_w);
+
+    [z.real, z.imag] = cephes.cmath.getValue(carg_z, "Complex");
+    [w.real, w.imag] = cephes.cmath.getValue(carg_w, "Complex");
+
+    return w;
+  } finally {
+    // Restore internal stacktop before returning
     cephes.cmath.stackRestore(stacktop);
-    throw new TypeError("z must be a Complex");
   }
-  const carg_z = cephes.cmath.stackAlloc(16);
-  const zBuffer = new Float64Array([z.real, z.imag]);
-  cephes.cmath.writeArrayToMemory(
-    new Uint8Array(zBuffer.buffer, zBuffer.byteOffset, zBuffer.byteLength),
-    carg_z,
-  );
-
-  // argument: Complex w
-  if (!isComplex(w)) {
-    cephes.cmath.stackRestore(stacktop);
-    throw new TypeError("w must be a Complex");
-  }
-  const carg_w = cephes.cmath.stackAlloc(16);
-  const wBuffer = new Float64Array([w.real, w.imag]);
-  cephes.cmath.writeArrayToMemory(
-    new Uint8Array(wBuffer.buffer, wBuffer.byteOffset, wBuffer.byteLength),
-    carg_w,
-  );
-
-  // return: void
-  cephes.cephes_ccos(carg_z, carg_w);
-
-  [z.real, z.imag] = cephes.cmath.getValue(carg_z, "Complex");
-  [w.real, w.imag] = cephes.cmath.getValue(carg_w, "Complex");
-
-  // Restore internal stacktop before returning
-  cephes.cmath.stackRestore(stacktop);
-  return w;
 }
 
 // from cephes/cmath/clog.c
 export function cacos(z: Complex, w: Complex) {
   //Save the STACKTOP because the following code will do some stack allocs
   const stacktop = cephes.cmath.stackSave();
+  try {
+    // argument: Complex z
+    if (!isComplex(z)) {
+      throw new TypeError("z must be a Complex");
+    }
+    const carg_z = cephes.cmath.stackAlloc(16);
+    const zBuffer = new Float64Array([z.real, z.imag]);
+    cephes.cmath.writeArrayToMemory(
+      new Uint8Array(zBuffer.buffer, zBuffer.byteOffset, zBuffer.byteLength),
+      carg_z,
+    );
 
-  // argument: Complex z
-  if (!isComplex(z)) {
+    // argument: Complex w
+    if (!isComplex(w)) {
+      throw new TypeError("w must be a Complex");
+    }
+    const carg_w = cephes.cmath.stackAlloc(16);
+    const wBuffer = new Float64Array([w.real, w.imag]);
+    cephes.cmath.writeArrayToMemory(
+      new Uint8Array(wBuffer.buffer, wBuffer.byteOffset, wBuffer.byteLength),
+      carg_w,
+    );
+
+    // return: void
+    cephes.cephes_cacos(carg_z, carg_w);
+
+    [z.real, z.imag] = cephes.cmath.getValue(carg_z, "Complex");
+    [w.real, w.imag] = cephes.cmath.getValue(carg_w, "Complex");
+
+    return w;
+  } finally {
+    // Restore internal stacktop before returning
     cephes.cmath.stackRestore(stacktop);
-    throw new TypeError("z must be a Complex");
   }
-  const carg_z = cephes.cmath.stackAlloc(16);
-  const zBuffer = new Float64Array([z.real, z.imag]);
-  cephes.cmath.writeArrayToMemory(
-    new Uint8Array(zBuffer.buffer, zBuffer.byteOffset, zBuffer.byteLength),
-    carg_z,
-  );
-
-  // argument: Complex w
-  if (!isComplex(w)) {
-    cephes.cmath.stackRestore(stacktop);
-    throw new TypeError("w must be a Complex");
-  }
-  const carg_w = cephes.cmath.stackAlloc(16);
-  const wBuffer = new Float64Array([w.real, w.imag]);
-  cephes.cmath.writeArrayToMemory(
-    new Uint8Array(wBuffer.buffer, wBuffer.byteOffset, wBuffer.byteLength),
-    carg_w,
-  );
-
-  // return: void
-  cephes.cephes_cacos(carg_z, carg_w);
-
-  [z.real, z.imag] = cephes.cmath.getValue(carg_z, "Complex");
-  [w.real, w.imag] = cephes.cmath.getValue(carg_w, "Complex");
-
-  // Restore internal stacktop before returning
-  cephes.cmath.stackRestore(stacktop);
-  return w;
 }
 
 // from cephes/cmath/clog.c
 export function csin(z: Complex, w: Complex) {
   //Save the STACKTOP because the following code will do some stack allocs
   const stacktop = cephes.cmath.stackSave();
+  try {
+    // argument: Complex z
+    if (!isComplex(z)) {
+      throw new TypeError("z must be a Complex");
+    }
+    const carg_z = cephes.cmath.stackAlloc(16);
+    const zBuffer = new Float64Array([z.real, z.imag]);
+    cephes.cmath.writeArrayToMemory(
+      new Uint8Array(zBuffer.buffer, zBuffer.byteOffset, zBuffer.byteLength),
+      carg_z,
+    );
 
-  // argument: Complex z
-  if (!isComplex(z)) {
+    // argument: Complex w
+    if (!isComplex(w)) {
+      throw new TypeError("w must be a Complex");
+    }
+    const carg_w = cephes.cmath.stackAlloc(16);
+    const wBuffer = new Float64Array([w.real, w.imag]);
+    cephes.cmath.writeArrayToMemory(
+      new Uint8Array(wBuffer.buffer, wBuffer.byteOffset, wBuffer.byteLength),
+      carg_w,
+    );
+
+    // return: void
+    cephes.cephes_csin(carg_z, carg_w);
+
+    [z.real, z.imag] = cephes.cmath.getValue(carg_z, "Complex");
+    [w.real, w.imag] = cephes.cmath.getValue(carg_w, "Complex");
+
+    return w;
+  } finally {
+    // Restore internal stacktop before returning
     cephes.cmath.stackRestore(stacktop);
-    throw new TypeError("z must be a Complex");
   }
-  const carg_z = cephes.cmath.stackAlloc(16);
-  const zBuffer = new Float64Array([z.real, z.imag]);
-  cephes.cmath.writeArrayToMemory(
-    new Uint8Array(zBuffer.buffer, zBuffer.byteOffset, zBuffer.byteLength),
-    carg_z,
-  );
-
-  // argument: Complex w
-  if (!isComplex(w)) {
-    cephes.cmath.stackRestore(stacktop);
-    throw new TypeError("w must be a Complex");
-  }
-  const carg_w = cephes.cmath.stackAlloc(16);
-  const wBuffer = new Float64Array([w.real, w.imag]);
-  cephes.cmath.writeArrayToMemory(
-    new Uint8Array(wBuffer.buffer, wBuffer.byteOffset, wBuffer.byteLength),
-    carg_w,
-  );
-
-  // return: void
-  cephes.cephes_csin(carg_z, carg_w);
-
-  [z.real, z.imag] = cephes.cmath.getValue(carg_z, "Complex");
-  [w.real, w.imag] = cephes.cmath.getValue(carg_w, "Complex");
-
-  // Restore internal stacktop before returning
-  cephes.cmath.stackRestore(stacktop);
-  return w;
 }
 
 // from cephes/cmath/clog.c
 export function casin(z: Complex, w: Complex) {
   //Save the STACKTOP because the following code will do some stack allocs
   const stacktop = cephes.cmath.stackSave();
+  try {
+    // argument: Complex z
+    if (!isComplex(z)) {
+      throw new TypeError("z must be a Complex");
+    }
+    const carg_z = cephes.cmath.stackAlloc(16);
+    const zBuffer = new Float64Array([z.real, z.imag]);
+    cephes.cmath.writeArrayToMemory(
+      new Uint8Array(zBuffer.buffer, zBuffer.byteOffset, zBuffer.byteLength),
+      carg_z,
+    );
 
-  // argument: Complex z
-  if (!isComplex(z)) {
+    // argument: Complex w
+    if (!isComplex(w)) {
+      throw new TypeError("w must be a Complex");
+    }
+    const carg_w = cephes.cmath.stackAlloc(16);
+    const wBuffer = new Float64Array([w.real, w.imag]);
+    cephes.cmath.writeArrayToMemory(
+      new Uint8Array(wBuffer.buffer, wBuffer.byteOffset, wBuffer.byteLength),
+      carg_w,
+    );
+
+    // return: void
+    cephes.cephes_casin(carg_z, carg_w);
+
+    [z.real, z.imag] = cephes.cmath.getValue(carg_z, "Complex");
+    [w.real, w.imag] = cephes.cmath.getValue(carg_w, "Complex");
+
+    return w;
+  } finally {
+    // Restore internal stacktop before returning
     cephes.cmath.stackRestore(stacktop);
-    throw new TypeError("z must be a Complex");
   }
-  const carg_z = cephes.cmath.stackAlloc(16);
-  const zBuffer = new Float64Array([z.real, z.imag]);
-  cephes.cmath.writeArrayToMemory(
-    new Uint8Array(zBuffer.buffer, zBuffer.byteOffset, zBuffer.byteLength),
-    carg_z,
-  );
-
-  // argument: Complex w
-  if (!isComplex(w)) {
-    cephes.cmath.stackRestore(stacktop);
-    throw new TypeError("w must be a Complex");
-  }
-  const carg_w = cephes.cmath.stackAlloc(16);
-  const wBuffer = new Float64Array([w.real, w.imag]);
-  cephes.cmath.writeArrayToMemory(
-    new Uint8Array(wBuffer.buffer, wBuffer.byteOffset, wBuffer.byteLength),
-    carg_w,
-  );
-
-  // return: void
-  cephes.cephes_casin(carg_z, carg_w);
-
-  [z.real, z.imag] = cephes.cmath.getValue(carg_z, "Complex");
-  [w.real, w.imag] = cephes.cmath.getValue(carg_w, "Complex");
-
-  // Restore internal stacktop before returning
-  cephes.cmath.stackRestore(stacktop);
-  return w;
 }
 
 // from cephes/cmath/clog.c
 export function ctan(z: Complex, w: Complex) {
   //Save the STACKTOP because the following code will do some stack allocs
   const stacktop = cephes.cmath.stackSave();
+  try {
+    // argument: Complex z
+    if (!isComplex(z)) {
+      throw new TypeError("z must be a Complex");
+    }
+    const carg_z = cephes.cmath.stackAlloc(16);
+    const zBuffer = new Float64Array([z.real, z.imag]);
+    cephes.cmath.writeArrayToMemory(
+      new Uint8Array(zBuffer.buffer, zBuffer.byteOffset, zBuffer.byteLength),
+      carg_z,
+    );
 
-  // argument: Complex z
-  if (!isComplex(z)) {
+    // argument: Complex w
+    if (!isComplex(w)) {
+      throw new TypeError("w must be a Complex");
+    }
+    const carg_w = cephes.cmath.stackAlloc(16);
+    const wBuffer = new Float64Array([w.real, w.imag]);
+    cephes.cmath.writeArrayToMemory(
+      new Uint8Array(wBuffer.buffer, wBuffer.byteOffset, wBuffer.byteLength),
+      carg_w,
+    );
+
+    // return: void
+    cephes.cephes_ctan(carg_z, carg_w);
+
+    [z.real, z.imag] = cephes.cmath.getValue(carg_z, "Complex");
+    [w.real, w.imag] = cephes.cmath.getValue(carg_w, "Complex");
+
+    return w;
+  } finally {
+    // Restore internal stacktop before returning
     cephes.cmath.stackRestore(stacktop);
-    throw new TypeError("z must be a Complex");
   }
-  const carg_z = cephes.cmath.stackAlloc(16);
-  const zBuffer = new Float64Array([z.real, z.imag]);
-  cephes.cmath.writeArrayToMemory(
-    new Uint8Array(zBuffer.buffer, zBuffer.byteOffset, zBuffer.byteLength),
-    carg_z,
-  );
-
-  // argument: Complex w
-  if (!isComplex(w)) {
-    cephes.cmath.stackRestore(stacktop);
-    throw new TypeError("w must be a Complex");
-  }
-  const carg_w = cephes.cmath.stackAlloc(16);
-  const wBuffer = new Float64Array([w.real, w.imag]);
-  cephes.cmath.writeArrayToMemory(
-    new Uint8Array(wBuffer.buffer, wBuffer.byteOffset, wBuffer.byteLength),
-    carg_w,
-  );
-
-  // return: void
-  cephes.cephes_ctan(carg_z, carg_w);
-
-  [z.real, z.imag] = cephes.cmath.getValue(carg_z, "Complex");
-  [w.real, w.imag] = cephes.cmath.getValue(carg_w, "Complex");
-
-  // Restore internal stacktop before returning
-  cephes.cmath.stackRestore(stacktop);
-  return w;
 }
 
 // from cephes/cmath/clog.c
 export function catan(z: Complex, w: Complex) {
   //Save the STACKTOP because the following code will do some stack allocs
   const stacktop = cephes.cmath.stackSave();
+  try {
+    // argument: Complex z
+    if (!isComplex(z)) {
+      throw new TypeError("z must be a Complex");
+    }
+    const carg_z = cephes.cmath.stackAlloc(16);
+    const zBuffer = new Float64Array([z.real, z.imag]);
+    cephes.cmath.writeArrayToMemory(
+      new Uint8Array(zBuffer.buffer, zBuffer.byteOffset, zBuffer.byteLength),
+      carg_z,
+    );
 
-  // argument: Complex z
-  if (!isComplex(z)) {
+    // argument: Complex w
+    if (!isComplex(w)) {
+      throw new TypeError("w must be a Complex");
+    }
+    const carg_w = cephes.cmath.stackAlloc(16);
+    const wBuffer = new Float64Array([w.real, w.imag]);
+    cephes.cmath.writeArrayToMemory(
+      new Uint8Array(wBuffer.buffer, wBuffer.byteOffset, wBuffer.byteLength),
+      carg_w,
+    );
+
+    // return: void
+    cephes.cephes_catan(carg_z, carg_w);
+
+    [z.real, z.imag] = cephes.cmath.getValue(carg_z, "Complex");
+    [w.real, w.imag] = cephes.cmath.getValue(carg_w, "Complex");
+
+    return w;
+  } finally {
+    // Restore internal stacktop before returning
     cephes.cmath.stackRestore(stacktop);
-    throw new TypeError("z must be a Complex");
   }
-  const carg_z = cephes.cmath.stackAlloc(16);
-  const zBuffer = new Float64Array([z.real, z.imag]);
-  cephes.cmath.writeArrayToMemory(
-    new Uint8Array(zBuffer.buffer, zBuffer.byteOffset, zBuffer.byteLength),
-    carg_z,
-  );
-
-  // argument: Complex w
-  if (!isComplex(w)) {
-    cephes.cmath.stackRestore(stacktop);
-    throw new TypeError("w must be a Complex");
-  }
-  const carg_w = cephes.cmath.stackAlloc(16);
-  const wBuffer = new Float64Array([w.real, w.imag]);
-  cephes.cmath.writeArrayToMemory(
-    new Uint8Array(wBuffer.buffer, wBuffer.byteOffset, wBuffer.byteLength),
-    carg_w,
-  );
-
-  // return: void
-  cephes.cephes_catan(carg_z, carg_w);
-
-  [z.real, z.imag] = cephes.cmath.getValue(carg_z, "Complex");
-  [w.real, w.imag] = cephes.cmath.getValue(carg_w, "Complex");
-
-  // Restore internal stacktop before returning
-  cephes.cmath.stackRestore(stacktop);
-  return w;
 }
 
 // from cephes/cmath/clog.c
 export function ccot(z: Complex, w: Complex) {
   //Save the STACKTOP because the following code will do some stack allocs
   const stacktop = cephes.cmath.stackSave();
+  try {
+    // argument: Complex z
+    if (!isComplex(z)) {
+      throw new TypeError("z must be a Complex");
+    }
+    const carg_z = cephes.cmath.stackAlloc(16);
+    const zBuffer = new Float64Array([z.real, z.imag]);
+    cephes.cmath.writeArrayToMemory(
+      new Uint8Array(zBuffer.buffer, zBuffer.byteOffset, zBuffer.byteLength),
+      carg_z,
+    );
 
-  // argument: Complex z
-  if (!isComplex(z)) {
+    // argument: Complex w
+    if (!isComplex(w)) {
+      throw new TypeError("w must be a Complex");
+    }
+    const carg_w = cephes.cmath.stackAlloc(16);
+    const wBuffer = new Float64Array([w.real, w.imag]);
+    cephes.cmath.writeArrayToMemory(
+      new Uint8Array(wBuffer.buffer, wBuffer.byteOffset, wBuffer.byteLength),
+      carg_w,
+    );
+
+    // return: void
+    cephes.cephes_ccot(carg_z, carg_w);
+
+    [z.real, z.imag] = cephes.cmath.getValue(carg_z, "Complex");
+    [w.real, w.imag] = cephes.cmath.getValue(carg_w, "Complex");
+
+    return w;
+  } finally {
+    // Restore internal stacktop before returning
     cephes.cmath.stackRestore(stacktop);
-    throw new TypeError("z must be a Complex");
   }
-  const carg_z = cephes.cmath.stackAlloc(16);
-  const zBuffer = new Float64Array([z.real, z.imag]);
-  cephes.cmath.writeArrayToMemory(
-    new Uint8Array(zBuffer.buffer, zBuffer.byteOffset, zBuffer.byteLength),
-    carg_z,
-  );
-
-  // argument: Complex w
-  if (!isComplex(w)) {
-    cephes.cmath.stackRestore(stacktop);
-    throw new TypeError("w must be a Complex");
-  }
-  const carg_w = cephes.cmath.stackAlloc(16);
-  const wBuffer = new Float64Array([w.real, w.imag]);
-  cephes.cmath.writeArrayToMemory(
-    new Uint8Array(wBuffer.buffer, wBuffer.byteOffset, wBuffer.byteLength),
-    carg_w,
-  );
-
-  // return: void
-  cephes.cephes_ccot(carg_z, carg_w);
-
-  [z.real, z.imag] = cephes.cmath.getValue(carg_z, "Complex");
-  [w.real, w.imag] = cephes.cmath.getValue(carg_w, "Complex");
-
-  // Restore internal stacktop before returning
-  cephes.cmath.stackRestore(stacktop);
-  return w;
 }
 
 // from cephes/misc/polevl.c
 export function p1evl(x: number, coef: Float64Array, N: Int) {
   //Save the STACKTOP because the following code will do some stack allocs
   const stacktop = cephes.misc.stackSave();
+  try {
+    // argument: double x
+    if (typeof x !== "number") {
+      throw new TypeError("x must be a number");
+    }
+    const carg_x = x;
 
-  // argument: double x
-  if (typeof x !== "number") {
+    // argument: double[] coef
+    if (!(coef instanceof Float64Array)) {
+      throw new TypeError("coef must be either a Float64Array");
+    }
+    const carg_coef = cephes.misc.stackAlloc(coef.length << 3);
+    cephes.misc.writeArrayToMemory(
+      new Uint8Array(coef.buffer, coef.byteOffset, coef.byteLength),
+      carg_coef,
+    );
+
+    // argument: int N
+    if (typeof N !== "number") {
+      throw new TypeError("N must be a number");
+    }
+    const carg_N = N | 0;
+
+    // return: double
+    const fn_ret = cephes.cephes_p1evl(carg_x, carg_coef, carg_N);
+
+    // No pointers, so just return fn_ret
+    const ret = fn_ret;
+
+    return ret;
+  } finally {
+    // Restore internal stacktop before returning
     cephes.misc.stackRestore(stacktop);
-    throw new TypeError("x must be a number");
   }
-  const carg_x = x;
-
-  // argument: double[] coef
-  if (!(coef instanceof Float64Array)) {
-    cephes.misc.stackRestore(stacktop);
-    throw new TypeError("coef must be either a Float64Array");
-  }
-  const carg_coef = cephes.misc.stackAlloc(coef.length << 3);
-  cephes.misc.writeArrayToMemory(
-    new Uint8Array(coef.buffer, coef.byteOffset, coef.byteLength),
-    carg_coef,
-  );
-
-  // argument: int N
-  if (typeof N !== "number") {
-    cephes.misc.stackRestore(stacktop);
-    throw new TypeError("N must be a number");
-  }
-  const carg_N = N | 0;
-
-  // return: double
-  const fn_ret = cephes.cephes_p1evl(carg_x, carg_coef, carg_N);
-
-  // No pointers, so just return fn_ret
-  const ret = fn_ret;
-
-  // Restore internal stacktop before returning
-  cephes.misc.stackRestore(stacktop);
-  return ret;
 }
 
 // from cephes/misc/polylog.c

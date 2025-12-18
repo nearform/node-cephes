@@ -11,8 +11,6 @@ const argGenerators = {
     let code = "";
     code += `  // argument: double ${name}\n`;
     code += `  if (typeof ${name} !== 'number') {\n`;
-    if (needStack)
-      code += `    cephes.${packageName}.stackRestore(stacktop);\n`;
     code += `    throw new TypeError('${name} must be a number');\n`;
     code += `  }\n`;
     code += `  const carg_${name} = ${name};\n`;
@@ -23,8 +21,6 @@ const argGenerators = {
     let code = "";
     code += `  // argument: int ${name}\n`;
     code += `  if (typeof ${name} !== 'number') {\n`;
-    if (needStack)
-      code += `    cephes.${packageName}.stackRestore(stacktop);\n`;
     code += `    throw new TypeError('${name} must be a number');\n`;
     code += `  }\n`;
     code += `  const carg_${name} = ${name} | 0;\n`;
@@ -49,8 +45,6 @@ const argGenerators = {
     let code = "";
     code += `  // argument: double[] ${name}\n`;
     code += `  if (!(${name} instanceof Float64Array)) {\n`;
-    if (needStack)
-      code += `    cephes.${packageName}.stackRestore(stacktop);\n`;
     code += `    throw new TypeError('${name} must be either a Float64Array');\n`;
     code += `  }\n`;
     code += `  const carg_${name} = cephes.${packageName}.stackAlloc(${name}.length << 3);\n`;
@@ -61,8 +55,6 @@ const argGenerators = {
     let code = "";
     code += `  // argument: Complex ${name}\n`;
     code += `  if (!isComplex(${name})) {\n`;
-    if (needStack)
-      code += `    cephes.${packageName}.stackRestore(stacktop);\n`;
     code += `    throw new TypeError('${name} must be a Complex');\n`;
     code += `  }\n`;
     code += `  const carg_${name} = cephes.${packageName}.stackAlloc(16);\n`;
@@ -140,7 +132,7 @@ class InterfaceGenerator extends stream.Transform {
       code +=
         "  //Save the STACKTOP because the following code will do some stack allocs\n";
       code += `  const stacktop = cephes.${packageName}.stackSave();\n`;
-      code += "\n";
+      code += "try {\n";
     }
 
     //
@@ -194,16 +186,18 @@ class InterfaceGenerator extends stream.Transform {
     //
     // function footer
     //
-    if (needStack) {
-      code += "  // Restore internal stacktop before returning\n";
-      code += `  cephes.${packageName}.stackRestore(stacktop);\n`;
-    }
+
     if (returnType !== "void") {
       code += "  return ret;\n";
     } else if (usesComplex) {
       code += `  return ${functionArgs.findLast(({ fullType }) => fullType === "Complex").name};\n`;
     }
-
+    if (needStack) {
+      code += "}finally{\n";
+      code += "  // Restore internal stacktop before returning\n";
+      code += `  cephes.${packageName}.stackRestore(stacktop);\n`;
+      code += "}\n";
+    }
     code += "};\n";
     code += "\n";
     this.#functions.push(functionName);
