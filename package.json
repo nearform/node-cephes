@@ -16,7 +16,7 @@
     "prepare": "npm run clean && npm run build && npm run lint",
     "serve:article": "(cd article && npx rollup -c) && npx http-server article",
     "pretest": "npm run build",
-    "test": "c8 node --import tsx --test 'test/!(*.puppeteer).test.{js,mjs,ts}'",
+    "test": "c8 node --import tsx --experimental-test-module-mocks --test 'test/!(*.puppeteer).test.{js,mjs,ts}'",
     "test:puppeteer": "c8 node --test 'test/*.puppeteer.test.{js,mjs}'"
   },
   "files": [
