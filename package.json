@@ -50,7 +50,7 @@
     "serve-handler": "^6.1.6",
     "split2": "^4.2.0",
     "tsx": "^4.21.0",
-    "typescript": "^5.9.3",
+    "typescript": "^6.0.3",
     "xorshift": "^1.1.1"
   },
   "license": "BSD-3-Clause",
