@@ -31,7 +31,7 @@
     "@rollup/plugin-inject": "^5.0.5",
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^16.0.3",
-    "@types/node": "^25.0.0",
+    "@types/node": "^26.0.0",
     "almost-equal": "^1.1.0",
     "buffer": "^6.0.3",
     "c8": "^11.0.0",
